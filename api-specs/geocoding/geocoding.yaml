@@ -1,0 +1,998 @@
+openapi: 3.0.0
+info:
+  title: Geoapify APIs
+  description: A collection of Geoapify APIs, including Address Autocomplete, Batch Geocoding, Forward Geocoding, Reverse Geocoding, and IP Geolocation.
+  version: 1.0.0
+servers:
+  - url: https://api.geoapify.com/v1
+    description: Main Geoapify API server
+
+tags:
+  - name: Address Autocomplete API
+    description: Provides address suggestions from input text.
+  - name: Batch Geocoding API
+    description: Allows geocoding multiple addresses or coordinates in a single request.
+  - name: Forward Geocoding API
+    description: Converts addresses into geographic coordinates.
+  - name: Reverse Geocoding API
+    description: Converts geographic coordinates into addresses.
+  - name: IP Geolocation API
+    description: Retrieves the geographical location based on the IP address.
+
+paths:
+  #  Address Autocomplete API
+  /geocode/autocomplete:
+    get:
+      tags:
+        - Address Autocomplete API
+      summary: Get address suggestions from input text
+      description: Returns suggested addresses and relevant information (such as country, city, and street) based on the input text provided.
+      operationId: getAddressAutocomplete
+      parameters:
+        - name: text
+          in: query
+          required: true
+          description: The text to autocomplete (e.g., partial address or place name).
+          schema:
+            type: string
+        - name: apiKey
+          in: query
+          required: true
+          description: API key for Geoapify services.
+          schema:
+            type: string
+        - name: format
+          in: query
+          required: false
+          description: Response format (json, xml, or geojson).
+          schema:
+            type: string
+            enum: [json, xml, geojson]
+        - name: type
+          in: query
+          required: false
+          description: Type of location to search for (e.g., country, city, postcode, etc.).
+          schema:
+            type: string
+            enum: [country, state, city, postcode, street, building]
+        - name: limit
+          in: query
+          required: false
+          description: Maximum number of results to return.
+          schema:
+            type: integer
+        - name: lang
+          in: query
+          required: false
+          description: Language of the returned result. Supports 2-character ISO 639-1 language codes.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response with address suggestions.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        datasource:
+                          type: object
+                          properties:
+                            sourcename:
+                              type: string
+                              description: Data source name
+                            attribution:
+                              type: string
+                              description: Attribution information
+                            license:
+                              type: string
+                              description: Data source license
+                            url:
+                              type: string
+                              description: Data source URL
+                        country:
+                          type: string
+                          description: Country name.
+                        country_code:
+                          type: string
+                          description: ISO 3166-1 alpha-2 country code.
+                        state:
+                          type: string
+                          description: State or region name.
+                        state_code:
+                          type: string
+                          description: State code.
+                        city:
+                          type: string
+                          description: City name.
+                        village:
+                          type: string
+                          description: Village name (if applicable).
+                        postcode:
+                          type: string
+                          description: Postcode of the location.
+                        district:
+                          type: string
+                          description: District of the location.
+                        suburb:
+                          type: string
+                          description: Suburb of the location.
+                        street:
+                          type: string
+                          description: Street name.
+                        housenumber:
+                          type: string
+                          description: House number.
+                        lon:
+                          type: number
+                          description: Longitude of the suggested location.
+                        lat:
+                          type: number
+                          description: Latitude of the suggested location.
+                        result_type:
+                          type: string
+                          description: Type of the result location (e.g., city, postcode, street, etc.).
+                        formatted:
+                          type: string
+                          description: Formatted address.
+                        address_line1:
+                          type: string
+                          description: Main part of the formatted address.
+                        address_line2:
+                          type: string
+                          description: Secondary part of the formatted address.
+                        rank:
+                          type: object
+                          properties:
+                            importance:
+                              type: number
+                              description: Importance of the location result.
+                            confidence:
+                              type: number
+                              description: Confidence value of the result (0 to 1).
+                            confidence_city_level:
+                              type: number
+                              description: City-level confidence (0 to 1).
+                            confidence_street_level:
+                              type: number
+                              description: Street-level confidence (0 to 1).
+                            confidence_building_level:
+                              type: number
+                              description: Building-level confidence (0 to 1).
+                            match_type:
+                              type: string
+                              description: Match type of the result (e.g., full_match).
+                        timezone:
+                          type: object
+                          properties:
+                            name:
+                              type: string
+                              description: Name of the timezone.
+                            offset_STD:
+                              type: string
+                              description: Standard time offset.
+                            offset_DST:
+                              type: string
+                              description: Daylight saving time offset.
+                            abbreviation_STD:
+                              type: string
+                              description: Standard time abbreviation.
+                            abbreviation_DST:
+                              type: string
+                              description: Daylight saving time abbreviation.
+                  query:
+                    type: object
+                    description: Details of the query parameters used in the request.
+                    properties:
+                      text:
+                        type: string
+                        description: The text input provided for autocomplete.
+                      parsed:
+                        type: object
+                        description: Parsed query details.
+                        properties:
+                          housenumber:
+                            type: string
+                            description: Parsed house number (if available).
+                          street:
+                            type: string
+                            description: Parsed street name (if available).
+                          city:
+                            type: string
+                            description: Parsed city name (if available).
+                          expected_type:
+                            type: string
+                            description: Expected result type (e.g., building, city).
+        '400':
+          description: Invalid input (e.g., missing or incorrect parameters).
+        '401':
+          description: Invalid or missing API key.
+        '500':
+          description: Internal server error.
+  # Batch Geocoding API
+  /batch/geocode/search:
+    post:
+      tags:
+        - Batch Geocoding API
+      summary: Create a new forward batch geocoding job
+      description: Submits a batch of addresses to be geocoded, returning a job ID for retrieving results once the process is complete.
+      operationId: createForwardBatchGeocodingJob
+      parameters:
+        - name: apiKey
+          in: query
+          required: true
+          description: API key for Geoapify services.
+          schema:
+            type: string
+        - name: type
+          in: query
+          required: false
+          description: Location type, such as 'country', 'state', 'city', 'postcode', 'street', or 'amenity'.
+          schema:
+            type: string
+            enum: [ country, state, city, postcode, street, amenity ]
+        - name: lang
+          in: query
+          required: false
+          description: The language of the result, using 2-character ISO 639-1 language codes.
+          schema:
+            type: string
+        - name: filter
+          in: query
+          required: false
+          description: Filter results by country, boundary, circle, etc.
+          schema:
+            type: string
+        - name: bias
+          in: query
+          required: false
+          description: Prefer places based on country, boundary, circle, or location.
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+              description: A list of addresses to be geocoded.
+            example:
+              - "668 Cedar St, San Carlos, CA 94070, United States of America"
+              - "96 Rue Saint-Martin, 75004 Paris, France"
+      responses:
+        '202':
+          description: Job successfully created, returning job details.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: Unique job ID for fetching results.
+                  status:
+                    type: string
+                    description: Status of the job (e.g., "pending").
+                  url:
+                    type: string
+                    description: URL for fetching the batch job results.
+        '400':
+          description: Invalid input (e.g., missing or incorrect parameters).
+        '401':
+          description: Invalid or missing API key.
+        '500':
+          description: Internal server error.
+
+    get:
+      tags:
+        - Batch Geocoding API
+      summary: Get batch geocoding job results
+      description: Retrieves the results of a batch geocoding job using the provided job ID.
+      operationId: getBatchGeocodingResults
+      parameters:
+        - name: apiKey
+          in: query
+          required: true
+          description: API key for Geoapify services.
+          schema:
+            type: string
+        - name: id
+          in: query
+          required: true
+          description: The job ID returned when the batch job was created.
+          schema:
+            type: string
+        - name: format
+          in: query
+          required: false
+          description: Desired format for the results (json or csv).
+          schema:
+            type: string
+            enum: [ json, csv ]
+      responses:
+        '200':
+          description: Successful response with batch geocoding results.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    query:
+                      type: object
+                      description: Original query details.
+                      properties:
+                        text:
+                          type: string
+                          description: Address text for forward geocoding.
+                        lon:
+                          type: number
+                          description: Longitude for reverse geocoding.
+                        lat:
+                          type: number
+                          description: Latitude for reverse geocoding.
+                    formatted:
+                      type: string
+                      description: Formatted address.
+                    lon:
+                      type: number
+                      description: Longitude of the geocoded result.
+                    lat:
+                      type: number
+                      description: Latitude of the geocoded result.
+                    result_type:
+                      type: string
+                      description: Type of the result (e.g., "building", "city").
+                    datasource:
+                      type: object
+                      properties:
+                        sourcename:
+                          type: string
+                          description: Data source name.
+                        attribution:
+                          type: string
+                          description: Attribution for the data source.
+                        license:
+                          type: string
+                          description: License for the data source.
+                        url:
+                          type: string
+                          description: Data source URL.
+        '202':
+          description: The job is still processing.
+        '400':
+          description: Invalid input (e.g., missing or incorrect parameters).
+        '401':
+          description: Invalid or missing API key.
+        '500':
+          description: Internal server error.
+  /batch/geocode/reverse:
+    post:
+      tags:
+        - Batch Geocoding API
+      summary: Create a new reverse batch geocoding job
+      description: Submits a batch of latitude/longitude coordinates to be reverse geocoded, returning a job ID for retrieving results once the process is complete.
+      operationId: createReverseBatchGeocodingJob
+      parameters:
+        - name: apiKey
+          in: query
+          required: true
+          description: API key for Geoapify services.
+          schema:
+            type: string
+        - name: type
+          in: query
+          required: false
+          description: Location type, such as 'country', 'state', 'city', 'postcode', 'street', or 'amenity'.
+          schema:
+            type: string
+            enum: [ country, state, city, postcode, street, amenity ]
+        - name: lang
+          in: query
+          required: false
+          description: The language of the result, using 2-character ISO 639-1 language codes.
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                oneOf:
+                  - type: array
+                    items:
+                      type: number
+                    description: Array of [longitude, latitude].
+                    example: [ -122.263801, 37.502683 ]
+                  - type: object
+                    properties:
+                      lon:
+                        type: number
+                      lat:
+                        type: number
+                    description: Object with 'lon' and 'lat' properties.
+                    example: { "lon": -122.263801, "lat": 37.502683 }
+              description: A list of latitude/longitude pairs for reverse geocoding.
+      responses:
+        '202':
+          description: Job successfully created, returning job details.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: Unique job ID for fetching results.
+                  status:
+                    type: string
+                    description: Status of the job (e.g., "pending").
+                  url:
+                    type: string
+                    description: URL for fetching the batch job results.
+        '400':
+          description: Invalid input (e.g., missing or incorrect parameters).
+        '401':
+          description: Invalid or missing API key.
+        '500':
+          description: Internal server error.
+  # Forward Geocoding API
+  /geocode/search:
+    get:
+      tags:
+        - Forward Geocoding API
+      summary: Geocode an address
+      description: Perform forward geocoding using free-form or structured address queries. The response can return multiple formats and allow filtering or biasing the results by location.
+      operationId: geocodeSearch
+      parameters:
+        - name: apiKey
+          in: query
+          required: true
+          description: Your Geoapify API key.
+          schema:
+            type: string
+        - name: text
+          in: query
+          required: false
+          description: Free-form address to search.
+          schema:
+            type: string
+        - name: name
+          in: query
+          required: false
+          description: Amenity or place name.
+          schema:
+            type: string
+        - name: housenumber
+          in: query
+          required: false
+          description: House number.
+          schema:
+            type: string
+        - name: street
+          in: query
+          required: false
+          description: Street name.
+          schema:
+            type: string
+        - name: postcode
+          in: query
+          required: false
+          description: Postcode or ZIP code.
+          schema:
+            type: string
+        - name: city
+          in: query
+          required: false
+          description: City name.
+          schema:
+            type: string
+        - name: state
+          in: query
+          required: false
+          description: State name.
+          schema:
+            type: string
+        - name: country
+          in: query
+          required: false
+          description: Country name.
+          schema:
+            type: string
+        - name: type
+          in: query
+          required: false
+          description: Location type (e.g., 'country', 'state', 'city').
+          schema:
+            type: string
+        - name: lang
+          in: query
+          required: false
+          description: Result language in ISO 639-1 format (e.g., 'en' for English).
+          schema:
+            type: string
+        - name: limit
+          in: query
+          required: false
+          description: "Max number of results (default: 5)."
+          schema:
+            type: integer
+        - name: filter
+          in: query
+          required: false
+          description: Filter by location (e.g., bounding box, country).
+          schema:
+            type: string
+        - name: bias
+          in: query
+          required: false
+          description: Bias results by proximity or country.
+          schema:
+            type: string
+        - name: format
+          in: query
+          required: false
+          description: "Response format (default is `json`). Other options: `xml`, `geojson`."
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A list of geocoded results.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        datasource:
+                          type: object
+                          properties:
+                            sourcename:
+                              type: string
+                            attribution:
+                              type: string
+                            license:
+                              type: string
+                            url:
+                              type: string
+                        name:
+                          type: string
+                          description: Name of the location or amenity (if available).
+                        country:
+                          type: string
+                          description: Country of the address.
+                        country_code:
+                          type: string
+                          description: ISO 3166-1 Alpha-2 country code.
+                        state:
+                          type: string
+                          description: State or region of the address.
+                        county:
+                          type: string
+                          description: County of the address.
+                        city:
+                          type: string
+                          description: City or town of the address.
+                        district:
+                          type: string
+                          description: District of the address (if available).
+                        suburb:
+                          type: string
+                          description: Suburb of the address (if available).
+                        postcode:
+                          type: string
+                          description: Postal code or ZIP code.
+                        street:
+                          type: string
+                          description: Street name of the address.
+                        housenumber:
+                          type: string
+                          description: House number of the address.
+                        lon:
+                          type: number
+                          format: float
+                          description: Longitude of the location.
+                        lat:
+                          type: number
+                          format: float
+                          description: Latitude of the location.
+                        formatted:
+                          type: string
+                          description: Formatted address string.
+                        address_line1:
+                          type: string
+                          description: Main part of the display address.
+                        address_line2:
+                          type: string
+                          description: Second part of the display address.
+                        result_type:
+                          type: string
+                          description: Type of result (e.g., building, street, city).
+                        timezone:
+                          type: object
+                          properties:
+                            name:
+                              type: string
+                            offset_STD:
+                              type: string
+                            offset_STD_seconds:
+                              type: integer
+                            offset_DST:
+                              type: string
+                            offset_DST_seconds:
+                              type: integer
+                        bbox:
+                          type: object
+                          properties:
+                            lon1:
+                              type: number
+                            lat1:
+                              type: number
+                            lon2:
+                              type: number
+                            lat2:
+                              type: number
+                      example:
+                        datasource:
+                          sourcename: openstreetmap
+                          attribution: "© OpenStreetMap contributors"
+                          license: "Open Database License"
+                          url: "https://www.openstreetmap.org/copyright"
+                        name: "Garegin Hovsepyan Street"
+                        country: "Armenia"
+                        country_code: "am"
+                        state: "Yerevan"
+                        city: "Yerevan"
+                        district: "Norq Marash"
+                        suburb: "Nork Marash"
+                        postcode: "0047"
+                        street: "Garegin Hovsepyan Street"
+                        housenumber: "100"
+                        lon: 44.5443304
+                        lat: 40.1867298
+                        formatted: "100 Garegin Hovsepyan Street, 0047, Yerevan, Norq Marash, Armenia"
+                        address_line1: "100 Garegin Hovsepyan Street"
+                        address_line2: "0047, Yerevan, Norq Marash, Armenia"
+                        result_type: "building"
+                        timezone:
+                          name: "Asia/Yerevan"
+                          offset_STD: "+04:00"
+                          offset_STD_seconds: 14400
+                          offset_DST: "+04:00"
+                          offset_DST_seconds: 14400
+                        bbox:
+                          lon1: 44.5430458
+                          lat1: 40.185287
+                          lon2: 44.5448617
+                          lat2: 40.1878514
+                  query:
+                    type: object
+                    properties:
+                      text:
+                        type: string
+                      housenumber:
+                        type: string
+                      street:
+                        type: string
+                      postcode:
+                        type: string
+                      city:
+                        type: string
+                      country:
+                        type: string
+                      parsed:
+                        type: object
+                        properties:
+                          housenumber:
+                            type: string
+                          street:
+                            type: string
+                          postcode:
+                            type: string
+                          city:
+                            type: string
+                          country:
+                            type: string
+                          expected_type:
+                            type: string
+                    example:
+                      text: ""
+                      housenumber: "100"
+                      street: "Hovsepyan"
+                      postcode: "0047"
+                      city: "Yerevan"
+                      country: "Armenia"
+                      parsed:
+                        housenumber: "100"
+                        street: "Hovsepyan"
+                        postcode: "0047"
+                        city: "Yerevan"
+                        country: "Armenia"
+                        expected_type: "amenity"
+        '400':
+          description: Invalid input.
+        '401':
+          description: Invalid API key.
+        '500':
+          description: Server error.
+  # Reverse Geocoding API
+  /geocode/reverse:
+    get:
+      tags:
+        - Reverse Geocoding API
+      summary: Get address from geographic coordinates
+      description: Returns an address and its components (city, postcode, street, etc.) based on the provided latitude and longitude coordinates.
+      operationId: getReverseGeocode
+      parameters:
+        - name: lat
+          in: query
+          required: true
+          description: Latitude of the location to reverse geocode.
+          schema:
+            type: number
+            format: float
+        - name: lon
+          in: query
+          required: true
+          description: Longitude of the location to reverse geocode.
+          schema:
+            type: number
+            format: float
+        - name: apiKey
+          in: query
+          required: true
+          description: API key for Geoapify services.
+          schema:
+            type: string
+        - name: format
+          in: query
+          required: false
+          description: Response format (json, xml, or geojson).
+          schema:
+            type: string
+            enum: [json, xml, geojson]
+        - name: limit
+          in: query
+          required: false
+          description: Maximum number of results to return.
+          schema:
+            type: integer
+        - name: type
+          in: query
+          required: false
+          description: Type of location to search for (e.g., country, city, postcode, etc.).
+          schema:
+            type: string
+            enum: [country, state, city, postcode, street, amenity]
+        - name: lang
+          in: query
+          required: false
+          description: Language of the returned result. Supports 2-character ISO 639-1 language codes.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response with reverse geocoded address data.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        datasource:
+                          type: object
+                          properties:
+                            sourcename:
+                              type: string
+                              description: Data source name
+                            attribution:
+                              type: string
+                              description: Attribution information
+                            license:
+                              type: string
+                              description: Data source license
+                            url:
+                              type: string
+                              description: Data source URL
+                        name:
+                          type: string
+                          description: Name of the location (if applicable).
+                        country:
+                          type: string
+                          description: Country name.
+                        country_code:
+                          type: string
+                          description: ISO 3166-1 alpha-2 country code.
+                        city:
+                          type: string
+                          description: City name.
+                        postcode:
+                          type: string
+                          description: Postcode of the location.
+                        street:
+                          type: string
+                          description: Street name.
+                        lon:
+                          type: number
+                          description: Longitude of the reverse geocoded location.
+                        lat:
+                          type: number
+                          description: Latitude of the reverse geocoded location.
+                        distance:
+                          type: number
+                          description: Distance to the provided coordinates (in meters).
+                        formatted:
+                          type: string
+                          description: Formatted address.
+                        result_type:
+                          type: string
+                          description: Type of the result location (e.g., city, postcode, street, etc.).
+                        rank:
+                          type: object
+                          properties:
+                            importance:
+                              type: number
+                              description: Importance of the location result.
+                            popularity:
+                              type: number
+                              description: Popularity of the location.
+                        timezone:
+                          type: object
+                          properties:
+                            name:
+                              type: string
+                              description: Name of the timezone.
+                            offset_STD:
+                              type: string
+                              description: Standard time offset.
+                            offset_DST:
+                              type: string
+                              description: Daylight saving time offset.
+                            abbreviation_STD:
+                              type: string
+                              description: Standard time abbreviation.
+                            abbreviation_DST:
+                              type: string
+                              description: Daylight saving time abbreviation.
+                  query:
+                    type: object
+                    description: Details of the query parameters used in the request.
+                    properties:
+                      lat:
+                        type: number
+                        description: Latitude of the queried location.
+                      lon:
+                        type: number
+                        description: Longitude of the queried location.
+                      plus_code:
+                        type: string
+                        description: Plus code (optional, based on coordinates).
+        '400':
+          description: Invalid input (e.g., missing or incorrect parameters).
+        '401':
+          description: Invalid or missing API key.
+        '500':
+          description: Internal server error.
+  # IP Geolocation API
+  /ipinfo:
+    get:
+      tags:
+        - IP Geolocation API
+      summary: Get geolocation information for an IP address
+      description: Retrieves location data such as country, city, currency, and language based on the provided IP address. If no IP address is provided, the user's IP address will be automatically detected.
+      operationId: getIPGeolocation
+      parameters:
+        - name: apiKey
+          in: query
+          required: true
+          description: API key for Geoapify services.
+          schema:
+            type: string
+        - name: ip
+          in: query
+          required: false
+          description: The IP address to look up. If not provided, the request will detect the client's IP address.
+          schema:
+            type: string
+            format: ipv4
+      responses:
+        '200':
+          description: Successful response with geolocation information.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ip:
+                    type: string
+                    description: The IP address that was queried.
+                  country:
+                    type: string
+                    description: The country associated with the IP address.
+                  country_code:
+                    type: string
+                    description: ISO 3166-1 alpha-2 country code.
+                  state:
+                    type: string
+                    description: State or region name.
+                  city:
+                    type: string
+                    description: City name.
+                  lat:
+                    type: number
+                    description: Latitude of the IP's geolocation.
+                  lon:
+                    type: number
+                    description: Longitude of the IP's geolocation.
+                  timezone:
+                    type: object
+                    description: Information about the timezone associated with the location.
+                    properties:
+                      name:
+                        type: string
+                        description: The name of the timezone.
+                      offset_STD:
+                        type: string
+                        description: Standard time offset.
+                      offset_STD_seconds:
+                        type: integer
+                        description: Standard time offset in seconds.
+                      offset_DST:
+                        type: string
+                        description: Daylight saving time offset.
+                      offset_DST_seconds:
+                        type: integer
+                        description: Daylight saving time offset in seconds.
+                      abbreviation_STD:
+                        type: string
+                        description: Abbreviation for standard time.
+                      abbreviation_DST:
+                        type: string
+                        description: Abbreviation for daylight saving time.
+                  currency:
+                    type: object
+                    description: Information about the currency used in the detected location.
+                    properties:
+                      code:
+                        type: string
+                        description: Currency code (e.g., USD).
+                      name:
+                        type: string
+                        description: Full name of the currency.
+                      symbol:
+                        type: string
+                        description: Symbol of the currency.
+                  language:
+                    type: object
+                    description: Information about the language spoken in the detected location.
+                    properties:
+                      code:
+                        type: string
+                        description: Language code (e.g., en).
+                      name:
+                        type: string
+                        description: Name of the language.
+        '400':
+          description: Invalid input (e.g., missing or incorrect parameters).
+        '401':
+          description: Invalid or missing API key.
+        '500':
+          description: Internal server error.

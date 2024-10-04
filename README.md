@@ -1,22 +1,37 @@
-# How to use the Swagger?
-1) Pick the yaml file that you want to use. (for example: geocoding.yaml)
-2) Paste it into https://editor.swagger.io/.
-3) Now you can Swagger requests.
+# Geoapify OpenAPI specifications
+
+## Overview
+The Geoapify OpenAPI specifications provides a convenient way to interact with the Geoapify geolocation services, including:
+
+- Address Autocomplete API (https://apidocs.geoapify.com/docs/geocoding/address-autocomplete/)
+- Batch Geocoding API (https://apidocs.geoapify.com/docs/geocoding/batch/)
+- Forward Geocoding API (https://apidocs.geoapify.com/docs/geocoding/forward-geocoding/)
+- Reverse Geocoding API (https://apidocs.geoapify.com/docs/geocoding/reverse-geocoding/)
+- IP Geolocation API (https://apidocs.geoapify.com/docs/ip-geolocation/)
+
+## Configuration
+
+### API Key Configuration
+- **API Key**: Ensure to replace `YOUR_API_KEY` placeholder in requests with your actual API key.
+
+## How to use the Swagger?
+1) Choose the YAML file that you want to use. For example, geocoding.yaml.
+3) Open Swagger Editor (https://editor.swagger.io/). Paste the content of the YAML file into the editor.
+3) You can now interact with the API, view the documentation, and use the "Try it out" feature to make sample requests directly from the editor.
 
 *Note
-You need to populate the API_KEY as a request parameter.
+Ensure to replace YOUR_API_KEY in the request parameters with your actual API key before making requests.
 
-# How to generate the client?
-1) Pick the yaml file that you want to use. (for example: geocoding.yaml)
-2) Paste it into https://editor.swagger.io/.
-3) On top you can see the "Generate Client" button.
-4) After clicking on it, pick the language for which you want to generate the client. (for example: typescript-angular)
-5) Extract the zip file.
-6) Move the folder to your Angular project's directory. (rename it to swagger-client)
-5) Execute "npm link" on that folder (swagger-client).
-6) Execute "npm link swagger-client" on the root directory.
+## How to generate the client?
+1) Choose the YAML file that you want to use. For example, geocoding.yaml.
+3) Open Swagger Editor (https://editor.swagger.io/). Paste the content of the YAML file into the editor.
+3) At the top of the Swagger Editor, click the "Generate Client" button. Select the language for which you want to generate the client SDK (e.g., typescript-angular).
+4) Download the generated client SDK as a .zip file and extract its contents.
+6) Move the extracted folder to your Angular project directory. Rename the folder to swagger-client for simplicity.
+5) Navigate to the swagger-client folder and run: "npm link"
+6) Then, navigate back to the root directory of your Angular project and run: "npm link swagger-client"
 7) Import the following modules in your Angular application -> [ApiModule, HttpClientModule]
-8) Now you can use the services declared in ApiModule, for example:
+8) Now you can use the services declared in ApiModule. Example usage:
 ```
   private ipGeolocationAPIService = inject(IPGeolocationAPIService);
 

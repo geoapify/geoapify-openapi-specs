@@ -8,6 +8,7 @@ The Geoapify OpenAPI specifications provides a convenient way to interact with t
 - Forward Geocoding API (https://apidocs.geoapify.com/docs/geocoding/forward-geocoding/)
 - Reverse Geocoding API (https://apidocs.geoapify.com/docs/geocoding/reverse-geocoding/)
 - IP Geolocation API (https://apidocs.geoapify.com/docs/ip-geolocation/)
+- Routing API (https://apidocs.geoapify.com/docs/routing/)
 
 ## Configuration
 

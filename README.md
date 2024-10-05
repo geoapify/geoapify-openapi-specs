@@ -36,7 +36,7 @@ Ensure to replace YOUR_API_KEY in the request parameters with your actual API ke
   private ipGeolocationAPIService = inject(IPGeolocationAPIService);
 
   constructor() {
-    this.ipGeolocationAPIService.getIPGeolocation("6dc7fb95a3b246cfa0f3bcef5ce9ed9a").subscribe((data) => {
+    this.ipGeolocationAPIService.getIPGeolocation("YOUR_API_KEY").subscribe((data) => {
       console.log(data);
     });
   }

@@ -316,7 +316,7 @@ paths:
                 {
                   "id": "de5a2fb3e21a43a5915f7173fd711051",
                   "status": "pending",
-                  "url": "https://api.geoapify.com/v1/batch/geocode/search?id=de5a2fb3e21a43a5915f7173fd711051&apiKey=6dc7fb95a3b246cfa0f3bcef5ce9ed9a"
+                  "url": "https://api.geoapify.com/v1/batch/geocode/search?id=de5a2fb3e21a43a5915f7173fd711051&apiKey=YOUR_API_KEY"
                 }
         '400':
           description: Invalid input (e.g., missing or incorrect parameters).
@@ -463,7 +463,7 @@ paths:
                 {
                   "id": "d8756e94f6ee42f7abdd9a0c99e6c9fd",
                   "status": "pending",
-                  "url": "https://api.geoapify.com/v1/batch/geocode/reverse?id=d8756e94f6ee42f7abdd9a0c99e6c9fd&apiKey=6dc7fb95a3b246cfa0f3bcef5ce9ed9a"
+                  "url": "https://api.geoapify.com/v1/batch/geocode/reverse?id=d8756e94f6ee42f7abdd9a0c99e6c9fd&apiKey=YOUR_API_KEY"
                 }
         '400':
           description: Invalid input (e.g., missing or incorrect parameters).

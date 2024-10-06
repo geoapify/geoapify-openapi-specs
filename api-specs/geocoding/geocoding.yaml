@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
-  title: Geoapify APIs
-  description: A collection of Geoapify APIs, including Address Autocomplete, Batch Geocoding, Forward Geocoding, Reverse Geocoding, and IP Geolocation.
+  title: Geoapify "Adresses and location" APIs
+  description: A collection of "Adresses and location", including Address Autocomplete, Batch Geocoding, Forward Geocoding, Reverse Geocoding, and IP Geolocation.
   version: 1.0.0
 servers:
   - url: https://api.geoapify.com/v1

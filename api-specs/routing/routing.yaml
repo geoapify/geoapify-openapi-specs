@@ -9,14 +9,14 @@ servers:
     description: Main Geoapify API server
 
 tags:
-  - name: Map Matching API
-    description: Lets you match geographical coordinates, such as GPS tracks, to the existing road network.
-  - name: Route Matrix API
-    description: Generates a time-distance matrix between source and target locations.
-  - name: Route Planner API
-    description: Optimizes routes between multiple locations for multiple agents.
   - name: Routing API
     description: Provides route calculations between waypoints for different transportation modes.
+  - name: Route Matrix API
+    description: Generates a time-distance matrix between source and target locations.
+  - name: Map Matching API
+    description: Lets you match geographical coordinates, such as GPS tracks, to the existing road network.
+  - name: Route Planner API
+    description: Optimizes routes between multiple locations for multiple agents.
 
 paths:
   /mapmatching:
@@ -44,7 +44,7 @@ paths:
                 mode:
                   type: string
                   description: The transportation mode to use.
-                  enum: [ drive, walk, bicycle ]
+                  enum: [ drive, light_truck, medium_truck, truck, heavy_truck, truck_dangerous_goods, long_truck, bus, scooter, motorcycle, bicycle, mountain_bike, road_bike, walk, hike, transit, approximated_transit ]
                   example: drive
                 waypoints:
                   type: array
@@ -308,7 +308,7 @@ paths:
                 mode:
                   type: string
                   description: The transportation mode to use.
-                  enum: [ drive, truck, walk, bicycle ]
+                  enum: [ drive, light_truck, medium_truck, truck, heavy_truck, truck_dangerous_goods, long_truck, bus, scooter, motorcycle, bicycle, mountain_bike, road_bike, walk, hike, transit, approximated_transit ]
                   example: drive
                 sources:
                   type: array
@@ -514,7 +514,7 @@ paths:
                 mode:
                   type: string
                   description: The transportation mode to use.
-                  enum: [ drive, truck, walk, bicycle ]
+                  enum: [ drive, light_truck, medium_truck, truck, heavy_truck, truck_dangerous_goods, long_truck, bus, scooter, motorcycle, bicycle, mountain_bike, road_bike, walk, hike, transit, approximated_transit ]
                   example: drive
                 agents:
                   type: array
@@ -535,7 +535,7 @@ paths:
                         type: array
                         items:
                           type: number
-                        description: Optional end location for the agent.
+                        description: Optional end location for the agent [longitude, latitude].
                       end_location_index:
                         type: integer
                         description: Index of the end location in the locations list.
@@ -1064,6 +1064,13 @@ paths:
       description: Calculates routes between two or more waypoints for a variety of transportation modes, such as cars, trucks, bicycles, and walking. Supports customization using parameters like avoidance of road types and route parts.
       operationId: calculateRoute
       parameters:
+        - name: apiKey
+          in: query
+          required: true
+          description: API key for authentication.
+          schema:
+            type: string
+            example: "YOUR_API_KEY"
         - name: waypoints
           in: query
           required: true
@@ -1077,15 +1084,8 @@ paths:
           description: Mode of transportation for route calculation.
           schema:
             type: string
-            enum: [ drive, walk, bike, truck, scooter, hike ]
+            enum: [ drive, light_truck, medium_truck, truck, heavy_truck, truck_dangerous_goods, long_truck, bus, scooter, motorcycle, bicycle, mountain_bike, road_bike, walk, hike, transit, approximated_transit ]
             example: "drive"
-        - name: apiKey
-          in: query
-          required: true
-          description: API key for authentication.
-          schema:
-            type: string
-            example: "YOUR_API_KEY"
         - name: type
           in: query
           required: false

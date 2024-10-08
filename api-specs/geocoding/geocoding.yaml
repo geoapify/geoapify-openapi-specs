@@ -8,14 +8,14 @@ servers:
     description: Main Geoapify API server
 
 tags:
-  - name: Address Autocomplete API
-    description: Provides address suggestions from input text.
-  - name: Batch Geocoding API
-    description: Allows geocoding multiple addresses or coordinates in a single request.
   - name: Forward Geocoding API
     description: Converts addresses into geographic coordinates.
   - name: Reverse Geocoding API
     description: Converts geographic coordinates into addresses.
+  - name: Address Autocomplete API
+    description: Provides address suggestions from input text.
+  - name: Batch Geocoding API
+    description: Allows geocoding multiple addresses or coordinates in a single request.
   - name: IP Geolocation API
     description: Retrieves the geographical location based on the IP address.
 

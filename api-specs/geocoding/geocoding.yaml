@@ -1,0 +1,1200 @@
+openapi: 3.0.0
+info:
+  title: Geoapify "Adresses and location" APIs
+  description: A collection of "Adresses and location", including Address Autocomplete, Batch Geocoding, Forward Geocoding, Reverse Geocoding, and IP Geolocation.
+  version: 1.0.0
+servers:
+  - url: https://api.geoapify.com/v1
+    description: Main Geoapify API server
+
+tags:
+  - name: Forward Geocoding API
+    description: Converts addresses into geographic coordinates.
+  - name: Reverse Geocoding API
+    description: Converts geographic coordinates into addresses.
+  - name: Address Autocomplete API
+    description: Provides address suggestions from input text.
+  - name: Batch Geocoding API
+    description: Allows geocoding multiple addresses or coordinates in a single request.
+  - name: IP Geolocation API
+    description: Retrieves the geographical location based on the IP address.
+
+paths:
+  #  Address Autocomplete API
+  /geocode/autocomplete:
+    get:
+      tags:
+        - Address Autocomplete API
+      summary: Get address suggestions from input text
+      description: Returns suggested addresses and relevant information (such as country, city, and street) based on the input text provided.
+      operationId: getAddressAutocomplete
+      parameters:
+        - name: text
+          in: query
+          required: true
+          description: The text to autocomplete (e.g., partial address or place name).
+          schema:
+            type: string
+            example: "Regen"
+        - name: apiKey
+          in: query
+          required: true
+          description: API key for Geoapify services.
+          schema:
+            type: string
+            example: "YOUR_API_KEY"
+        - name: format
+          in: query
+          required: false
+          description: Response format (json, xml, or geojson).
+          schema:
+            type: string
+            enum: [json, xml, geojson]
+            example: "json"
+        - name: type
+          in: query
+          required: false
+          description: Type of location to search for (e.g., country, city, postcode, etc.).
+          schema:
+            type: string
+            enum: [country, state, city, postcode, street, building]
+            example: "city"
+        - name: limit
+          in: query
+          required: false
+          description: Maximum number of results to return.
+          schema:
+            type: integer
+            example: 1
+        - name: lang
+          in: query
+          required: false
+          description: Language of the returned result. Supports 2-character ISO 639-1 language codes.
+          schema:
+            type: string
+            example: en
+      responses:
+        '200':
+          description: Successful response with address suggestions.
+          content:
+            application/json:
+              example: |
+                {
+                  "results": [
+                    {
+                      "datasource": {
+                        "sourcename": "openstreetmap",
+                        "attribution": "© OpenStreetMap contributors",
+                        "license": "Open Database License",
+                        "url": "https://www.openstreetmap.org/copyright"
+                      },
+                      "country": "Germany",
+                      "country_code": "de",
+                      "state": "Bavaria",
+                      "county": "Landkreis Regen",
+                      "city": "Regensburg",
+                      "postcode": "94209",
+                      "state_code": "BY",
+                      "result_type": "city",
+                      "formatted": "Regensburg, BY, Germany",
+                      "address_line1": "Regensburg",
+                      "address_line2": "BY, Germany",
+                      "category": "administrative",
+                      "timezone": {
+                        "name": "Europe/Berlin",
+                        "offset_STD": "+01:00",
+                        "offset_STD_seconds": 3600,
+                        "offset_DST": "+02:00",
+                        "offset_DST_seconds": 7200,
+                        "abbreviation_STD": "CET",
+                        "abbreviation_DST": "CEST"
+                      },
+                      "plus_code": "8FXJ239W+RX",
+                      "plus_code_short": "9W+RX Regensburg, Bavaria, Germany",
+                      "rank": {
+                        "confidence": 1,
+                        "confidence_city_level": 1,
+                        "match_type": "full_match"
+                      },
+                      "place_id": "51ac938ecde9312840596b57321180824840f00101f901cbf3000000000000c00208",
+                      "bbox": {
+                        "lon1": 12.0290745,
+                        "lat1": 48.9667457,
+                        "lon2": 12.1916078,
+                        "lat2": 49.0764158
+                      },
+                      "lon": 12.0974869,
+                      "lat": 49.0195333
+                    }
+                  ],
+                  "query": {
+                    "text": "Regen",
+                    "parsed": {
+                      "city": "regen",
+                      "expected_type": "unknown"
+                    }
+                  }
+                }
+            application/xml:
+              example: |
+                <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+                <root>
+                  <results>
+                    <country>Germany</country>
+                    <country_code>de</country_code>
+                    <state>Bavaria</state>
+                    <city>Regensburg</city>
+                    <datasource>
+                      <sourcename>openstreetmap</sourcename>
+                      <attribution>© OpenStreetMap contributors</attribution>
+                      <license>Open Database License</license>
+                      <url>https://www.openstreetmap.org/copyright</url>
+                    </datasource>
+                    <state_code>BY</state_code>
+                    <lon>12.0974869</lon>
+                    <lat>49.0195333</lat>
+                    <result_type>city</result_type>
+                    <formatted>Regensburg, BY, Germany</formatted>
+                    <address_line1>Regensburg</address_line1>
+                    <address_line2>BY, Germany</address_line2>
+                    <category>administrative</category>
+                    <timezone>
+                      <name>Europe/Berlin</name>
+                      <offset_STD>+01:00</offset_STD>
+                      <offset_STD_seconds>3600</offset_STD_seconds>
+                      <offset_DST>+02:00</offset_DST>
+                      <offset_DST_seconds>7200</offset_DST_seconds>
+                      <abbreviation_STD>CET</abbreviation_STD>
+                      <abbreviation_DST>CEST</abbreviation_DST>
+                    </timezone>
+                  </results>
+                  <query>
+                    <text>Regen</text>
+                    <parsed>
+                      <city>regen</city>
+                      <expected_type>unknown</expected_type>
+                    </parsed>
+                  </query>
+                </root>
+            application/geo+json:
+              example: |
+                {
+                  "type": "FeatureCollection",
+                  "features": [
+                    {
+                      "type": "Feature",
+                      "properties": {
+                        "country": "Germany",
+                        "country_code": "de",
+                        "state": "Bavaria",
+                        "city": "Regensburg",
+                        "datasource": {
+                          "sourcename": "openstreetmap",
+                          "attribution": "© OpenStreetMap contributors",
+                          "license": "Open Database License",
+                          "url": "https://www.openstreetmap.org/copyright"
+                        },
+                        "state_code": "BY",
+                        "lon": 12.0974869,
+                        "lat": 49.0195333,
+                        "population": 145000,
+                        "result_type": "city",
+                        "formatted": "Regensburg, BY, Germany",
+                        "address_line1": "Regensburg",
+                        "address_line2": "BY, Germany",
+                        "category": "administrative",
+                        "timezone": {
+                          "name": "Europe/Berlin",
+                          "offset_STD": "+01:00",
+                          "offset_STD_seconds": 3600,
+                          "offset_DST": "+02:00",
+                          "offset_DST_seconds": 7200,
+                          "abbreviation_STD": "CET",
+                          "abbreviation_DST": "CEST"
+                        },
+                        "plus_code": "8FXJ239W+RX",
+                        "plus_code_short": "9W+RX Regensburg, Bavaria, Germany",
+                        "rank": {
+                          "confidence": 1,
+                          "confidence_city_level": 1,
+                          "match_type": "full_match"
+                        },
+                        "place_id": "51ac938ecde9312840596b57321180824840f00101f901cbf3000000000000c00208"
+                      },
+                      "geometry": {
+                        "type": "Point",
+                        "coordinates": [
+                          12.0974869,
+                          49.0195333
+                        ]
+                      },
+                      "bbox": [
+                        12.0290745,
+                        48.9667457,
+                        12.1916078,
+                        49.0764158
+                      ]
+                    }
+                  ],
+                  "query": {
+                    "text": "Regen",
+                    "parsed": {
+                      "city": "regen",
+                      "expected_type": "unknown"
+                    }
+                  }
+                }
+        '400':
+          description: Invalid input (e.g., missing or incorrect parameters).
+        '401':
+          description: Invalid or missing API key.
+        '500':
+          description: Internal server error.
+  # Batch Geocoding API
+  /batch/geocode/search:
+    post:
+      tags:
+        - Batch Geocoding API
+      summary: Create a new forward batch geocoding job
+      description: Submits a batch of addresses to be geocoded, returning a job ID for retrieving results once the process is complete.
+      operationId: createForwardBatchGeocodingJob
+      parameters:
+        - name: apiKey
+          in: query
+          required: true
+          description: API key for Geoapify services.
+          schema:
+            type: string
+            example: "YOUR_API_KEY"
+        - name: type
+          in: query
+          required: false
+          description: Location type, such as 'country', 'state', 'city', 'postcode', 'street', or 'amenity'.
+          schema:
+            type: string
+            enum: [ country, state, city, postcode, street, amenity ]
+            example: "city"
+        - name: lang
+          in: query
+          required: false
+          description: The language of the result, using 2-character ISO 639-1 language codes.
+          schema:
+            type: string
+            example: en
+        - name: filter
+          in: query
+          required: false
+          description: Filter results by country, boundary, circle, etc.
+          schema:
+            type: string
+            example: "rect:8.738507,-10.137391,63.042511,59.098366"
+        - name: bias
+          in: query
+          required: false
+          description: Prefer places based on country, boundary, circle, or location.
+          schema:
+            type: string
+            example: "rect:8.738507,-10.137391,63.042511,59.098366"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+              description: A list of addresses to be geocoded.
+            example:
+              - "668 Cedar St, San Carlos, CA 94070, United States of America"
+              - "96 Rue Saint-Martin, 75004 Paris, France"
+      responses:
+        '202':
+          description: Job successfully created, returning job details.
+          content:
+            application/json:
+              example: |
+                {
+                  "id": "de5a2fb3e21a43a5915f7173fd711051",
+                  "status": "pending",
+                  "url": "https://api.geoapify.com/v1/batch/geocode/search?id=de5a2fb3e21a43a5915f7173fd711051&apiKey=YOUR_API_KEY"
+                }
+        '400':
+          description: Invalid input (e.g., missing or incorrect parameters).
+        '401':
+          description: Invalid or missing API key.
+        '500':
+          description: Internal server error.
+
+    get:
+      tags:
+        - Batch Geocoding API
+      summary: Get batch geocoding job results
+      description: Retrieves the results of a batch geocoding job using the provided job ID.
+      operationId: getBatchGeocodingResults
+      parameters:
+        - name: apiKey
+          in: query
+          required: true
+          description: API key for Geoapify services.
+          schema:
+            type: string
+            example: "YOUR_API_KEY"
+        - name: id
+          in: query
+          required: true
+          description: The job ID returned when the batch job was created.
+          schema:
+            type: string
+            example: '8f25c31e2179441ea103868fd9c3784d'
+        - name: format
+          in: query
+          required: false
+          description: Desired format for the results (json or csv).
+          schema:
+            type: string
+            enum: [ json, csv ]
+            example: json
+      responses:
+        '200':
+          description: Successful response with batch geocoding results.
+          content:
+            application/json:
+              example: |
+                [
+                  {
+                    "query": {
+                      "text": "668 Cedar St, San Carlos, CA 94070, United States of America",
+                      "parsed": {
+                        "housenumber": "668",
+                        "street": "cedar st",
+                        "postcode": "94070",
+                        "city": "san carlos",
+                        "state": "ca",
+                        "country": "united states of america",
+                        "expected_type": "building"
+                      }
+                    }
+                  },
+                  {
+                    "query": {
+                      "text": "96 Rue Saint-Martin, 75004 Paris, France",
+                      "parsed": {
+                        "housenumber": "96",
+                        "street": "rue saint-martin",
+                        "postcode": "75004",
+                        "city": "paris",
+                        "country": "france",
+                        "expected_type": "building"
+                      }
+                    }
+                  }
+                ]
+            text/csv:
+              example: |
+                "query.text","query.parsed.housenumber","query.parsed.street","query.parsed.postcode","query.parsed.city","query.parsed.state","query.parsed.country","query.parsed.expected_type"
+                "668 Cedar St, San Carlos, CA 94070, United States of America","668","cedar st","94070","san carlos","ca","united states of america","building"
+                "96 Rue Saint-Martin, 75004 Paris, France","96","rue saint-martin","75004","paris","","france","building"
+        '202':
+          description: The job is still processing.
+        '400':
+          description: Invalid input (e.g., missing or incorrect parameters).
+        '401':
+          description: Invalid or missing API key.
+        '500':
+          description: Internal server error.
+  /batch/geocode/reverse:
+    post:
+      tags:
+        - Batch Geocoding API
+      summary: Create a new reverse batch geocoding job
+      description: Submits a batch of latitude/longitude coordinates to be reverse geocoded, returning a job ID for retrieving results once the process is complete.
+      operationId: createReverseBatchGeocodingJob
+      parameters:
+        - name: apiKey
+          in: query
+          required: true
+          description: API key for Geoapify services.
+          schema:
+            type: string
+            example: "YOUR_API_KEY"
+        - name: type
+          in: query
+          required: false
+          description: Location type, such as 'country', 'state', 'city', 'postcode', 'street', or 'amenity'.
+          schema:
+            type: string
+            enum: [ country, state, city, postcode, street, amenity ]
+            example: "city"
+        - name: lang
+          in: query
+          required: false
+          description: The language of the result, using 2-character ISO 639-1 language codes.
+          schema:
+            type: string
+            example: en
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                oneOf:
+                  - type: array
+                    items:
+                      type: number
+                    description: Array of [longitude, latitude].
+                    example: [ -122.263801, 37.502683 ]
+                  - type: object
+                    properties:
+                      lon:
+                        type: number
+                      lat:
+                        type: number
+                    description: Object with 'lon' and 'lat' properties.
+                    example: { "lon": -122.263801, "lat": 37.502683 }
+              description: A list of latitude/longitude pairs for reverse geocoding.
+      responses:
+        '202':
+          description: Job successfully created, returning job details.
+          content:
+            application/json:
+              example: |
+                {
+                  "id": "d8756e94f6ee42f7abdd9a0c99e6c9fd",
+                  "status": "pending",
+                  "url": "https://api.geoapify.com/v1/batch/geocode/reverse?id=d8756e94f6ee42f7abdd9a0c99e6c9fd&apiKey=YOUR_API_KEY"
+                }
+        '400':
+          description: Invalid input (e.g., missing or incorrect parameters).
+        '401':
+          description: Invalid or missing API key.
+        '500':
+          description: Internal server error.
+  # Forward Geocoding API
+  /geocode/search:
+    get:
+      tags:
+        - Forward Geocoding API
+      summary: Geocode an address
+      description: Perform forward geocoding using free-form or structured address queries. The response can return multiple formats and allow filtering or biasing the results by location.
+      operationId: geocodeSearch
+      parameters:
+        - name: apiKey
+          in: query
+          required: true
+          description: Your Geoapify API key.
+          schema:
+            type: string
+            example: "YOUR_API_KEY"
+        - name: text
+          in: query
+          required: false
+          description: Free-form address to search.
+          schema:
+            type: string
+            example: "Hannoverstr"
+        - name: name
+          in: query
+          required: false
+          description: Amenity or place name.
+          schema:
+            type: string
+            example: 'Hannoverstraße'
+        - name: housenumber
+          in: query
+          required: false
+          description: House number.
+          schema:
+            type: string
+            example: '1A'
+        - name: street
+          in: query
+          required: false
+          description: Street name.
+          schema:
+            type: string
+            example: 'Hannoverstraße'
+        - name: postcode
+          in: query
+          required: false
+          description: Postcode or ZIP code.
+          schema:
+            type: string
+            example: '44651'
+        - name: city
+          in: query
+          required: false
+          description: City name.
+          schema:
+            type: string
+            example: 'Herne'
+        - name: state
+          in: query
+          required: false
+          description: State name.
+          schema:
+            type: string
+            example: 'Westphalia'
+        - name: country
+          in: query
+          required: false
+          description: Country name.
+          schema:
+            type: string
+            example: 'Germany'
+        - name: type
+          in: query
+          required: false
+          description: Location type (e.g., 'country', 'state', 'city').
+          schema:
+            type: string
+            example: 'amenity'
+        - name: lang
+          in: query
+          required: false
+          description: Result language in ISO 639-1 format (e.g., 'en' for English).
+          schema:
+            type: string
+            example: en
+        - name: limit
+          in: query
+          required: false
+          description: "Max number of results (default: 5)."
+          schema:
+            type: integer
+            example: 1
+        - name: filter
+          in: query
+          required: false
+          description: Filter by location (e.g., bounding box, country).
+          schema:
+            type: string
+            example: "rect:8.738507,-10.137391,63.042511,59.098366"
+        - name: bias
+          in: query
+          required: false
+          description: Bias results by proximity or country.
+          schema:
+            type: string
+            example: "rect:8.738507,-10.137391,63.042511,59.098366"
+        - name: format
+          in: query
+          required: false
+          description: "Response format (default is `json`). Other options: `xml`, `geojson`."
+          schema:
+            type: string
+            example: 'json'
+      responses:
+        '200':
+          description: A list of geocoded results.
+          content:
+            application/json:
+              example: |
+                {
+                  "results": [
+                    {
+                      "datasource": {
+                        "sourcename": "openstreetmap",
+                        "attribution": "© OpenStreetMap contributors",
+                        "license": "Open Database License",
+                        "url": "https://www.openstreetmap.org/copyright"
+                      },
+                      "country": "Germany",
+                      "country_code": "de",
+                      "state": "Bavaria",
+                      "city": "Munich",
+                      "postcode": "80997",
+                      "district": "Moosach-Bahnhof",
+                      "suburb": "Moosach",
+                      "street": "Hannoverstraße",
+                      "housenumber": "8",
+                      "lon": 11.50395619013508,
+                      "lat": 48.18515935,
+                      "state_code": "BY",
+                      "result_type": "building",
+                      "formatted": "Hannoverstraße 8, 80997 Munich, Germany",
+                      "address_line1": "Hannoverstraße 8",
+                      "address_line2": "80997 Munich, Germany",
+                      "category": "building.residential",
+                      "timezone": {
+                        "name": "Europe/Berlin",
+                        "offset_STD": "+01:00",
+                        "offset_STD_seconds": 3600,
+                        "offset_DST": "+02:00",
+                        "offset_DST_seconds": 7200,
+                        "abbreviation_STD": "CET",
+                        "abbreviation_DST": "CEST"
+                      },
+                      "plus_code": "8FWH5GP3+3H",
+                      "plus_code_short": "5GP3+3H Munich, Bavaria, Germany",
+                      "rank": {
+                        "importance": 0.00000999999999995449,
+                        "confidence": 0,
+                        "confidence_city_level": 0,
+                        "confidence_street_level": 0,
+                        "confidence_building_level": 0,
+                        "match_type": "match_by_building"
+                      },
+                      "place_id": "516d7eb68b06022740593966344db3174840f00102f901e098c30500000000c00203",
+                      "bbox": {
+                        "lon1": 11.5037848,
+                        "lat1": 48.1850482,
+                        "lon2": 11.5041224,
+                        "lat2": 48.1852642
+                      }
+                    }
+                  ],
+                  "query": {
+                    "text": "Hannoverstr",
+                    "housenumber": "1A",
+                    "street": "Hannoverstraße",
+                    "postcode": "44651",
+                    "city": "Herne",
+                    "state": "Westphalia",
+                    "country": "Germany",
+                    "parsed": {
+                      "house": "hannoverstr hannoverstraße",
+                      "housenumber": "1A",
+                      "street": "Hannoverstraße",
+                      "postcode": "44651",
+                      "city": "Herne",
+                      "state": "Westphalia",
+                      "country": "Germany",
+                      "expected_type": "amenity"
+                    }
+                  }
+                }
+            application/xml:
+              example: |
+                <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+                <root>
+                  <results>
+                    <datasource>
+                      <sourcename>openstreetmap</sourcename>
+                      <attribution>© OpenStreetMap contributors</attribution>
+                      <license>Open Database License</license>
+                      <url>https://www.openstreetmap.org/copyright</url>
+                    </datasource>
+                    <country>Germany</country>
+                    <country_code>de</country_code>
+                    <state>Bavaria</state>
+                    <city>Munich</city>
+                    <postcode>80997</postcode>
+                    <district>Moosach-Bahnhof</district>
+                    <suburb>Moosach</suburb>
+                    <street>Hannoverstraße</street>
+                    <housenumber>8</housenumber>
+                    <lon>11.50395619013508</lon>
+                    <lat>48.18515935</lat>
+                    <state_code>BY</state_code>
+                    <result_type>building</result_type>
+                    <formatted>Hannoverstraße 8, 80997 Munich, Germany</formatted>
+                    <address_line1>Hannoverstraße 8</address_line1>
+                    <address_line2>80997 Munich, Germany</address_line2>
+                    <category>building.residential</category>
+                    <timezone>
+                      <name>Europe/Berlin</name>
+                      <offset_STD>+01:00</offset_STD>
+                      <offset_STD_seconds>3600</offset_STD_seconds>
+                      <offset_DST>+02:00</offset_DST>
+                      <offset_DST_seconds>7200</offset_DST_seconds>
+                      <abbreviation_STD>CET</abbreviation_STD>
+                      <abbreviation_DST>CEST</abbreviation_DST>
+                    </timezone>
+                    <plus_code>8FWH5GP3+3H</plus_code>
+                    <plus_code_short>5GP3+3H Munich, Bavaria, Germany</plus_code_short>
+                    <rank>
+                      <importance>0.00000999999999995449</importance>
+                      <confidence>0</confidence>
+                      <confidence_city_level>0</confidence_city_level>
+                      <confidence_street_level>0</confidence_street_level>
+                      <confidence_building_level>0</confidence_building_level>
+                      <match_type>match_by_building</match_type>
+                    </rank>
+                    <place_id>516d7eb68b06022740593966344db3174840f00102f901e098c30500000000c00203</place_id>
+                    <bbox>
+                      <lon1>11.5037848</lon1>
+                      <lat1>48.1850482</lat1>
+                      <lon2>11.5041224</lon2>
+                      <lat2>48.1852642</lat2>
+                    </bbox>
+                  </results>
+                  <query>
+                    <text>Hannoverstr</text>
+                    <housenumber>1A</housenumber>
+                    <street>Hannoverstraße</street>
+                    <postcode>44651</postcode>
+                    <city>Herne</city>
+                    <state>Westphalia</state>
+                    <country>Germany</country>
+                    <parsed>
+                      <house>hannoverstr hannoverstraße</house>
+                      <housenumber>1A</housenumber>
+                      <street>Hannoverstraße</street>
+                      <postcode>44651</postcode>
+                      <city>Herne</city>
+                      <state>Westphalia</state>
+                      <country>Germany</country>
+                      <expected_type>amenity</expected_type>
+                    </parsed>
+                  </query>
+                </root>
+            application/geo+json:
+              example: |
+                {
+                  "type": "FeatureCollection",
+                  "features": [
+                    {
+                      "type": "Feature",
+                      "properties": {
+                        "datasource": {
+                          "sourcename": "openstreetmap",
+                          "attribution": "© OpenStreetMap contributors",
+                          "license": "Open Database License",
+                          "url": "https://www.openstreetmap.org/copyright"
+                        },
+                        "country": "Germany",
+                        "country_code": "de",
+                        "state": "Bavaria",
+                        "city": "Munich",
+                        "postcode": "80997",
+                        "district": "Moosach-Bahnhof",
+                        "suburb": "Moosach",
+                        "street": "Hannoverstraße",
+                        "housenumber": "8",
+                        "lon": 11.50395619013508,
+                        "lat": 48.18515935,
+                        "state_code": "BY",
+                        "result_type": "building",
+                        "formatted": "Hannoverstraße 8, 80997 Munich, Germany",
+                        "address_line1": "Hannoverstraße 8",
+                        "address_line2": "80997 Munich, Germany",
+                        "category": "building.residential",
+                        "timezone": {
+                          "name": "Europe/Berlin",
+                          "offset_STD": "+01:00",
+                          "offset_STD_seconds": 3600,
+                          "offset_DST": "+02:00",
+                          "offset_DST_seconds": 7200,
+                          "abbreviation_STD": "CET",
+                          "abbreviation_DST": "CEST"
+                        },
+                        "plus_code": "8FWH5GP3+3H",
+                        "plus_code_short": "5GP3+3H Munich, Bavaria, Germany",
+                        "rank": {
+                          "importance": 0.00000999999999995449,
+                          "confidence": 0,
+                          "confidence_city_level": 0,
+                          "confidence_street_level": 0,
+                          "confidence_building_level": 0,
+                          "match_type": "match_by_building"
+                        },
+                        "place_id": "516d7eb68b06022740593966344db3174840f00102f901e098c30500000000c00203"
+                      },
+                      "geometry": {
+                        "type": "Point",
+                        "coordinates": [
+                          11.50395619013508,
+                          48.18515935
+                        ]
+                      },
+                      "bbox": [
+                        11.5037848,
+                        48.1850482,
+                        11.5041224,
+                        48.1852642
+                      ]
+                    }
+                  ],
+                  "query": {
+                    "text": "Hannoverstr",
+                    "housenumber": "1A",
+                    "street": "Hannoverstraße",
+                    "postcode": "44651",
+                    "city": "Herne",
+                    "state": "Westphalia",
+                    "country": "Germany",
+                    "parsed": {
+                      "house": "hannoverstr hannoverstraße",
+                      "housenumber": "1A",
+                      "street": "Hannoverstraße",
+                      "postcode": "44651",
+                      "city": "Herne",
+                      "state": "Westphalia",
+                      "country": "Germany",
+                      "expected_type": "amenity"
+                    }
+                  }
+                }
+        '400':
+          description: Invalid input.
+        '401':
+          description: Invalid API key.
+        '500':
+          description: Server error.
+  # Reverse Geocoding API
+  /geocode/reverse:
+    get:
+      tags:
+        - Reverse Geocoding API
+      summary: Get address from geographic coordinates
+      description: Returns an address and its components (city, postcode, street, etc.) based on the provided latitude and longitude coordinates.
+      operationId: getReverseGeocode
+      parameters:
+        - name: lat
+          in: query
+          required: true
+          description: Latitude of the location to reverse geocode.
+          schema:
+            type: number
+            format: float
+            example: 36.47032
+        - name: lon
+          in: query
+          required: true
+          description: Longitude of the location to reverse geocode.
+          schema:
+            type: number
+            format: float
+            example: -86.65138
+        - name: apiKey
+          in: query
+          required: true
+          description: API key for Geoapify services.
+          schema:
+            type: string
+            example: "YOUR_API_KEY"
+        - name: format
+          in: query
+          required: false
+          description: Response format (json, xml, or geojson).
+          schema:
+            type: string
+            enum: [json, xml, geojson]
+            example: "json"
+        - name: limit
+          in: query
+          required: false
+          description: Maximum number of results to return.
+          schema:
+            type: integer
+            example: 1
+        - name: type
+          in: query
+          required: false
+          description: Type of location to search for (e.g., country, city, postcode, etc.).
+          schema:
+            type: string
+            enum: [country, state, city, postcode, street, amenity]
+            example: "city"
+        - name: lang
+          in: query
+          required: false
+          description: Language of the returned result. Supports 2-character ISO 639-1 language codes.
+          schema:
+            type: string
+            example: en
+      responses:
+        '200':
+          description: Successful response with reverse geocoded address data.
+          content:
+            application/json:
+              example: |
+                {
+                  "results": [
+                    {
+                      "datasource": {
+                        "sourcename": "openstreetmap",
+                        "attribution": "© OpenStreetMap contributors",
+                        "license": "Open Database License",
+                        "url": "https://www.openstreetmap.org/copyright"
+                      },
+                      "country": "United States",
+                      "country_code": "us",
+                      "region": "Middle Tennessee",
+                      "state": "Tennessee",
+                      "county": "Sumner County",
+                      "city": "White House",
+                      "postcode": "37188",
+                      "lon": -86.6536503,
+                      "lat": 36.4682439,
+                      "state_code": "TN",
+                      "distance": 0,
+                      "result_type": "postcode",
+                      "formatted": "White House, TN 37188, United States of America",
+                      "address_line1": "White House, TN 37188",
+                      "address_line2": "United States of America",
+                      "category": "administrative",
+                      "timezone": {
+                        "name": "America/Chicago",
+                        "offset_STD": "-06:00",
+                        "offset_STD_seconds": -21600,
+                        "offset_DST": "-05:00",
+                        "offset_DST_seconds": -18000,
+                        "abbreviation_STD": "CST",
+                        "abbreviation_DST": "CDT"
+                      },
+                      "plus_code": "868MF89W+7G",
+                      "plus_code_short": "9W+7G White House, Sumner County, United States",
+                      "rank": {
+                        "importance": 0.3758389495615451,
+                        "popularity": 1.8230053383091829
+                      },
+                      "place_id": "5151611168d5a955c0599786866aef3b4240f00101f9017a02030000000000c0020792030833373138382b7573",
+                      "bbox": {
+                        "lon1": -86.714807,
+                        "lat1": 36.430421,
+                        "lon2": -86.624015,
+                        "lat2": 36.507271
+                      }
+                    }
+                  ],
+                  "query": {
+                    "lat": 36.47032,
+                    "lon": -86.65138,
+                    "plus_code": "868MF8CX+4C"
+                  }
+                }
+            application/xml:
+              example: |
+                <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+                <root>
+                  <results>
+                    <datasource>
+                      <sourcename>openstreetmap</sourcename>
+                      <attribution>© OpenStreetMap contributors</attribution>
+                      <license>Open Database License</license>
+                      <url>https://www.openstreetmap.org/copyright</url>
+                    </datasource>
+                    <country>United States</country>
+                    <country_code>us</country_code>
+                    <region>Middle Tennessee</region>
+                    <state>Tennessee</state>
+                    <county>Sumner County</county>
+                    <city>White House</city>
+                    <postcode>37188</postcode>
+                    <lon>-86.6536503</lon>
+                    <lat>36.4682439</lat>
+                    <state_code>TN</state_code>
+                    <distance>0</distance>
+                    <result_type>postcode</result_type>
+                    <formatted>White House, TN 37188, United States of America</formatted>
+                    <address_line1>White House, TN 37188</address_line1>
+                    <address_line2>United States of America</address_line2>
+                    <category>administrative</category>
+                    <timezone>
+                      <name>America/Chicago</name>
+                      <offset_STD>-06:00</offset_STD>
+                      <offset_STD_seconds>-21600</offset_STD_seconds>
+                      <offset_DST>-05:00</offset_DST>
+                      <offset_DST_seconds>-18000</offset_DST_seconds>
+                      <abbreviation_STD>CST</abbreviation_STD>
+                      <abbreviation_DST>CDT</abbreviation_DST>
+                    </timezone>
+                    <plus_code>868MF89W+7G</plus_code>
+                    <plus_code_short>9W+7G White House, Sumner County, United States</plus_code_short>
+                    <rank>
+                      <importance>0.3758389495615451</importance>
+                      <popularity>1.8230053383091829</popularity>
+                    </rank>
+                    <place_id>5151611168d5a955c0599786866aef3b4240f00101f9017a02030000000000c0020792030833373138382b7573</place_id>
+                    <bbox>
+                      <lon1>-86.714807</lon1>
+                      <lat1>36.430421</lat1>
+                      <lon2>-86.624015</lon2>
+                      <lat2>36.507271</lat2>
+                    </bbox>
+                  </results>
+                  <query>
+                    <lat>36.47032</lat>
+                    <lon>-86.65138</lon>
+                    <plus_code>868MF8CX+4C</plus_code>
+                  </query>
+                </root>
+            application/geo+json:
+              example: |
+                {
+                  "type": "FeatureCollection",
+                  "features": [
+                    {
+                      "type": "Feature",
+                      "properties": {
+                        "datasource": {
+                          "sourcename": "openstreetmap",
+                          "attribution": "© OpenStreetMap contributors",
+                          "license": "Open Database License",
+                          "url": "https://www.openstreetmap.org/copyright"
+                        },
+                        "country": "United States",
+                        "country_code": "us",
+                        "region": "Middle Tennessee",
+                        "state": "Tennessee",
+                        "county": "Sumner County",
+                        "city": "White House",
+                        "postcode": "37188",
+                        "lon": -86.6536503,
+                        "lat": 36.4682439,
+                        "state_code": "TN",
+                        "distance": 0,
+                        "result_type": "postcode",
+                        "formatted": "White House, TN 37188, United States of America",
+                        "address_line1": "White House, TN 37188",
+                        "address_line2": "United States of America",
+                        "category": "administrative",
+                        "timezone": {
+                          "name": "America/Chicago",
+                          "offset_STD": "-06:00",
+                          "offset_STD_seconds": -21600,
+                          "offset_DST": "-05:00",
+                          "offset_DST_seconds": -18000,
+                          "abbreviation_STD": "CST",
+                          "abbreviation_DST": "CDT"
+                        },
+                        "plus_code": "868MF89W+7G",
+                        "plus_code_short": "9W+7G White House, Sumner County, United States",
+                        "rank": {
+                          "importance": 0.3758389495615451,
+                          "popularity": 1.8230053383091829
+                        },
+                        "place_id": "5151611168d5a955c0599786866aef3b4240f00101f9017a02030000000000c0020792030833373138382b7573"
+                      },
+                      "geometry": {
+                        "type": "Point",
+                        "coordinates": [
+                          -86.6536503,
+                          36.4682439
+                        ]
+                      },
+                      "bbox": [
+                        -86.714807,
+                        36.430421,
+                        -86.624015,
+                        36.507271
+                      ]
+                    }
+                  ],
+                  "query": {
+                    "lat": 36.47032,
+                    "lon": -86.65138,
+                    "plus_code": "868MF8CX+4C"
+                  }
+                }
+        '400':
+          description: Invalid input (e.g., missing or incorrect parameters).
+        '401':
+          description: Invalid or missing API key.
+        '500':
+          description: Internal server error.
+  # IP Geolocation API
+  /ipinfo:
+    get:
+      tags:
+        - IP Geolocation API
+      summary: Get geolocation information for an IP address
+      description: Retrieves location data such as country, city, currency, and language based on the provided IP address. If no IP address is provided, the user's IP address will be automatically detected.
+      operationId: getIPGeolocation
+      parameters:
+        - name: apiKey
+          in: query
+          required: true
+          description: API key for Geoapify services.
+          schema:
+            type: string
+            example: "YOUR_API_KEY"
+        - name: ip
+          in: query
+          required: false
+          description: The IP address to look up. If not provided, the request will detect the client's IP address.
+          schema:
+            type: string
+            format: ipv4
+            example: 8.8.4.4
+      responses:
+        '200':
+          description: Successful response with geolocation information.
+          content:
+            application/json:
+              example: |
+                {
+                  "city": {
+                    "names": {
+                      "en": "Mountain View"
+                    },
+                    "name": "Mountain View"
+                  },
+                  "continent": {
+                    "code": "NA",
+                    "geoname_id": 6255149,
+                    "names": {
+                      "de": "Nordamerika",
+                      "en": "North America",
+                      "es": "Norteamérica",
+                      "fa": " امریکای شمالی",
+                      "fr": "Amérique Du Nord",
+                      "ja": "北アメリカ大陸",
+                      "ko": "북아메리카",
+                      "pt-BR": "América Do Norte",
+                      "ru": "Северная Америка",
+                      "zh-CN": "北美洲"
+                    },
+                    "name": "North America"
+                  },
+                  "country": {
+                    "geoname_id": 6252001,
+                    "iso_code": "US",
+                    "names": {
+                      "de": "Vereinigte Staaten von Amerika",
+                      "en": "United States",
+                      "es": "Estados Unidos de América (los)",
+                      "fa": "ایالات متحدهٔ امریکا",
+                      "fr": "États-Unis",
+                      "ja": "アメリカ合衆国",
+                      "ko": "미국",
+                      "pt-BR": "Estados Unidos",
+                      "ru": "США",
+                      "zh-CN": "美国"
+                    },
+                    "name": "United States",
+                    "name_native": "United States",
+                    "phone_code": "1",
+                    "capital": "Washington D.C.",
+                    "currency": "USD,USN,USS",
+                    "flag": "🇺🇸",
+                    "languages": [
+                      {
+                        "iso_code": "en",
+                        "name": "English",
+                        "name_native": "English"
+                      }
+                    ]
+                  },
+                  "location": {
+                    "latitude": 37.4223,
+                    "longitude": -122.085
+                  },
+                  "subdivisions": [
+                    {
+                      "names": {
+                        "en": "California"
+                      }
+                    }
+                  ],
+                  "state": {
+                    "name": "California"
+                  },
+                  "datasource": [
+                    {
+                      "name": "IP to City Lite",
+                      "attribution": "<a href='https://db-ip.com'>IP Geolocation by DB-IP</a>",
+                      "license": "Creative Commons Attribution License"
+                    }
+                  ],
+                  "ip": "8.8.4.4"
+                }
+        '400':
+          description: Invalid input (e.g., missing or incorrect parameters).
+        '401':
+          description: Invalid or missing API key.
+        '500':
+          description: Internal server error.

@@ -9,6 +9,9 @@ The Geoapify OpenAPI specifications provides a convenient way to interact with t
 - Reverse Geocoding API (https://apidocs.geoapify.com/docs/geocoding/reverse-geocoding/)
 - IP Geolocation API (https://apidocs.geoapify.com/docs/ip-geolocation/)
 - Routing API (https://apidocs.geoapify.com/docs/routing/)
+- Route Matrix API (https://apidocs.geoapify.com/docs/route-matrix/)
+- Map Matching API (https://apidocs.geoapify.com/docs/map-matching/)
+- Route Planner API (https://apidocs.geoapify.com/docs/route-planner/)
 
 ## Configuration
 

@@ -18,16 +18,30 @@ The Geoapify OpenAPI specifications provides a convenient way to interact with t
 ### API Key Configuration
 - **API Key**: Ensure to replace `YOUR_API_KEY` placeholder in requests with your actual API key.
 
-## How to use the Swagger?
-1) Choose the YAML file that you want to use. For example, geocoding.yaml.
-3) Open Swagger Editor (https://editor.swagger.io/). Paste the content of the YAML file into the editor.
-3) You can now interact with the API, view the documentation, and use the "Try it out" feature to make sample requests directly from the editor.
+## How to use Swagger?
+
+### Option 1: Using Swagger Editor
+1) Choose the YAML file that you want to use. For example, `address_autocomplete.yaml`.
+2) Open Swagger Editor ([https://editor.swagger.io/](https://editor.swagger.io/)).
+3) Paste the content of the YAML file into the editor.
+4) You can now interact with the API, view the documentation, and use the **"Try it out"** feature to make sample requests directly from the editor.
+
+### Option 2: Using Local Swagger UI
+
+1) Download or clone this repository to your local machine.
+2) In the `index.html` file, multiple Swagger YAML files are pre-configured.
+3) Open `index.html` in your browser.
+4) By default, Swagger UI will load the first API definition (for example, `Forward Geocoding API`).
+5) To switch to another API:
+    - Use the **"Select a definition"** dropdown at the top of the page.
+    - Choose the API you want to explore, such as `Address Autocomplete API`.
+6) After selecting the desired API, Swagger UI will load its documentation and enable you to use the **"Try it out"** feature for testing API endpoints.
 
 *Note
 Ensure to replace YOUR_API_KEY in the request parameters with your actual API key before making requests.
 
 ## How to generate the client?
-1) Choose the YAML file that you want to use. For example, geocoding.yaml.
+1) Choose the YAML file that you want to use. For example, address_autocomplete.yaml.
 3) Open Swagger Editor (https://editor.swagger.io/). Paste the content of the YAML file into the editor.
 3) At the top of the Swagger Editor, click the "Generate Client" button. Select the language for which you want to generate the client SDK (e.g., typescript-angular).
 4) Download the generated client SDK as a .zip file and extract its contents.

@@ -1,0 +1,126 @@
+openapi: 3.0.0
+info:
+  title: IP Geolocation API
+  description: The IP Geolocation API is a powerful tool that allows you to easily detect a user's location by their IP address. By utilizing this API, you can determine which language your visitor speaks and which currency to use in payment forms, among other valuable data.
+  version: 1.0.0
+servers:
+  - url: https://api.geoapify.com/v1
+    description: Main Geoapify API server
+
+tags:
+  - name: IP Geolocation API
+    description: Retrieves the geographical location based on the IP address.
+
+paths:
+  # IP Geolocation API
+  /ipinfo:
+    get:
+      tags:
+        - IP Geolocation API
+      summary: Get geolocation information for an IP address
+      description: Retrieves location data such as country, city, currency, and language based on the provided IP address. If no IP address is provided, the user's IP address will be automatically detected.
+      operationId: getIPGeolocation
+      parameters:
+        - name: apiKey
+          in: query
+          required: true
+          description: API key for Geoapify services.
+          schema:
+            type: string
+            example: "YOUR_API_KEY"
+        - name: ip
+          in: query
+          required: false
+          description: The IP address to look up. If not provided, the request will detect the client's IP address.
+          schema:
+            type: string
+            format: ipv4
+            example: 8.8.4.4
+      responses:
+        '200':
+          description: Successful response with geolocation information.
+          content:
+            application/json:
+              example: |
+                {
+                  "city": {
+                    "names": {
+                      "en": "Mountain View"
+                    },
+                    "name": "Mountain View"
+                  },
+                  "continent": {
+                    "code": "NA",
+                    "geoname_id": 6255149,
+                    "names": {
+                      "de": "Nordamerika",
+                      "en": "North America",
+                      "es": "Norteamérica",
+                      "fa": " امریکای شمالی",
+                      "fr": "Amérique Du Nord",
+                      "ja": "北アメリカ大陸",
+                      "ko": "북아메리카",
+                      "pt-BR": "América Do Norte",
+                      "ru": "Северная Америка",
+                      "zh-CN": "北美洲"
+                    },
+                    "name": "North America"
+                  },
+                  "country": {
+                    "geoname_id": 6252001,
+                    "iso_code": "US",
+                    "names": {
+                      "de": "Vereinigte Staaten von Amerika",
+                      "en": "United States",
+                      "es": "Estados Unidos de América (los)",
+                      "fa": "ایالات متحدهٔ امریکا",
+                      "fr": "États-Unis",
+                      "ja": "アメリカ合衆国",
+                      "ko": "미국",
+                      "pt-BR": "Estados Unidos",
+                      "ru": "США",
+                      "zh-CN": "美国"
+                    },
+                    "name": "United States",
+                    "name_native": "United States",
+                    "phone_code": "1",
+                    "capital": "Washington D.C.",
+                    "currency": "USD,USN,USS",
+                    "flag": "🇺🇸",
+                    "languages": [
+                      {
+                        "iso_code": "en",
+                        "name": "English",
+                        "name_native": "English"
+                      }
+                    ]
+                  },
+                  "location": {
+                    "latitude": 37.4223,
+                    "longitude": -122.085
+                  },
+                  "subdivisions": [
+                    {
+                      "names": {
+                        "en": "California"
+                      }
+                    }
+                  ],
+                  "state": {
+                    "name": "California"
+                  },
+                  "datasource": [
+                    {
+                      "name": "IP to City Lite",
+                      "attribution": "<a href='https://db-ip.com'>IP Geolocation by DB-IP</a>",
+                      "license": "Creative Commons Attribution License"
+                    }
+                  ],
+                  "ip": "8.8.4.4"
+                }
+        '400':
+          description: Invalid input (e.g., missing or incorrect parameters).
+        '401':
+          description: Invalid or missing API key.
+        '500':
+          description: Internal server error.

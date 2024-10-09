@@ -1,0 +1,220 @@
+openapi: 3.0.0
+info:
+  title: Route Matrix API
+  description: The Route Matrix API allows you to obtain up to 1000 travel distances and time values at once. You can also generate larger matrices by combining several result matrices from different calls. In addition, you can choose from a range of transportation or travel modes, including options for passenger cars, delivery trucks, small motor vehicles, and pedestrians.
+  version: 1.0.0
+
+servers:
+  - url: https://api.geoapify.com/v1
+    description: Main Geoapify API server
+
+tags:
+  - name: Route Matrix API
+    description: Generates a time-distance matrix between source and target locations.
+
+paths:
+  /routematrix:
+    post:
+      tags:
+        - Route Matrix API
+      summary: Generate time-distance matrix for source and target locations
+      description: Generates a time-distance matrix for specified source and target locations, useful for optimizing routes and analytics. Supports multiple transportation modes including driving, walking, and bicycles.
+      operationId: generateRouteMatrix
+      parameters:
+        - name: apiKey
+          in: query
+          required: true
+          description: Your Geoapify API key.
+          schema:
+            type: string
+            example: "YOUR_API_KEY"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                mode:
+                  type: string
+                  description: The transportation mode to use.
+                  enum: [ drive, light_truck, medium_truck, truck, heavy_truck, truck_dangerous_goods, long_truck, bus, scooter, motorcycle, bicycle, mountain_bike, road_bike, walk, hike, transit, approximated_transit ]
+                  example: drive
+                sources:
+                  type: array
+                  description: List of source waypoints.
+                  items:
+                    type: object
+                    properties:
+                      location:
+                        type: array
+                        items:
+                          type: number
+                        description: The coordinates of the source location as [longitude, latitude].
+                        example: [ 9.236501233317654, 47.79125886208948 ]
+                targets:
+                  type: array
+                  description: List of target waypoints.
+                  items:
+                    type: object
+                    properties:
+                      location:
+                        type: array
+                        items:
+                          type: number
+                        description: The coordinates of the target location as [longitude, latitude].
+                        example: [ 9.049297670979968, 47.572236047449366 ]
+                avoid:
+                  type: array
+                  description: List of road types or locations to avoid.
+                  items:
+                    type: object
+                    properties:
+                      type:
+                        type: string
+                        description: Type of area to avoid (e.g., tolls, highways, locations).
+                        example: tolls
+                      values:
+                        type: array
+                        description: Specific coordinates to avoid if the type is "locations".
+                        items:
+                          type: object
+                          properties:
+                            lon:
+                              type: number
+                              description: Longitude.
+                            lat:
+                              type: number
+                              description: Latitude.
+                traffic:
+                  type: string
+                  description: The traffic model to use for route calculation.
+                  enum: [ free_flow, approximated ]
+                  example: approximated
+                type:
+                  type: string
+                  description: Type of route calculation.
+                  enum: [ balanced, short, less_maneuvers ]
+                  example: short
+                max_speed:
+                  type: number
+                  description: Maximum speed allowed in kilometers per hour.
+                  example: 80
+                units:
+                  type: string
+                  description: Unit system to use for distances.
+                  enum: [ metric, imperial ]
+                  example: imperial
+            example:
+              mode: truck
+              sources:
+                - location: [ 9.236501233317654, 47.79125886208948 ]
+                - location: [ 9.29243400499115, 47.75443519732946 ]
+              targets:
+                - location: [ 9.049297670979968, 47.572236047449366 ]
+                - location: [ 9.204539649503204, 47.56068305549502 ]
+              avoid:
+                - type: tolls
+              traffic: approximated
+              type: balanced
+              max_speed: 80
+              units: metric
+      responses:
+        '200':
+          description: A successful response containing the time-distance matrix.
+          content:
+            application/json:
+              example: |
+                {
+                  "sources": [
+                    {
+                      "original_location": [
+                        9.236501233317654,
+                        47.79125886208948
+                      ],
+                      "location": [
+                        9.238094,
+                        47.792033
+                      ]
+                    },
+                    {
+                      "original_location": [
+                        9.29243400499115,
+                        47.75443519732946
+                      ],
+                      "location": [
+                        9.2926,
+                        47.754454
+                      ]
+                    }
+                  ],
+                  "targets": [
+                    {
+                      "original_location": [
+                        9.049297670979968,
+                        47.572236047449366
+                      ],
+                      "location": [
+                        9.049953,
+                        47.572671
+                      ]
+                    },
+                    {
+                      "original_location": [
+                        9.204539649503204,
+                        47.56068305549502
+                      ],
+                      "location": [
+                        9.204531,
+                        47.560683
+                      ]
+                    }
+                  ],
+                  "sources_to_targets": [
+                    [
+                      {
+                        "distance": 71016,
+                        "time": 7002,
+                        "source_index": 0,
+                        "target_index": 0
+                      },
+                      {
+                        "distance": 71027,
+                        "time": 7251,
+                        "source_index": 0,
+                        "target_index": 1
+                      }
+                    ],
+                    [
+                      {
+                        "distance": 38044,
+                        "time": 6772,
+                        "source_index": 1,
+                        "target_index": 0
+                      },
+                      {
+                        "distance": 38055,
+                        "time": 7021,
+                        "source_index": 1,
+                        "target_index": 1
+                      }
+                    ]
+                  ],
+                  "units": "metric",
+                  "distance_units": "meters",
+                  "mode": "truck",
+                  "type": "balanced",
+                  "traffic": "approximated",
+                  "max_speed": 80,
+                  "avoid": [
+                    {
+                      "type": "tolls"
+                    }
+                  ]
+                }
+        '400':
+          description: Invalid input (e.g., missing or incorrect parameters).
+        '401':
+          description: Invalid or missing API key.
+        '500':
+          description: Internal server error.

@@ -1,0 +1,244 @@
+openapi: 3.0.0
+info:
+  title: Address Autocomplete API
+  description: Geoapify Address Autocomplete API (Place Autocomplete) is used to implement location autocomplete fields. It returns suggestions for address or places fields based on provided part of the address.
+  version: 1.0.0
+servers:
+  - url: https://api.geoapify.com/v1
+    description: Main Geoapify API server
+
+tags:
+  - name: Address Autocomplete API
+    description: Provides address suggestions from input text.
+
+paths:
+  #  Address Autocomplete API
+  /geocode/autocomplete:
+    get:
+      tags:
+        - Address Autocomplete API
+      summary: Get address suggestions from input text
+      description: Returns suggested addresses and relevant information (such as country, city, and street) based on the input text provided.
+      operationId: getAddressAutocomplete
+      parameters:
+        - name: text
+          in: query
+          required: true
+          description: The text to autocomplete (e.g., partial address or place name).
+          schema:
+            type: string
+            example: "Regen"
+        - name: apiKey
+          in: query
+          required: true
+          description: API key for Geoapify services.
+          schema:
+            type: string
+            example: "YOUR_API_KEY"
+        - name: format
+          in: query
+          required: false
+          description: Response format (json, xml, or geojson).
+          schema:
+            type: string
+            enum: [json, xml, geojson]
+            example: "json"
+        - name: type
+          in: query
+          required: false
+          description: Type of location to search for (e.g., country, city, postcode, etc.).
+          schema:
+            type: string
+            enum: [country, state, city, postcode, street, building]
+            example: "city"
+        - name: limit
+          in: query
+          required: false
+          description: Maximum number of results to return.
+          schema:
+            type: integer
+            example: 1
+        - name: lang
+          in: query
+          required: false
+          description: Language of the returned result. Supports 2-character ISO 639-1 language codes.
+          schema:
+            type: string
+            example: en
+      responses:
+        '200':
+          description: Successful response with address suggestions.
+          content:
+            application/json:
+              example: |
+                {
+                  "results": [
+                    {
+                      "datasource": {
+                        "sourcename": "openstreetmap",
+                        "attribution": "© OpenStreetMap contributors",
+                        "license": "Open Database License",
+                        "url": "https://www.openstreetmap.org/copyright"
+                      },
+                      "country": "Germany",
+                      "country_code": "de",
+                      "state": "Bavaria",
+                      "county": "Landkreis Regen",
+                      "city": "Regensburg",
+                      "postcode": "94209",
+                      "state_code": "BY",
+                      "result_type": "city",
+                      "formatted": "Regensburg, BY, Germany",
+                      "address_line1": "Regensburg",
+                      "address_line2": "BY, Germany",
+                      "category": "administrative",
+                      "timezone": {
+                        "name": "Europe/Berlin",
+                        "offset_STD": "+01:00",
+                        "offset_STD_seconds": 3600,
+                        "offset_DST": "+02:00",
+                        "offset_DST_seconds": 7200,
+                        "abbreviation_STD": "CET",
+                        "abbreviation_DST": "CEST"
+                      },
+                      "plus_code": "8FXJ239W+RX",
+                      "plus_code_short": "9W+RX Regensburg, Bavaria, Germany",
+                      "rank": {
+                        "confidence": 1,
+                        "confidence_city_level": 1,
+                        "match_type": "full_match"
+                      },
+                      "place_id": "51ac938ecde9312840596b57321180824840f00101f901cbf3000000000000c00208",
+                      "bbox": {
+                        "lon1": 12.0290745,
+                        "lat1": 48.9667457,
+                        "lon2": 12.1916078,
+                        "lat2": 49.0764158
+                      },
+                      "lon": 12.0974869,
+                      "lat": 49.0195333
+                    }
+                  ],
+                  "query": {
+                    "text": "Regen",
+                    "parsed": {
+                      "city": "regen",
+                      "expected_type": "unknown"
+                    }
+                  }
+                }
+            application/xml:
+              example: |
+                <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+                <root>
+                  <results>
+                    <country>Germany</country>
+                    <country_code>de</country_code>
+                    <state>Bavaria</state>
+                    <city>Regensburg</city>
+                    <datasource>
+                      <sourcename>openstreetmap</sourcename>
+                      <attribution>© OpenStreetMap contributors</attribution>
+                      <license>Open Database License</license>
+                      <url>https://www.openstreetmap.org/copyright</url>
+                    </datasource>
+                    <state_code>BY</state_code>
+                    <lon>12.0974869</lon>
+                    <lat>49.0195333</lat>
+                    <result_type>city</result_type>
+                    <formatted>Regensburg, BY, Germany</formatted>
+                    <address_line1>Regensburg</address_line1>
+                    <address_line2>BY, Germany</address_line2>
+                    <category>administrative</category>
+                    <timezone>
+                      <name>Europe/Berlin</name>
+                      <offset_STD>+01:00</offset_STD>
+                      <offset_STD_seconds>3600</offset_STD_seconds>
+                      <offset_DST>+02:00</offset_DST>
+                      <offset_DST_seconds>7200</offset_DST_seconds>
+                      <abbreviation_STD>CET</abbreviation_STD>
+                      <abbreviation_DST>CEST</abbreviation_DST>
+                    </timezone>
+                  </results>
+                  <query>
+                    <text>Regen</text>
+                    <parsed>
+                      <city>regen</city>
+                      <expected_type>unknown</expected_type>
+                    </parsed>
+                  </query>
+                </root>
+            application/geo+json:
+              example: |
+                {
+                  "type": "FeatureCollection",
+                  "features": [
+                    {
+                      "type": "Feature",
+                      "properties": {
+                        "country": "Germany",
+                        "country_code": "de",
+                        "state": "Bavaria",
+                        "city": "Regensburg",
+                        "datasource": {
+                          "sourcename": "openstreetmap",
+                          "attribution": "© OpenStreetMap contributors",
+                          "license": "Open Database License",
+                          "url": "https://www.openstreetmap.org/copyright"
+                        },
+                        "state_code": "BY",
+                        "lon": 12.0974869,
+                        "lat": 49.0195333,
+                        "population": 145000,
+                        "result_type": "city",
+                        "formatted": "Regensburg, BY, Germany",
+                        "address_line1": "Regensburg",
+                        "address_line2": "BY, Germany",
+                        "category": "administrative",
+                        "timezone": {
+                          "name": "Europe/Berlin",
+                          "offset_STD": "+01:00",
+                          "offset_STD_seconds": 3600,
+                          "offset_DST": "+02:00",
+                          "offset_DST_seconds": 7200,
+                          "abbreviation_STD": "CET",
+                          "abbreviation_DST": "CEST"
+                        },
+                        "plus_code": "8FXJ239W+RX",
+                        "plus_code_short": "9W+RX Regensburg, Bavaria, Germany",
+                        "rank": {
+                          "confidence": 1,
+                          "confidence_city_level": 1,
+                          "match_type": "full_match"
+                        },
+                        "place_id": "51ac938ecde9312840596b57321180824840f00101f901cbf3000000000000c00208"
+                      },
+                      "geometry": {
+                        "type": "Point",
+                        "coordinates": [
+                          12.0974869,
+                          49.0195333
+                        ]
+                      },
+                      "bbox": [
+                        12.0290745,
+                        48.9667457,
+                        12.1916078,
+                        49.0764158
+                      ]
+                    }
+                  ],
+                  "query": {
+                    "text": "Regen",
+                    "parsed": {
+                      "city": "regen",
+                      "expected_type": "unknown"
+                    }
+                  }
+                }
+        '400':
+          description: Invalid input (e.g., missing or incorrect parameters).
+        '401':
+          description: Invalid or missing API key.
+        '500':
+          description: Internal server error.

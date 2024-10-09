@@ -1,0 +1,235 @@
+openapi: 3.0.0
+info:
+  title: Batch Geocoding API
+  description: When you need to transform a large number of addresses into geographic coordinates programmatically, you can use a Batch Geocoding API.
+  version: 1.0.0
+servers:
+  - url: https://api.geoapify.com/v1
+    description: Main Geoapify API server
+
+tags:
+  - name: Batch Geocoding API
+    description: Allows geocoding multiple addresses or coordinates in a single request.
+
+paths:
+  # Batch Geocoding API
+  /batch/geocode/search:
+    post:
+      tags:
+        - Batch Geocoding API
+      summary: Create a new forward batch geocoding job
+      description: Submits a batch of addresses to be geocoded, returning a job ID for retrieving results once the process is complete.
+      operationId: createForwardBatchGeocodingJob
+      parameters:
+        - name: apiKey
+          in: query
+          required: true
+          description: API key for Geoapify services.
+          schema:
+            type: string
+            example: "YOUR_API_KEY"
+        - name: type
+          in: query
+          required: false
+          description: Location type, such as 'country', 'state', 'city', 'postcode', 'street', or 'amenity'.
+          schema:
+            type: string
+            enum: [ country, state, city, postcode, street, amenity ]
+            example: "city"
+        - name: lang
+          in: query
+          required: false
+          description: The language of the result, using 2-character ISO 639-1 language codes.
+          schema:
+            type: string
+            example: en
+        - name: filter
+          in: query
+          required: false
+          description: Filter results by country, boundary, circle, etc.
+          schema:
+            type: string
+            example: "rect:8.738507,-10.137391,63.042511,59.098366"
+        - name: bias
+          in: query
+          required: false
+          description: Prefer places based on country, boundary, circle, or location.
+          schema:
+            type: string
+            example: "rect:8.738507,-10.137391,63.042511,59.098366"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+              description: A list of addresses to be geocoded.
+            example:
+              - "668 Cedar St, San Carlos, CA 94070, United States of America"
+              - "96 Rue Saint-Martin, 75004 Paris, France"
+      responses:
+        '202':
+          description: Job successfully created, returning job details.
+          content:
+            application/json:
+              example: |
+                {
+                  "id": "de5a2fb3e21a43a5915f7173fd711051",
+                  "status": "pending",
+                  "url": "https://api.geoapify.com/v1/batch/geocode/search?id=de5a2fb3e21a43a5915f7173fd711051&apiKey=YOUR_API_KEY"
+                }
+        '400':
+          description: Invalid input (e.g., missing or incorrect parameters).
+        '401':
+          description: Invalid or missing API key.
+        '500':
+          description: Internal server error.
+
+    get:
+      tags:
+        - Batch Geocoding API
+      summary: Get batch geocoding job results
+      description: Retrieves the results of a batch geocoding job using the provided job ID.
+      operationId: getBatchGeocodingResults
+      parameters:
+        - name: apiKey
+          in: query
+          required: true
+          description: API key for Geoapify services.
+          schema:
+            type: string
+            example: "YOUR_API_KEY"
+        - name: id
+          in: query
+          required: true
+          description: The job ID returned when the batch job was created.
+          schema:
+            type: string
+            example: '8f25c31e2179441ea103868fd9c3784d'
+        - name: format
+          in: query
+          required: false
+          description: Desired format for the results (json or csv).
+          schema:
+            type: string
+            enum: [ json, csv ]
+            example: json
+      responses:
+        '200':
+          description: Successful response with batch geocoding results.
+          content:
+            application/json:
+              example: |
+                [
+                  {
+                    "query": {
+                      "text": "668 Cedar St, San Carlos, CA 94070, United States of America",
+                      "parsed": {
+                        "housenumber": "668",
+                        "street": "cedar st",
+                        "postcode": "94070",
+                        "city": "san carlos",
+                        "state": "ca",
+                        "country": "united states of america",
+                        "expected_type": "building"
+                      }
+                    }
+                  },
+                  {
+                    "query": {
+                      "text": "96 Rue Saint-Martin, 75004 Paris, France",
+                      "parsed": {
+                        "housenumber": "96",
+                        "street": "rue saint-martin",
+                        "postcode": "75004",
+                        "city": "paris",
+                        "country": "france",
+                        "expected_type": "building"
+                      }
+                    }
+                  }
+                ]
+            text/csv:
+              example: |
+                "query.text","query.parsed.housenumber","query.parsed.street","query.parsed.postcode","query.parsed.city","query.parsed.state","query.parsed.country","query.parsed.expected_type"
+                "668 Cedar St, San Carlos, CA 94070, United States of America","668","cedar st","94070","san carlos","ca","united states of america","building"
+                "96 Rue Saint-Martin, 75004 Paris, France","96","rue saint-martin","75004","paris","","france","building"
+        '202':
+          description: The job is still processing.
+        '400':
+          description: Invalid input (e.g., missing or incorrect parameters).
+        '401':
+          description: Invalid or missing API key.
+        '500':
+          description: Internal server error.
+  /batch/geocode/reverse:
+    post:
+      tags:
+        - Batch Geocoding API
+      summary: Create a new reverse batch geocoding job
+      description: Submits a batch of latitude/longitude coordinates to be reverse geocoded, returning a job ID for retrieving results once the process is complete.
+      operationId: createReverseBatchGeocodingJob
+      parameters:
+        - name: apiKey
+          in: query
+          required: true
+          description: API key for Geoapify services.
+          schema:
+            type: string
+            example: "YOUR_API_KEY"
+        - name: type
+          in: query
+          required: false
+          description: Location type, such as 'country', 'state', 'city', 'postcode', 'street', or 'amenity'.
+          schema:
+            type: string
+            enum: [ country, state, city, postcode, street, amenity ]
+            example: "city"
+        - name: lang
+          in: query
+          required: false
+          description: The language of the result, using 2-character ISO 639-1 language codes.
+          schema:
+            type: string
+            example: en
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                oneOf:
+                  - type: array
+                    items:
+                      type: number
+                    description: Array of [longitude, latitude].
+                    example: [ -122.263801, 37.502683 ]
+                  - type: object
+                    properties:
+                      lon:
+                        type: number
+                      lat:
+                        type: number
+                    description: Object with 'lon' and 'lat' properties.
+                    example: { "lon": -122.263801, "lat": 37.502683 }
+              description: A list of latitude/longitude pairs for reverse geocoding.
+      responses:
+        '202':
+          description: Job successfully created, returning job details.
+          content:
+            application/json:
+              example: |
+                {
+                  "id": "d8756e94f6ee42f7abdd9a0c99e6c9fd",
+                  "status": "pending",
+                  "url": "https://api.geoapify.com/v1/batch/geocode/reverse?id=d8756e94f6ee42f7abdd9a0c99e6c9fd&apiKey=YOUR_API_KEY"
+                }
+        '400':
+          description: Invalid input (e.g., missing or incorrect parameters).
+        '401':
+          description: Invalid or missing API key.
+        '500':
+          description: Internal server error.

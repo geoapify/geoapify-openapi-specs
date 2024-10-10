@@ -1,0 +1,200 @@
+openapi: 3.0.0
+info:
+  title: Isoline API
+  description: The Isoline API is designed to calculate the accessible areas from a specific location. In simple terms, it helps you determine the site you can travel from a place and identify new opportunities for businesses or locations.
+  version: 1.0.0
+servers:
+  - url: https://api.geoapify.com/v1
+    description: Main Geoapify API server
+
+tags:
+  - name: Isoline API
+    description: API for calculating Isochrones and Isodistances from a given location.
+
+paths:
+  /isoline:
+    get:
+      tags:
+        - Isoline API
+      summary: Calculate Isochrones or Isodistances
+      description: |
+        Returns isolines (Isochrones or Isodistances) based on a specified location, travel type, and range.
+      operationId: getIsoline
+      parameters:
+        - name: apiKey
+          in: query
+          required: true
+          description: The API key for Geoapify services.
+          schema:
+            type: string
+            example: "YOUR_API_KEY"
+        - name: lat
+          in: query
+          required: true
+          description: Latitude of the location.
+          schema:
+            type: number
+            example: 28.293067
+        - name: lon
+          in: query
+          required: true
+          description: Longitude of the location.
+          schema:
+            type: number
+            example: -81.550409
+        - name: type
+          in: query
+          required: true
+          description: |
+            Type of isoline to calculate (isochrone for travel time, isodistance for distance).
+          schema:
+            type: string
+            enum: [time, distance]
+            example: time
+        - name: mode
+          in: query
+          required: true
+          description: |
+            Travel or transportation mode (e.g., drive, walk). See the Routing API Travel Modes table for more information.
+          schema:
+            type: string
+            example: drive
+        - name: range
+          in: query
+          required: true
+          description: |
+            Range values for the isoline. For isochrones, it represents time in seconds. For isodistances, it represents distance in meters.
+          schema:
+            type: string
+            example: "900"
+        - name: avoid
+          in: query
+          required: false
+          description: |
+            A list of road types or locations to avoid in routing.
+          schema:
+            type: string
+            example: "tolls:1|ferries|location:35.234045,-80.836392"
+        - name: traffic
+          in: query
+          required: false
+          description: |
+            The traffic model for route calculation. Default is free_flow (no traffic influence).
+          schema:
+            type: string
+            enum: [free_flow, approximated]
+            example: approximated
+        - name: route_type
+          in: query
+          required: false
+          description: |
+            The type of route to calculate (balanced, short, less_maneuvers). Default is balanced.
+          schema:
+            type: string
+            enum: [balanced, short, less_maneuvers]
+            example: short
+        - name: max_speed
+          in: query
+          required: false
+          description: |
+            Maximum speed (in kilometers per hour) for vehicles. Applies to drive, truck, and bus modes.
+          schema:
+            type: number
+            example: 80
+        - name: units
+          in: query
+          required: false
+          description: |
+            Distance units for the calculated route. The default is metric.
+          schema:
+            type: string
+            enum: [metric, imperial]
+            example: imperial
+        - name: id
+          in: query
+          required: false
+          description: |
+            The unique ID of a previously generated isoline. Used to retrieve the same isoline instead of recalculating.
+          schema:
+            type: string
+            example: "a235ce27b9fa8a22688f06915cfe53e3"
+      responses:
+        '200':
+          description: Successful response containing the calculated isoline(s).
+          content:
+            application/geo+json:
+              example: |
+                {
+                  "features": [
+                    {
+                      "properties": {
+                        "lat": -20.318872,
+                        "lon": -27.023424,
+                        "mode": "truck_dangerous_goods",
+                        "type": "distance",
+                        "range": 1,
+                        "route_type": "short",
+                        "traffic": "free_flow",
+                        "units": "metric",
+                        "max_speed": 10,
+                        "id": "80529db168673d2f39930ee3090e77d0"
+                      },
+                      "geometry": {
+                        "coordinates": [
+                          [
+                            [
+                              [
+                                -27.023424,
+                                -20.318871
+                              ],
+                              [
+                                -27.023425,
+                                -20.318871
+                              ],
+                              [
+                                -27.023425,
+                                -20.318872
+                              ],
+                              [
+                                -27.023425,
+                                -20.318873
+                              ],
+                              [
+                                -27.023424,
+                                -20.318873
+                              ],
+                              [
+                                -27.023423,
+                                -20.318873
+                              ],
+                              [
+                                -27.023423,
+                                -20.318872
+                              ],
+                              [
+                                -27.023423,
+                                -20.318871
+                              ],
+                              [
+                                -27.023424,
+                                -20.318871
+                              ]
+                            ]
+                          ]
+                        ],
+                        "type": "MultiPolygon"
+                      },
+                      "type": "Feature"
+                    }
+                  ],
+                  "type": "FeatureCollection",
+                  "properties": {
+                    "id": "80529db168673d2f39930ee3090e77d0"
+                  }
+                }
+        '400':
+          description: Invalid request or missing parameters.
+        '401':
+          description: Unauthorized, invalid API key.
+        '500':
+          description: Internal server error.

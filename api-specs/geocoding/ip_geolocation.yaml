@@ -3,6 +3,13 @@ info:
   title: IP Geolocation API
   description: The IP Geolocation API is a powerful tool that allows you to easily detect a user's location by their IP address. By utilizing this API, you can determine which language your visitor speaks and which currency to use in payment forms, among other valuable data.
   version: 1.0.0
+  contact:
+    name: Geoapify GmbH
+    url: https://geoapify.com
+    email: info@geoapify.com
+  license:
+    name: MIT
+    url: https://opensource.org/license/mit
 servers:
   - url: https://api.geoapify.com/v1
     description: Main Geoapify API server

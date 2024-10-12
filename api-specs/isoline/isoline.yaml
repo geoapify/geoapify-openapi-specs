@@ -3,6 +3,13 @@ info:
   title: Isoline API
   description: The Isoline API is designed to calculate the accessible areas from a specific location. In simple terms, it helps you determine the site you can travel from a place and identify new opportunities for businesses or locations.
   version: 1.0.0
+  contact:
+    name: Geoapify GmbH
+    url: https://geoapify.com
+    email: info@geoapify.com
+  license:
+    name: MIT
+    url: https://opensource.org/license/mit
 servers:
   - url: https://api.geoapify.com/v1
     description: Main Geoapify API server

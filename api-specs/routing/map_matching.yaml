@@ -3,6 +3,13 @@ info:
   title: Map Matching API
   description: The Map Matching API lets you match geographical coordinates, such as GPS tracks, to the existing road network. You can choose between various transportation modes, including cars, buses, delivery trucks, bicycles, and walking.
   version: 1.0.0
+  contact:
+    name: Geoapify GmbH
+    url: https://geoapify.com
+    email: info@geoapify.com
+  license:
+    name: MIT
+    url: https://opensource.org/license/mit
 
 servers:
   - url: https://api.geoapify.com/v1

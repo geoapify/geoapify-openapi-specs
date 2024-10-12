@@ -3,6 +3,13 @@ info:
   title: Batch Geocoding API
   description: When you need to transform a large number of addresses into geographic coordinates programmatically, you can use a Batch Geocoding API.
   version: 1.0.0
+  contact:
+    name: Geoapify GmbH
+    url: https://geoapify.com
+    email: info@geoapify.com
+  license:
+    name: MIT
+    url: https://opensource.org/license/mit
 servers:
   - url: https://api.geoapify.com/v1
     description: Main Geoapify API server

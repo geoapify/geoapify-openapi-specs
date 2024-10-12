@@ -3,6 +3,13 @@ info:
   title: Route Matrix API
   description: The Route Matrix API allows you to obtain up to 1000 travel distances and time values at once. You can also generate larger matrices by combining several result matrices from different calls. In addition, you can choose from a range of transportation or travel modes, including options for passenger cars, delivery trucks, small motor vehicles, and pedestrians.
   version: 1.0.0
+  contact:
+    name: Geoapify GmbH
+    url: https://geoapify.com
+    email: info@geoapify.com
+  license:
+    name: MIT
+    url: https://opensource.org/license/mit
 
 servers:
   - url: https://api.geoapify.com/v1

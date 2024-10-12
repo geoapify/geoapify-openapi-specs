@@ -3,6 +3,13 @@ info:
   title: Forward Geocoding API
   description: Geoapify provides Geocoding REST API that searches addresses worldwide. The REST API works via HTTP GET and returns JSON or XML responses. The API is cross-platform and can be used with most programming languages.
   version: 1.0.0
+  contact:
+    name: Geoapify GmbH
+    url: https://geoapify.com
+    email: info@geoapify.com
+  license:
+    name: MIT
+    url: https://opensource.org/license/mit
 servers:
   - url: https://api.geoapify.com/v1
     description: Main Geoapify API server

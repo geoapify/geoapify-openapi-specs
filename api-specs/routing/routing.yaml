@@ -3,6 +3,13 @@ info:
   title: Routing API
   description: The Routing API works via HTTP GET requests and calculates routes between two or more waypoints. The API builds routes for automobiles, delivery trucks, cargo vans, bicycles, motor scooters, and walking or riding a bike. A returned result includes Directions and Turn-by-Turn navigation instructions.
   version: 1.0.0
+  contact:
+    name: Geoapify GmbH
+    url: https://geoapify.com
+    email: info@geoapify.com
+  license:
+    name: MIT
+    url: https://opensource.org/license/mit
 
 servers:
   - url: https://api.geoapify.com/v1

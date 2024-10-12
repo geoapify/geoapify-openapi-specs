@@ -3,6 +3,13 @@ info:
   title: Reverse Geocoding API
   description: Reverse Geocoding is useful when you have a certain set of coordinates and want to find out the corresponding address. For example, if you need to know your customer’s address by GPS coordinates or get an address of a building a user has clicked on.
   version: 1.0.0
+  contact:
+    name: Geoapify GmbH
+    url: https://geoapify.com
+    email: info@geoapify.com
+  license:
+    name: MIT
+    url: https://opensource.org/license/mit
 servers:
   - url: https://api.geoapify.com/v1
     description: Main Geoapify API server

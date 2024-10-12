@@ -1,0 +1,29 @@
+{
+  "name": "geoapify-openapi-specs",
+  "version": "1.0.0",
+  "description": "The Geoapify OpenAPI specifications provides a convenient way to interact with the Geoapify geolocation services",
+  "directories": {
+    "api-specs": "api-specs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "spectral lint --ruleset=ruleset.spectral.yaml api-specs/**/*.{json,yml,yaml}"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://git@github.com/geoapify/geoapify-openapi-specs.git"
+  },
+  "bugs": {
+    "url": "https://github.com/geoapify/geoapify-openapi-specs/issues"
+  },
+  "homepage": "https://github.com/geoapify/geoapify-openapi-specs#readme",
+  "author": {
+    "name": "Geoapify GmbH",
+    "email": "info@geoapify.com",
+    "url": "https://geoapify.com"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@stoplight/spectral-cli": "6.13.1"
+  }
+}

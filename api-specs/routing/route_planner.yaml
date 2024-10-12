@@ -3,6 +3,13 @@ info:
   title: Route Planner API
   description: The Route Planner API allows developers to integrate route planning and schedule optimization functionality into their applications. With this API, users can obtain the optimal routes between multiple locations and for multiple vehicles or agents.
   version: 1.0.0
+  contact:
+    name: Geoapify GmbH
+    url: https://geoapify.com
+    email: info@geoapify.com
+  license:
+    name: MIT
+    url: https://opensource.org/license/mit
 
 servers:
   - url: https://api.geoapify.com/v1

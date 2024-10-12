@@ -3,6 +3,13 @@ info:
   title: Address Autocomplete API
   description: Geoapify Address Autocomplete API (Place Autocomplete) is used to implement location autocomplete fields. It returns suggestions for address or places fields based on provided part of the address.
   version: 1.0.0
+  contact:
+    name: Geoapify GmbH
+    url: https://geoapify.com
+    email: info@geoapify.com
+  license:
+    name: MIT
+    url: https://opensource.org/license/mit
 servers:
   - url: https://api.geoapify.com/v1
     description: Main Geoapify API server

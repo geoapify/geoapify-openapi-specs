@@ -31,7 +31,7 @@ The Geoapify OpenAPI specifications provides a convenient way to interact with t
 
 1) Download or clone this repository to your local machine.
 2) In the `index.html` file, multiple Swagger YAML files are pre-configured.
-3) Open `index.html` in your browser.
+3) To open the Swagger UI, run: "npm start" 
 4) By default, Swagger UI will load the first API definition (for example, `Forward Geocoding API`).
 5) To switch to another API:
     - Use the **"Select a definition"** dropdown at the top of the page.

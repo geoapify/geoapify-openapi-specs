@@ -1,22 +1,22 @@
 openapi: 3.0.0
 info:
   title: IP Geolocation API
-  description: The IP Geolocation API is a powerful tool that allows you to easily detect a user's location by their IP address. By utilizing this API, you can determine which language your visitor speaks and which currency to use in payment forms, among other valuable data.
+  description: The IP Geolocation API provides a convenient way to detect a user's geographical location based on their IP address. This API offers valuable data, such as the user's country, region, city, and timezone, as well as language and currency information, which can be used to enhance user experiences—like customizing content, localizing payment forms, or adjusting language settings.
   version: 1.0.0
   contact:
-    name: Geoapify GmbH
+    name: Geoapify
     url: https://geoapify.com
     email: info@geoapify.com
   license:
     name: MIT
-    url: https://opensource.org/license/mit
+    url: https://opensource.org/licenses/MIT
 servers:
   - url: https://api.geoapify.com/v1
-    description: Main Geoapify API server
+    description: Primary Geoapify API endpoint
 
 tags:
   - name: IP Geolocation API
-    description: Retrieves the geographical location based on the IP address.
+    description: Retrieves geographical location, language, and currency information based on the user's IP address.
 
 paths:
   # IP Geolocation API
@@ -24,25 +24,26 @@ paths:
     get:
       tags:
         - IP Geolocation API
-      summary: Get geolocation information for an IP address
-      description: Retrieves location data such as country, city, currency, and language based on the provided IP address. If no IP address is provided, the user's IP address will be automatically detected.
+      summary: Retrieve geolocation data for a given IP address
+      description: Returns location details such as country, city, currency, and language based on the specified IP address. If no IP address is provided, the user's own IP address will be automatically detected and used for the lookup. This API can help customize user experiences, such as localizing content or payment forms based on location.
       operationId: getIPGeolocation
       parameters:
         - name: apiKey
           in: query
           required: true
-          description: API key for Geoapify services.
+          description: Your Geoapify API key used to authenticate the request. Sign up for a free API key at [https://myprojects.geoapify.com/](https://myprojects.geoapify.com/), which includes up to 3,000 requests per day on the Free plan.
           schema:
             type: string
             example: "YOUR_API_KEY"
         - name: ip
           in: query
           required: false
-          description: The IP address to look up. If not provided, the request will detect the client's IP address.
+          description: The IP address to retrieve location information for. If not provided, the request will use the client's IP address automatically.
           schema:
             type: string
             format: ipv4
             example: 8.8.4.4
+
       responses:
         '200':
           description: Successful response with geolocation information.
@@ -126,8 +127,10 @@ paths:
                   "ip": "8.8.4.4"
                 }
         '400':
-          description: Invalid input (e.g., missing or incorrect parameters).
+          description: Bad Request. The input provided is invalid or improperly formatted. Please verify and correct your request parameters.
         '401':
-          description: Invalid or missing API key.
+          description: Unauthorized. The API key is missing, incorrect, or invalid. Please provide a valid API key to authenticate the request.
+        '429':
+          description: Request limit exceeded. Too many requests have been sent in a short period, surpassing the allowed rate limits.
         '500':
-          description: Internal server error.
+          description: Internal Server Error. The server encountered an unexpected condition that prevented it from fulfilling the request. Please try again later or [contact support](mailto:info@geoapify.com) if the issue persists.

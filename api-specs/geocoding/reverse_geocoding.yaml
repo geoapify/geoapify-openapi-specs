@@ -1,18 +1,18 @@
 openapi: 3.0.0
 info:
   title: Reverse Geocoding API
-  description: Reverse Geocoding is useful when you have a certain set of coordinates and want to find out the corresponding address. For example, if you need to know your customer’s address by GPS coordinates or get an address of a building a user has clicked on.
+  description: The Reverse Geocoding API allows you to convert geographic coordinates (latitude and longitude) into human-readable addresses. This is particularly useful for obtaining an address based on GPS coordinates or determining the location of a point of interest, such as when a user clicks on a map. Common use cases include finding a customer’s address from their GPS data or identifying the address of a specific building.
   version: 1.0.0
   contact:
-    name: Geoapify GmbH
+    name: Geoapify
     url: https://geoapify.com
     email: info@geoapify.com
   license:
     name: MIT
-    url: https://opensource.org/license/mit
+    url: https://opensource.org/licenses/MIT
 servers:
   - url: https://api.geoapify.com/v1
-    description: Main Geoapify API server
+    description: Primary Geoapify API endpoint
 
 tags:
   - name: Reverse Geocoding API
@@ -24,14 +24,14 @@ paths:
     get:
       tags:
         - Reverse Geocoding API
-      summary: Get address from geographic coordinates
-      description: Returns an address and its components (city, postcode, street, etc.) based on the provided latitude and longitude coordinates.
+      summary: Retrieve address from geographic coordinates
+      description: Returns an address and its components (such as city, postcode, street, etc.) based on the provided latitude and longitude coordinates. Use this endpoint to convert coordinates into a human-readable address for various use cases, such as map applications or location-based services.
       operationId: getReverseGeocode
       parameters:
         - name: lat
           in: query
           required: true
-          description: Latitude of the location to reverse geocode.
+          description: The latitude of the location to reverse geocode.
           schema:
             type: number
             format: float
@@ -39,7 +39,7 @@ paths:
         - name: lon
           in: query
           required: true
-          description: Longitude of the location to reverse geocode.
+          description: The longitude of the location to reverse geocode.
           schema:
             type: number
             format: float
@@ -47,14 +47,14 @@ paths:
         - name: apiKey
           in: query
           required: true
-          description: API key for Geoapify services.
+          description: Your Geoapify API key to authenticate the request. You can sign up and obtain an API key for free at [https://myprojects.geoapify.com/](https://myprojects.geoapify.com/). The Free plan includes up to 3,000 requests per day.
           schema:
             type: string
             example: "YOUR_API_KEY"
         - name: format
           in: query
           required: false
-          description: Response format (json, xml, or geojson).
+          description: The format of the response (JSON, XML, or GeoJSON).
           schema:
             type: string
             enum: [json, xml, geojson]
@@ -62,22 +62,29 @@ paths:
         - name: limit
           in: query
           required: false
-          description: Maximum number of results to return.
+          description: The maximum number of results to return.
           schema:
             type: integer
             example: 1
         - name: type
           in: query
           required: false
-          description: Type of location to search for (e.g., country, city, postcode, etc.).
+          description: |
+            Defines the location type to be searched. Available types include:
+
+            - `country`: Search for countries.
+            - `state`: Search for states or regions.
+            - `city`: Search for cities or towns.
+            - `postcode`: Search for postal codes.
+            - `street`: Search for specific streets.
+            - `amenity`: Search for points of interest (e.g., schools, parks, etc.).
           schema:
             type: string
-            enum: [country, state, city, postcode, street, amenity]
-            example: "city"
+            enum: [ country, state, city, postcode, street, amenity ]
         - name: lang
           in: query
           required: false
-          description: Language of the returned result. Supports 2-character ISO 639-1 language codes.
+          description: Result language in [ISO 639-1](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) format (e.g., 'en' for English).
           schema:
             type: string
             example: en
@@ -86,189 +93,195 @@ paths:
           description: Successful response with reverse geocoded address data.
           content:
             application/json:
-              example: |
-                {
-                  "results": [
+              examples: 
+                format=json:
+                  value: |
                     {
-                      "datasource": {
-                        "sourcename": "openstreetmap",
-                        "attribution": "© OpenStreetMap contributors",
-                        "license": "Open Database License",
-                        "url": "https://www.openstreetmap.org/copyright"
-                      },
-                      "country": "United States",
-                      "country_code": "us",
-                      "region": "Middle Tennessee",
-                      "state": "Tennessee",
-                      "county": "Sumner County",
-                      "city": "White House",
-                      "postcode": "37188",
-                      "lon": -86.6536503,
-                      "lat": 36.4682439,
-                      "state_code": "TN",
-                      "distance": 0,
-                      "result_type": "postcode",
-                      "formatted": "White House, TN 37188, United States of America",
-                      "address_line1": "White House, TN 37188",
-                      "address_line2": "United States of America",
-                      "category": "administrative",
-                      "timezone": {
-                        "name": "America/Chicago",
-                        "offset_STD": "-06:00",
-                        "offset_STD_seconds": -21600,
-                        "offset_DST": "-05:00",
-                        "offset_DST_seconds": -18000,
-                        "abbreviation_STD": "CST",
-                        "abbreviation_DST": "CDT"
-                      },
-                      "plus_code": "868MF89W+7G",
-                      "plus_code_short": "9W+7G White House, Sumner County, United States",
-                      "rank": {
-                        "importance": 0.3758389495615451,
-                        "popularity": 1.8230053383091829
-                      },
-                      "place_id": "5151611168d5a955c0599786866aef3b4240f00101f9017a02030000000000c0020792030833373138382b7573",
-                      "bbox": {
-                        "lon1": -86.714807,
-                        "lat1": 36.430421,
-                        "lon2": -86.624015,
-                        "lat2": 36.507271
+                      "results": [
+                        {
+                          "datasource": {
+                            "sourcename": "openstreetmap",
+                            "attribution": "© OpenStreetMap contributors",
+                            "license": "Open Database License",
+                            "url": "https://www.openstreetmap.org/copyright"
+                          },
+                          "country": "United States",
+                          "country_code": "us",
+                          "region": "Middle Tennessee",
+                          "state": "Tennessee",
+                          "county": "Sumner County",
+                          "city": "White House",
+                          "postcode": "37188",
+                          "lon": -86.6536503,
+                          "lat": 36.4682439,
+                          "state_code": "TN",
+                          "distance": 0,
+                          "result_type": "postcode",
+                          "formatted": "White House, TN 37188, United States of America",
+                          "address_line1": "White House, TN 37188",
+                          "address_line2": "United States of America",
+                          "category": "administrative",
+                          "timezone": {
+                            "name": "America/Chicago",
+                            "offset_STD": "-06:00",
+                            "offset_STD_seconds": -21600,
+                            "offset_DST": "-05:00",
+                            "offset_DST_seconds": -18000,
+                            "abbreviation_STD": "CST",
+                            "abbreviation_DST": "CDT"
+                          },
+                          "plus_code": "868MF89W+7G",
+                          "plus_code_short": "9W+7G White House, Sumner County, United States",
+                          "rank": {
+                            "importance": 0.3758389495615451,
+                            "popularity": 1.8230053383091829
+                          },
+                          "place_id": "5151611168d5a955c0599786866aef3b4240f00101f9017a02030000000000c0020792030833373138382b7573",
+                          "bbox": {
+                            "lon1": -86.714807,
+                            "lat1": 36.430421,
+                            "lon2": -86.624015,
+                            "lat2": 36.507271
+                          }
+                        }
+                      ],
+                      "query": {
+                        "lat": 36.47032,
+                        "lon": -86.65138,
+                        "plus_code": "868MF8CX+4C"
                       }
                     }
-                  ],
-                  "query": {
-                    "lat": 36.47032,
-                    "lon": -86.65138,
-                    "plus_code": "868MF8CX+4C"
-                  }
-                }
-            application/xml:
-              example: |
-                <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-                <root>
-                  <results>
-                    <datasource>
-                      <sourcename>openstreetmap</sourcename>
-                      <attribution>© OpenStreetMap contributors</attribution>
-                      <license>Open Database License</license>
-                      <url>https://www.openstreetmap.org/copyright</url>
-                    </datasource>
-                    <country>United States</country>
-                    <country_code>us</country_code>
-                    <region>Middle Tennessee</region>
-                    <state>Tennessee</state>
-                    <county>Sumner County</county>
-                    <city>White House</city>
-                    <postcode>37188</postcode>
-                    <lon>-86.6536503</lon>
-                    <lat>36.4682439</lat>
-                    <state_code>TN</state_code>
-                    <distance>0</distance>
-                    <result_type>postcode</result_type>
-                    <formatted>White House, TN 37188, United States of America</formatted>
-                    <address_line1>White House, TN 37188</address_line1>
-                    <address_line2>United States of America</address_line2>
-                    <category>administrative</category>
-                    <timezone>
-                      <name>America/Chicago</name>
-                      <offset_STD>-06:00</offset_STD>
-                      <offset_STD_seconds>-21600</offset_STD_seconds>
-                      <offset_DST>-05:00</offset_DST>
-                      <offset_DST_seconds>-18000</offset_DST_seconds>
-                      <abbreviation_STD>CST</abbreviation_STD>
-                      <abbreviation_DST>CDT</abbreviation_DST>
-                    </timezone>
-                    <plus_code>868MF89W+7G</plus_code>
-                    <plus_code_short>9W+7G White House, Sumner County, United States</plus_code_short>
-                    <rank>
-                      <importance>0.3758389495615451</importance>
-                      <popularity>1.8230053383091829</popularity>
-                    </rank>
-                    <place_id>5151611168d5a955c0599786866aef3b4240f00101f9017a02030000000000c0020792030833373138382b7573</place_id>
-                    <bbox>
-                      <lon1>-86.714807</lon1>
-                      <lat1>36.430421</lat1>
-                      <lon2>-86.624015</lon2>
-                      <lat2>36.507271</lat2>
-                    </bbox>
-                  </results>
-                  <query>
-                    <lat>36.47032</lat>
-                    <lon>-86.65138</lon>
-                    <plus_code>868MF8CX+4C</plus_code>
-                  </query>
-                </root>
-            application/geo+json:
-              example: |
-                {
-                  "type": "FeatureCollection",
-                  "features": [
+                format=geojson:
+                  value:  |
                     {
-                      "type": "Feature",
-                      "properties": {
-                        "datasource": {
-                          "sourcename": "openstreetmap",
-                          "attribution": "© OpenStreetMap contributors",
-                          "license": "Open Database License",
-                          "url": "https://www.openstreetmap.org/copyright"
-                        },
-                        "country": "United States",
-                        "country_code": "us",
-                        "region": "Middle Tennessee",
-                        "state": "Tennessee",
-                        "county": "Sumner County",
-                        "city": "White House",
-                        "postcode": "37188",
-                        "lon": -86.6536503,
-                        "lat": 36.4682439,
-                        "state_code": "TN",
-                        "distance": 0,
-                        "result_type": "postcode",
-                        "formatted": "White House, TN 37188, United States of America",
-                        "address_line1": "White House, TN 37188",
-                        "address_line2": "United States of America",
-                        "category": "administrative",
-                        "timezone": {
-                          "name": "America/Chicago",
-                          "offset_STD": "-06:00",
-                          "offset_STD_seconds": -21600,
-                          "offset_DST": "-05:00",
-                          "offset_DST_seconds": -18000,
-                          "abbreviation_STD": "CST",
-                          "abbreviation_DST": "CDT"
-                        },
-                        "plus_code": "868MF89W+7G",
-                        "plus_code_short": "9W+7G White House, Sumner County, United States",
-                        "rank": {
-                          "importance": 0.3758389495615451,
-                          "popularity": 1.8230053383091829
-                        },
-                        "place_id": "5151611168d5a955c0599786866aef3b4240f00101f9017a02030000000000c0020792030833373138382b7573"
-                      },
-                      "geometry": {
-                        "type": "Point",
-                        "coordinates": [
-                          -86.6536503,
-                          36.4682439
-                        ]
-                      },
-                      "bbox": [
-                        -86.714807,
-                        36.430421,
-                        -86.624015,
-                        36.507271
-                      ]
+                      "type": "FeatureCollection",
+                      "features": [
+                        {
+                          "type": "Feature",
+                          "properties": {
+                            "datasource": {
+                              "sourcename": "openstreetmap",
+                              "attribution": "© OpenStreetMap contributors",
+                              "license": "Open Database License",
+                              "url": "https://www.openstreetmap.org/copyright"
+                            },
+                            "country": "United States",
+                            "country_code": "us",
+                            "region": "Middle Tennessee",
+                            "state": "Tennessee",
+                            "county": "Sumner County",
+                            "city": "White House",
+                            "postcode": "37188",
+                            "lon": -86.6536503,
+                            "lat": 36.4682439,
+                            "state_code": "TN",
+                            "distance": 0,
+                            "result_type": "postcode",
+                            "formatted": "White House, TN 37188, United States of America",
+                            "address_line1": "White House, TN 37188",
+                            "address_line2": "United States of America",
+                            "category": "administrative",
+                            "timezone": {
+                              "name": "America/Chicago",
+                              "offset_STD": "-06:00",
+                              "offset_STD_seconds": -21600,
+                              "offset_DST": "-05:00",
+                              "offset_DST_seconds": -18000,
+                              "abbreviation_STD": "CST",
+                              "abbreviation_DST": "CDT"
+                            },
+                            "plus_code": "868MF89W+7G",
+                            "plus_code_short": "9W+7G White House, Sumner County, United States",
+                            "rank": {
+                              "importance": 0.3758389495615451,
+                              "popularity": 1.8230053383091829
+                            },
+                            "place_id": "5151611168d5a955c0599786866aef3b4240f00101f9017a02030000000000c0020792030833373138382b7573"
+                          },
+                          "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                              -86.6536503,
+                              36.4682439
+                            ]
+                          },
+                          "bbox": [
+                            -86.714807,
+                            36.430421,
+                            -86.624015,
+                            36.507271
+                          ]
+                        }
+                      ],
+                      "query": {
+                        "lat": 36.47032,
+                        "lon": -86.65138,
+                        "plus_code": "868MF8CX+4C"
+                      }
                     }
-                  ],
-                  "query": {
-                    "lat": 36.47032,
-                    "lon": -86.65138,
-                    "plus_code": "868MF8CX+4C"
-                  }
-                }
+            application/xml:
+              examples: 
+                format=xml:
+                  value: |
+                    <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+                    <root>
+                      <results>
+                        <datasource>
+                          <sourcename>openstreetmap</sourcename>
+                          <attribution>© OpenStreetMap contributors</attribution>
+                          <license>Open Database License</license>
+                          <url>https://www.openstreetmap.org/copyright</url>
+                        </datasource>
+                        <country>United States</country>
+                        <country_code>us</country_code>
+                        <region>Middle Tennessee</region>
+                        <state>Tennessee</state>
+                        <county>Sumner County</county>
+                        <city>White House</city>
+                        <postcode>37188</postcode>
+                        <lon>-86.6536503</lon>
+                        <lat>36.4682439</lat>
+                        <state_code>TN</state_code>
+                        <distance>0</distance>
+                        <result_type>postcode</result_type>
+                        <formatted>White House, TN 37188, United States of America</formatted>
+                        <address_line1>White House, TN 37188</address_line1>
+                        <address_line2>United States of America</address_line2>
+                        <category>administrative</category>
+                        <timezone>
+                          <name>America/Chicago</name>
+                          <offset_STD>-06:00</offset_STD>
+                          <offset_STD_seconds>-21600</offset_STD_seconds>
+                          <offset_DST>-05:00</offset_DST>
+                          <offset_DST_seconds>-18000</offset_DST_seconds>
+                          <abbreviation_STD>CST</abbreviation_STD>
+                          <abbreviation_DST>CDT</abbreviation_DST>
+                        </timezone>
+                        <plus_code>868MF89W+7G</plus_code>
+                        <plus_code_short>9W+7G White House, Sumner County, United States</plus_code_short>
+                        <rank>
+                          <importance>0.3758389495615451</importance>
+                          <popularity>1.8230053383091829</popularity>
+                        </rank>
+                        <place_id>5151611168d5a955c0599786866aef3b4240f00101f9017a02030000000000c0020792030833373138382b7573</place_id>
+                        <bbox>
+                          <lon1>-86.714807</lon1>
+                          <lat1>36.430421</lat1>
+                          <lon2>-86.624015</lon2>
+                          <lat2>36.507271</lat2>
+                        </bbox>
+                      </results>
+                      <query>
+                        <lat>36.47032</lat>
+                        <lon>-86.65138</lon>
+                        <plus_code>868MF8CX+4C</plus_code>
+                      </query>
+                    </root>
         '400':
-          description: Invalid input (e.g., missing or incorrect parameters).
+          description: Bad Request. The input provided is invalid or improperly formatted. Please verify and correct your request parameters.
         '401':
-          description: Invalid or missing API key.
+          description: Unauthorized. The API key is missing, incorrect, or invalid. Please provide a valid API key to authenticate the request.
+        '429':
+          description: Request limit exceeded. Too many requests have been sent in a short period, surpassing the allowed rate limits.
         '500':
-          description: Internal server error.
+          description: Internal Server Error. The server encountered an unexpected condition that prevented it from fulfilling the request. Please try again later or [contact support](mailto:info@geoapify.com) if the issue persists.

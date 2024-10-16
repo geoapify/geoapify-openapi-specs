@@ -1,7 +1,19 @@
 {
   "name": "geoapify-openapi-specs",
   "version": "1.0.0",
-  "description": "The Geoapify OpenAPI specifications provides a convenient way to interact with the Geoapify geolocation services",
+  "description": "The Geoapify OpenAPI specifications provide an easy and structured way to interact with Geoapify's geolocation services, including routing, geocoding, and map data.",
+  "keywords": [
+    "Geoapify",
+    "OpenAPI",
+    "API specifications",
+    "geolocation",
+    "routing",
+    "geocoding",
+    "maps",
+    "location services",
+    "Swagger",
+    "API documentation"
+  ],
   "directories": {
     "api-specs": "api-specs"
   },
@@ -19,7 +31,7 @@
   },
   "homepage": "https://github.com/geoapify/geoapify-openapi-specs#readme",
   "author": {
-    "name": "Geoapify GmbH",
+    "name": "Geoapify",
     "email": "info@geoapify.com",
     "url": "https://geoapify.com"
   },

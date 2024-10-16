@@ -1,37 +1,37 @@
 openapi: 3.0.0
 info:
   title: Map Matching API
-  description: The Map Matching API lets you match geographical coordinates, such as GPS tracks, to the existing road network. You can choose between various transportation modes, including cars, buses, delivery trucks, bicycles, and walking.
+  description: The Map Matching API allows you to align raw geographic coordinates, such as GPS tracks, to the nearest roads and pathways on the map. This is useful for improving the accuracy of location data, especially for routes and paths that follow the road network. The API supports various transportation modes, including cars, buses, delivery trucks, bicycles, and walking, ensuring accurate results for different types of travel.
   version: 1.0.0
   contact:
-    name: Geoapify GmbH
+    name: Geoapify
     url: https://geoapify.com
     email: info@geoapify.com
   license:
     name: MIT
-    url: https://opensource.org/license/mit
+    url: https://opensource.org/licenses/MIT
 
 servers:
   - url: https://api.geoapify.com/v1
-    description: Main Geoapify API server
+    description: Primary Geoapify API endpoint
 
 tags:
   - name: Map Matching API
-    description: Lets you match geographical coordinates, such as GPS tracks, to the existing road network.
+    description: Matches geographical coordinates, such as GPS tracks, to the closest roads and pathways in the existing road network, improving the accuracy of location data for various transportation modes.
 
 paths:
   /mapmatching:
     post:
       tags:
         - Map Matching API
-      summary: Match GPS coordinates to road network
-      description: Matches geographical coordinates, such as GPS tracks, to the existing road network. Supports different travel modes like drive, walk, and bicycle.
+      summary: Match GPS coordinates to the road network
+      description: Aligns geographical coordinates, such as GPS tracks, to the nearest roads and pathways on the existing road network. This endpoint supports various travel modes, including driving, walking, and cycling, to ensure accurate route matching based on the mode of transportation.
       operationId: mapMatching
       parameters:
         - name: apiKey
           in: query
           required: true
-          description: Your Geoapify API key.
+          description: Your Geoapify API key to authenticate the request. You can sign up and obtain an API key for free at [https://myprojects.geoapify.com/](https://myprojects.geoapify.com/). The Free plan includes up to 3,000 requests per day.
           schema:
             type: string
             example: "YOUR_API_KEY"
@@ -44,12 +44,31 @@ paths:
               properties:
                 mode:
                   type: string
-                  description: The transportation mode to use.
-                  enum: [ drive, light_truck, medium_truck, truck, heavy_truck, truck_dangerous_goods, long_truck, bus, scooter, motorcycle, bicycle, mountain_bike, road_bike, walk, hike, transit, approximated_transit ]
+                  description: |
+                    Specifies the transportation mode for matching the GPS coordinates to the road network. Different modes reflect the travel type and optimize the mapping accordingly. Available options include:
+
+                    - `drive`: Standard car or automobile.
+                    - `light_truck`: Light-duty truck.
+                    - `medium_truck`: Medium-duty truck.
+                    - `truck`: General truck.
+                    - `heavy_truck`: Heavy-duty truck.
+                    - `truck_dangerous_goods`: Truck carrying hazardous materials.
+                    - `long_truck`: Long or articulated truck.
+                    - `bus`: Public or private bus.
+                    - `scooter`: Motorized scooter.
+                    - `motorcycle`: Motorbike.
+                    - `bicycle`: Standard bicycle.
+                    - `mountain_bike`: Mountain bike, optimized for off-road cycling.
+                    - `road_bike`: Road bicycle, optimized for paved roads.
+                    - `walk`: Walking on foot.
+                    - `hike`: Hiking on trails or rugged terrain.
+                    - `transit`: Public transit routes (based on real-time data).
+                    - `approximated_transit`: Estimated public transit routes without real-time data.
+
                   example: drive
                 waypoints:
                   type: array
-                  description: Array of waypoints to be matched to the road network.
+                  description: An array of waypoints to be matched to the road network. Each waypoint includes coordinates, a timestamp, and an optional bearing.
                   items:
                     type: object
                     properties:
@@ -57,16 +76,16 @@ paths:
                         type: array
                         items:
                           type: number
-                        description: The coordinates of the waypoint as [longitude, latitude].
-                        example: [ 10.694703, 47.567028 ]
+                        description: The coordinates of the waypoint in [longitude, latitude] format.
+                        example: [10.694703, 47.567028]
                       timestamp:
                         type: string
                         format: date-time
-                        description: The timestamp of the waypoint in ISO 8601 format.
+                        description: The timestamp of the waypoint in ISO 8601 format, indicating the precise time when the waypoint was recorded.
                         example: "2019-11-04T07:09:34.000Z"
                       bearing:
                         type: number
-                        description: Bearing in degrees [0, 360].
+                        description: The bearing (in degrees) of the waypoint, indicating the compass direction of travel, ranging from 0 to 360 degrees.
                         example: 90
             example:
               mode: drive
@@ -79,7 +98,7 @@ paths:
         '200':
           description: A successful response containing the matched route and its properties.
           content:
-            application/geo+json:
+            application/json:
               example: |
                 {
                   "type": "FeatureCollection",
@@ -278,8 +297,10 @@ paths:
                   ]
                 }
         '400':
-          description: Invalid input (e.g., missing or incorrect parameters).
+          description: Bad Request. The input provided is invalid or improperly formatted. Please verify and correct your request parameters.
         '401':
-          description: Invalid or missing API key.
+          description: Unauthorized. The API key is missing, incorrect, or invalid. Please provide a valid API key to authenticate the request.
+        '429':
+          description: Request limit exceeded. Too many requests have been sent in a short period, surpassing the allowed rate limits.
         '500':
-          description: Internal server error.
+          description: Internal Server Error. The server encountered an unexpected condition that prevented it from fulfilling the request. Please try again later or [contact support](mailto:info@geoapify.com) if the issue persists.

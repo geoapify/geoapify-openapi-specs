@@ -1,23 +1,23 @@
 openapi: 3.0.0
 info:
   title: Route Planner API
-  description: The Route Planner API allows developers to integrate route planning and schedule optimization functionality into their applications. With this API, users can obtain the optimal routes between multiple locations and for multiple vehicles or agents.
+  description: The Route Planner API enables developers to integrate advanced route planning and schedule optimization into their applications. This API allows users to calculate the most efficient routes between multiple locations, taking into account multiple vehicles or agents. It is ideal for logistics, delivery services, and fleet management, helping optimize routes for time, distance, and resource usage.
   version: 1.0.0
   contact:
-    name: Geoapify GmbH
+    name: Geoapify
     url: https://geoapify.com
     email: info@geoapify.com
   license:
     name: MIT
-    url: https://opensource.org/license/mit
+    url: https://opensource.org/licenses/MIT
 
 servers:
   - url: https://api.geoapify.com/v1
-    description: Main Geoapify API server
+    description: Primary Geoapify API endpoint
 
 tags:
   - name: Route Planner API
-    description: Optimizes routes between multiple locations for multiple agents.
+    description: Optimizes routes between multiple locations, supporting multiple vehicles or agents for efficient route planning and schedule optimization.
 
 paths:
   /routeplanner:
@@ -25,13 +25,13 @@ paths:
       tags:
         - Route Planner API
       summary: Generate optimized route plans for agents and jobs
-      description: Provides an optimized route plan for agents, jobs, and shipments considering vehicle capacities, time windows, and more.
+      description: Generates an optimized route plan for agents, jobs, and shipments by considering factors such as vehicle capacities, time windows, travel distances, and more. This helps ensure efficient delivery, fleet management, or logistics operations by optimizing routes for multiple agents and vehicles.
       operationId: generateRoutePlan
       parameters:
         - name: apiKey
           in: query
           required: true
-          description: Your Geoapify API key.
+          description: Your Geoapify API key to authenticate the request. You can sign up and obtain an API key for free at [https://myprojects.geoapify.com/](https://myprojects.geoapify.com/). The Free plan includes up to 3,000 requests per day.
           schema:
             type: string
             example: "YOUR_API_KEY"
@@ -44,12 +44,31 @@ paths:
               properties:
                 mode:
                   type: string
-                  description: The transportation mode to use.
-                  enum: [ drive, light_truck, medium_truck, truck, heavy_truck, truck_dangerous_goods, long_truck, bus, scooter, motorcycle, bicycle, mountain_bike, road_bike, walk, hike, transit, approximated_transit ]
+                  description: |
+                    Specifies the transportation mode to use for route planning. This helps optimize the route based on the vehicle or travel method. Available options include:
+
+                    - `drive`: Standard car or automobile.
+                    - `light_truck`: Light-duty truck.
+                    - `medium_truck`: Medium-duty truck.
+                    - `truck`: General truck.
+                    - `heavy_truck`: Heavy-duty truck.
+                    - `truck_dangerous_goods`: Truck carrying hazardous materials.
+                    - `long_truck`: Long or articulated truck.
+                    - `bus`: Public or private bus.
+                    - `scooter`: Motorized scooter.
+                    - `motorcycle`: Motorbike.
+                    - `bicycle`: Standard bicycle.
+                    - `mountain_bike`: Mountain bike for off-road travel.
+                    - `road_bike`: Road bicycle optimized for paved surfaces.
+                    - `walk`: Walking on foot.
+                    - `hike`: Hiking on rough terrain or trails.
+                    - `transit`: Public transportation routes with real-time data.
+                    - `approximated_transit`: Estimated public transit routes without real-time data.
+
                   example: drive
                 agents:
                   type: array
-                  description: List of agents representing vehicles or workers.
+                  description: List of agents representing vehicles or workers responsible for carrying out the route plan. Each agent can have specific attributes such as capacity, time windows, and location details.
                   items:
                     type: object
                     properties:
@@ -57,65 +76,65 @@ paths:
                         type: array
                         items:
                           type: number
-                        description: The starting location of the agent as [longitude, latitude].
-                        example: [ 13.381453755359324, 52.520666399999996 ]
+                        description: The starting location of the agent in [longitude, latitude] format.
+                        example: [13.381453755359324, 52.520666399999996]
                       start_location_index:
                         type: integer
-                        description: Index of the start location in the locations list.
+                        description: The index of the agent's starting location in the locations list.
                       end_location:
                         type: array
                         items:
                           type: number
-                        description: Optional end location for the agent [longitude, latitude].
+                        description: Optional end location for the agent in [longitude, latitude] format.
                       end_location_index:
                         type: integer
-                        description: Index of the end location in the locations list.
+                        description: The index of the agent's end location in the locations list, if applicable.
                       pickup_capacity:
                         type: number
-                        description: Capacity for bulky goods pickup.
+                        description: The agent's capacity for picking up bulky goods, measured in units (e.g., weight or volume).
                       delivery_capacity:
                         type: number
-                        description: Capacity for bulky goods delivery.
+                        description: The agent's capacity for delivering bulky goods, measured in units.
                       capabilities:
                         type: array
                         items:
                           type: string
-                        description: List of capabilities or special features of the agent.
-                        example: [ 'electricity', 'extra-long' ]
+                        description: List of free-format strings representing the agent's capabilities or special features (e.g., vehicle type, specific equipment, or unique skills).
+                        example: ['electricity', 'extra-long']
                       time_windows:
                         type: array
                         items:
                           type: array
                           items:
                             type: number
-                        description: Working timeframes represented as pairs of relative times in seconds.
-                        example: [ [ 0, 7200 ] ]
+                        description: Working timeframes for the agent, represented as pairs of relative start and end times in seconds. The time is relative to the start of the working day, where `0` represents the beginning of the day.
+                        example: [[0, 7200]]
                       breaks:
                         type: array
-                        description: Breaks during the agent's working hours.
+                        description: Scheduled breaks during the agent's working hours.
                         items:
                           type: object
                           properties:
                             duration:
                               type: number
-                              description: Break duration in seconds.
+                              description: The duration of the break in seconds.
                             time_windows:
                               type: array
                               items:
                                 type: array
                                 items:
                                   type: number
-                              description: Time ranges during which the break can take place.
-                              example: [ [ 3600, 7200 ] ]
+                              description: The time intervals (in seconds) during which the break can occur.
+                              example: [[3600, 7200]]
                       id:
                         type: string
-                        description: Optional identifier for the agent.
+                        description: Optional unique identifier for the agent.
                       description:
                         type: string
-                        description: Description of the agent.
+                        description: A brief description of the agent (e.g., vehicle type or worker role).
                 jobs:
                   type: array
-                  description: List of jobs to be performed by the agents.
+                  description: A list of jobs to be performed by the agents, where each job includes location, priority, duration, and other details related to the task.
                   items:
                     type: object
                     properties:
@@ -123,48 +142,48 @@ paths:
                         type: array
                         items:
                           type: number
-                        description: The job location as [longitude, latitude].
-                        example: [ 13.381175446198714, 52.50929975 ]
+                        description: The job location specified in [longitude, latitude] format.
+                        example: [13.381175446198714, 52.50929975]
                       location_index:
                         type: integer
-                        description: Index of the job location in the locations list.
+                        description: Index of the job location in the locations list, linking it to a specific entry in the locations array.
                       priority:
                         type: integer
-                        description: Job priority, ranging from 0 (lowest) to 100 (highest).
+                        description: Job priority, ranging from 0 (lowest) to 100 (highest), indicating the importance of the job relative to others.
                         example: 50
                       duration:
                         type: number
-                        description: Duration of the job in seconds.
+                        description: Duration of the job in seconds, representing how long it will take to complete the task.
                         example: 600
                       pickup_amount:
                         type: number
-                        description: Amount of bulky goods to be picked up for the job.
+                        description: Amount of bulky goods (e.g., weight or volume) to be picked up during the job.
                       delivery_amount:
                         type: number
-                        description: Amount of bulky goods to be delivered for the job.
+                        description: Amount of bulky goods (e.g., weight or volume) to be delivered during the job.
                       requirements:
                         type: array
                         items:
                           type: string
-                        description: List of job requirements that match agent capabilities.
-                        example: [ 'electricity', 'extra-long' ]
+                        description: List of job-specific requirements that must match the agent’s capabilities, defined as free-format strings.
+                        example: ['electricity', 'extra-long']
                       time_windows:
                         type: array
                         items:
                           type: array
                           items:
                             type: number
-                        description: Timeframes in seconds within which the job must be completed.
-                        example: [ [ 0, 3600 ] ]
+                        description: Timeframes in seconds within which the job must be completed. The time is relative, where `0` represents the start of the working day.
+                        example: [[0, 3600]]
                       id:
                         type: string
-                        description: Optional identifier for the job.
+                        description: Optional unique identifier for the job.
                       description:
                         type: string
-                        description: Description of the job.
+                        description: A brief description of the job or task.
                 shipments:
                   type: array
-                  description: List of shipments to be picked up and delivered by agents.
+                  description: List of shipments that agents are responsible for picking up and delivering. Each shipment includes locations, timeframes, and other relevant details for both pickup and delivery.
                   items:
                     type: object
                     properties:
@@ -178,13 +197,13 @@ paths:
                             type: array
                             items:
                               type: number
-                            description: The pickup location as [longitude, latitude].
+                            description: The pickup location in [longitude, latitude] format.
                           location_index:
                             type: integer
-                            description: Index of the pickup location in the locations list.
+                            description: Index of the pickup location in the locations list, referencing a specific entry.
                           duration:
                             type: number
-                            description: Duration of the pickup in seconds.
+                            description: Duration of the pickup process in seconds.
                             example: 120
                           time_windows:
                             type: array
@@ -192,8 +211,8 @@ paths:
                               type: array
                               items:
                                 type: number
-                            description: Timeframes for the pickup.
-                            example: [ [ 0, 3600 ] ]
+                            description: Timeframes within which the pickup must occur, in seconds relative to the start of the working day.
+                            example: [[0, 3600]]
                       delivery:
                         type: object
                         properties:
@@ -201,13 +220,13 @@ paths:
                             type: array
                             items:
                               type: number
-                            description: The delivery location as [longitude, latitude].
+                            description: The delivery location in [longitude, latitude] format.
                           location_index:
                             type: integer
-                            description: Index of the delivery location in the locations list.
+                            description: Index of the delivery location in the locations list, referencing a specific entry.
                           duration:
                             type: number
-                            description: Duration of the delivery in seconds.
+                            description: Duration of the delivery process in seconds.
                             example: 120
                           time_windows:
                             type: array
@@ -215,76 +234,95 @@ paths:
                               type: array
                               items:
                                 type: number
-                            description: Timeframes for the delivery.
-                            example: [ [ 0, 3600 ] ]
+                            description: Timeframes within which the delivery must occur, in seconds relative to the start of the working day.
+                            example: [[0, 3600]]
                       requirements:
                         type: array
                         items:
                           type: string
-                        description: Requirements for handling the shipment.
+                        description: Specific requirements for handling the shipment, represented as free-format strings (e.g., refrigeration or fragile items).
                       priority:
                         type: integer
-                        description: Shipment priority.
+                        description: Shipment priority, with a value ranging from 0 (lowest) to 100 (highest).
                       description:
                         type: string
-                        description: Description of the shipment.
+                        description: A brief description of the shipment, outlining its contents or special instructions.
                 locations:
                   type: array
-                  description: List of locations used in jobs and shipments.
+                  description: List of locations referenced by jobs and shipments, each identified by unique coordinates.
                   items:
                     type: object
                     properties:
                       id:
                         type: string
-                        description: Unique identifier for the location.
+                        description: Unique identifier for the location, used to reference the location in jobs, shipments, or agent details.
                       location:
                         type: array
                         items:
                           type: number
-                        description: Coordinates of the location as [longitude, latitude].
+                        description: Coordinates of the location specified as [longitude, latitude].
+                        example: [13.4050, 52.5200]
                 avoid:
                   type: array
-                  description: List of road types or locations to avoid.
+                  description: A list of road types or specific geographic locations that should be avoided during route planning.
                   items:
                     type: object
                     properties:
                       type:
                         type: string
-                        description: Type of area to avoid.
+                        description: Specifies the type of area or road to avoid (e.g., toll roads, highways, or specific locations).
+                        enum: [tolls, ferries, highways, location]
                         example: tolls
+                      importance:
+                        type: number
+                        description: Specifies the importance of avoiding the selected road type or location, with values ranging from 0 to 1. A value of `1` means the avoidance is critical, while a value of `0` means it is not important and can be ignored if necessary.
                       values:
                         type: array
                         items:
                           type: object
-                          description: Coordinates to avoid.
+                          description: Coordinates of specific locations to avoid, when the type is 'location', defined by longitude and latitude.
                           properties:
                             lon:
                               type: number
-                              description: Longitude.
+                              description: Longitude of the location to avoid.
                               example: 12.1830350
                             lat:
                               type: number
-                              description: Latitude.
+                              description: Latitude of the location to avoid.
                               example: 47.981384
                 traffic:
                   type: string
-                  description: Traffic model to use for route calculation.
+                  description: |
+                    Specifies the traffic model to use for route calculation.
+                      - `free_flow`: Ignores traffic conditions and assumes optimal driving conditions with no delays.
+                      - `approximated`: Takes into account potential traffic congestion, adjusting travel time estimates accordingly.
                   enum: [ free_flow, approximated ]
                   example: approximated
+
                 type:
                   type: string
-                  description: Type of route calculation.
+                  description: |
+                    Specifies the type of route optimization to apply.
+                      - `balanced`: A balanced route that optimizes both time and distance.
+                      - `short`: Prioritizes the shortest route by distance.
+                      - `less_maneuvers`: Minimizes turns and complex maneuvers, which is useful for large vehicles or ease of driving.
                   enum: [ balanced, short, less_maneuvers ]
                   example: short
+
                 max_speed:
                   type: number
-                  description: Maximum speed allowed in kilometers per hour.
+                  description: Maximum allowed speed for the route, in kilometers per hour (KPH). This is typically used for vehicle-based modes of transportation.
                   example: 80
+
                 units:
                   type: string
-                  description: Unit system for distances.
+                  description: |
+                    Unit system to be used for measuring distances in the response.
+                      - `metric`: Kilometers and meters.
+                      - `imperial`: Miles and feet.
                   enum: [ metric, imperial ]
                   example: metric
+
             example:
               mode: drive
               agents:
@@ -581,8 +619,10 @@ paths:
                   ]
                 }
         '400':
-          description: Invalid input (e.g., missing or incorrect parameters).
+          description: Bad Request. The input provided is invalid or improperly formatted. Please verify and correct your request parameters.
         '401':
-          description: Invalid or missing API key.
+          description: Unauthorized. The API key is missing, incorrect, or invalid. Please provide a valid API key to authenticate the request.
+        '429':
+          description: Request limit exceeded. Too many requests have been sent in a short period, surpassing the allowed rate limits.
         '500':
-          description: Internal server error.
+          description: Internal Server Error. The server encountered an unexpected condition that prevented it from fulfilling the request. Please try again later or [contact support](mailto:info@geoapify.com) if the issue persists.

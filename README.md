@@ -15,6 +15,7 @@ The Geoapify OpenAPI specifications provide a convenient way to interact with th
 - [Map Matching API](https://apidocs.geoapify.com/docs/map-matching/)
 - [Route Planner API](https://apidocs.geoapify.com/docs/route-planner/)
 - [Isoline API](https://apidocs.geoapify.com/docs/isolines/)
+- [Places API](https://apidocs.geoapify.com/docs/places/)
 
 ## Before You Start
 

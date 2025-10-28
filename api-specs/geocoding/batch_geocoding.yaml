@@ -122,6 +122,8 @@ paths:
           description: Batch geocoding job successfully created. The response includes the job details, such as the unique job ID, current job status, and the URL to check the status or retrieve the results once processing is complete. **The job ID must be used to fetch the final geocoding results after the job has finished processing.**
           content:
             application/json:
+              schema:
+                $ref: '#/components/schemas/BatchJobResponse'
               example: |
                 {
                   "id": "de5a2fb3e21a43a5915f7173fd711051",
@@ -171,6 +173,8 @@ paths:
           description: Successful response with batch geocoding results.
           content:
             application/json:
+              schema:
+                $ref: '#/components/schemas/BatchForwardGeocodingResults'
               example: |
                 [
                   {
@@ -202,6 +206,9 @@ paths:
                   }
                 ]
             text/csv:
+              schema:
+                type: string
+                description: CSV format with headers and comma-separated values
               example: |
                 "query.text","query.parsed.housenumber","query.parsed.street","query.parsed.postcode","query.parsed.city","query.parsed.state","query.parsed.country","query.parsed.expected_type"
                 "668 Cedar St, San Carlos, CA 94070, United States of America","668","cedar st","94070","san carlos","ca","united states of america","building"
@@ -282,6 +289,8 @@ paths:
           description: Job successfully created, returning job details.
           content:
             application/json:
+              schema:
+                $ref: '#/components/schemas/BatchJobResponse'
               example: |
                 {
                   "id": "d8756e94f6ee42f7abdd9a0c99e6c9fd",
@@ -331,6 +340,8 @@ paths:
           description: Successful response with batch reverse geocoding results.
           content:
             application/json:
+              schema:
+                $ref: '#/components/schemas/BatchReverseGeocodingResults'
               example: |
                 [
                   {
@@ -421,6 +432,9 @@ paths:
                   }
                 ]
             text/csv:
+              schema:
+                type: string
+                description: CSV format with headers and comma-separated values
               example: |
                 "query.lon","query.lat","query.plus_code","country_code","housenumber","street","country","county","datasource.sourcename","datasource.attribution","datasource.license","postcode","state","city","state_code","lon","lat","distance","result_type","formatted","address_line1","address_line2","timezone.name","timezone.offset_STD","timezone.offset_STD_seconds","timezone.offset_DST","timezone.offset_DST_seconds","timezone.abbreviation_STD","timezone.abbreviation_DST","plus_code","plus_code_short","rank.popularity","place_id"
                 "-122.263801","37.502683","849VGP3P+3F","us","656","Cedar Street","United States","San Mateo County","openaddresses","© OpenAddresses contributors","BSD-3-Clause License","94070","California","San Carlos","CA","-122.263964","37.502693","14.421782254517026","building","656 Cedar Street, San Carlos, CA 94070, United States of America","656 Cedar Street","San Carlos, CA 94070, United States of America","America/Los_Angeles","-08:00","-28800","-07:00","-25200","PST","PDT","849VGP3P+3C","3P+3C, 94070 San Carlos, United States","4.377368426402045","5191d442c9e4905ec059cd76853e58c04240c00203e203476f70656e6164647265737365733a616464726573733a75732f63612f73616e5f6d6174656f2d6164647265737365732d636f756e74793a61633138623835353436356330343166"
@@ -435,3 +449,333 @@ paths:
           description: Request limit exceeded. Too many requests have been sent in a short period, surpassing the allowed rate limits.
         '500':
           description: Internal Server Error. The server encountered an unexpected condition that prevented it from fulfilling the request. Please try again later or [contact support](mailto:info@geoapify.com) if the issue persists.
+components:
+  schemas:
+    # Batch Job Response (for both forward and reverse)
+    BatchJobResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique job identifier
+        status:
+          type: string
+          enum: [pending, processing, completed, failed]
+          description: Current job status
+        url:
+          type: string
+          format: uri
+          description: URL to retrieve job results
+      required:
+        - id
+        - status
+        - url
+    
+    # Forward Batch Geocoding Results
+    BatchForwardGeocodingResults:
+      type: array
+      items:
+        $ref: '#/components/schemas/BatchForwardGeocodingResult'
+    
+    # Individual forward batch geocoding result (based on documentation example)
+    BatchForwardGeocodingResult:
+      type: object
+      properties:
+        query:
+          $ref: '#/components/schemas/BatchForwardQuery'
+        datasource:
+          $ref: '#/components/schemas/BatchDatasource'
+        housenumber:
+          type: string
+          description: House number component of an address
+        street:
+          type: string
+          description: Street component of the address
+        suburb:
+          type: string
+          description: Suburb component of the address
+        city:
+          type: string
+          description: City component of the address
+        county:
+          type: string
+          description: County component of the address
+        state:
+          type: string
+          description: State component of the address
+        postcode:
+          type: string
+          description: Postcode or ZIP code of the address
+        country:
+          type: string
+          description: Country component of the address
+        country_code:
+          type: string
+          description: ISO 3166-1 alpha-2 country code
+        lon:
+          type: number
+          format: double
+          description: Longitude coordinate of the location
+        lat:
+          type: number
+          format: double
+          description: Latitude coordinate of the location
+        formatted:
+          type: string
+          description: Display address
+        address_line1:
+          type: string
+          description: Main part of the display address
+        address_line2:
+          type: string
+          description: The second part of the display address
+        state_code:
+          type: string
+          description: State shortcode
+        result_type:
+          type: string
+          description: Found location type
+        rank:
+          $ref: '#/components/schemas/BatchRank'
+        place_id:
+          type: string
+          description: Unique identifier for the place
+        category:
+          type: string
+          description: A place category
+        name:
+          type: string
+          description: Location name
+        distance:
+          type: number
+          description: Distance in meters
+        timezone:
+          $ref: '#/components/schemas/BatchTimezone'
+        plus_code:
+          type: string
+          description: Plus code (Open Location Code)
+        plus_code_short:
+          type: string
+          description: Shortened plus code
+        bbox:
+          $ref: '#/components/schemas/BatchBoundingBox'
+    
+    # Reverse Batch Geocoding Results
+    BatchReverseGeocodingResults:
+      type: array
+      items:
+        $ref: '#/components/schemas/BatchReverseGeocodingResult'
+    
+    # Individual reverse batch geocoding result (based on documentation example)
+    BatchReverseGeocodingResult:
+      type: object
+      properties:
+        query:
+          $ref: '#/components/schemas/BatchReverseQuery'
+        country_code:
+          type: string
+          description: ISO 3166-1 alpha-2 country code
+        housenumber:
+          type: string
+          description: House number component of an address
+        street:
+          type: string
+          description: Street component of the address
+        country:
+          type: string
+          description: Country component of the address
+        county:
+          type: string
+          description: County component of the address
+        datasource:
+          $ref: '#/components/schemas/BatchDatasource'
+        postcode:
+          type: string
+          description: Postcode or ZIP code of the address
+        state:
+          type: string
+          description: State component of the address
+        city:
+          type: string
+          description: City component of the address
+        state_code:
+          type: string
+          description: State shortcode
+        lon:
+          type: number
+          format: double
+          description: Longitude coordinate of the location
+        lat:
+          type: number
+          format: double
+          description: Latitude coordinate of the location
+        distance:
+          type: number
+          description: Distance in meters to the given coordinates
+        result_type:
+          type: string
+          description: Found location type
+        formatted:
+          type: string
+          description: Display address
+        address_line1:
+          type: string
+          description: Main part of the display address
+        address_line2:
+          type: string
+          description: The second part of the display address
+        timezone:
+          $ref: '#/components/schemas/BatchTimezone'
+        plus_code:
+          type: string
+          description: Plus code (Open Location Code)
+        plus_code_short:
+          type: string
+          description: Shortened plus code
+        rank:
+          $ref: '#/components/schemas/BatchRank'
+        place_id:
+          type: string
+          description: Unique identifier for the place
+        name:
+          type: string
+          description: Location name
+        category:
+          type: string
+          description: A place category
+        district:
+          type: string
+          description: District component of the address
+        suburb:
+          type: string
+          description: Suburb component of the address
+    
+    # Forward Query Information
+    BatchForwardQuery:
+      type: object
+      properties:
+        text:
+          type: string
+          description: Original query text
+        parsed:
+          type: object
+          description: Parsed query components
+          properties:
+            housenumber:
+              type: string
+            street:
+              type: string
+            postcode:
+              type: string
+            city:
+              type: string
+            state:
+              type: string
+            country:
+              type: string
+            expected_type:
+              type: string
+    
+    # Reverse Query Information
+    BatchReverseQuery:
+      type: object
+      properties:
+        lon:
+          type: number
+          description: Query longitude
+        lat:
+          type: number
+          description: Query latitude
+        plus_code:
+          type: string
+          description: Plus code for the query coordinates
+    
+    # Datasource information
+    BatchDatasource:
+      type: object
+      properties:
+        sourcename:
+          type: string
+          description: Name of the data source
+        attribution:
+          type: string
+          description: Attribution text
+        license:
+          type: string
+          description: License name
+        url:
+          type: string
+          format: uri
+          description: URL to license or source
+    
+    # Timezone information
+    BatchTimezone:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Timezone name
+        name_alt:
+          type: string
+          description: The alternative name of the timezone, if exist
+        offset_STD:
+          type: string
+          description: Time offset
+        offset_STD_seconds:
+          type: integer
+          description: Time offset in seconds
+        offset_DST:
+          type: string
+          description: Time offset for daylight saving time
+        offset_DST_seconds:
+          type: integer
+          description: Time offset in seconds for daylight saving time
+        abbreviation_STD:
+          type: string
+          description: Timezone abbreviation. Provided when exists
+        abbreviation_DST:
+          type: string
+          description: Timezone abbreviation for daylight saving time. Provided when exists
+    
+    # Ranking information
+    BatchRank:
+      type: object
+      properties:
+        importance:
+          type: number
+          description: Importance score of the result
+        popularity:
+          type: number
+          description: Popularity score of the result
+        confidence:
+          type: number
+          description: Confidence value, takes values from 0 to 1
+        confidence_city_level:
+          type: number
+          description: City-level confidence, takes values from 0 to 1
+        confidence_street_level:
+          type: number
+          description: Street-level confidence, takes values from 0 to 1
+        confidence_building_level:
+          type: number
+          description: Building-level confidence, takes values from 0 to 1
+        match_type:
+          type: string
+          description: Match type between requested address and result address
+    
+    # Bounding box
+    BatchBoundingBox:
+      type: object
+      properties:
+        lon1:
+          type: number
+          description: Minimum longitude
+        lat1:
+          type: number
+          description: Minimum latitude
+        lon2:
+          type: number
+          description: Maximum longitude
+        lat2:
+          type: number
+          description: Maximum latitude

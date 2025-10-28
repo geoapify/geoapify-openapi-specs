@@ -184,6 +184,10 @@ paths:
           description: Successful response with routing details.
           content:
             application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/RoutingJsonResponse'
+                  - $ref: '#/components/schemas/RoutingGeoJsonResponse'
               examples:
                 format=json:
                   value: |
@@ -2891,6 +2895,8 @@ paths:
                       "type": "FeatureCollection"
                     }
             application/xml:
+              schema:
+                $ref: '#/components/schemas/RoutingXmlResponse'
               examples:
                 format=xml:
                   value: |
@@ -3884,3 +3890,507 @@ paths:
           description: Request limit exceeded. Too many requests have been sent in a short period, surpassing the allowed rate limits.
         '500':
           description: Internal Server Error. The server encountered an unexpected condition that prevented it from fulfilling the request. Please try again later or [contact support](mailto:info@geoapify.com) if the issue persists.
+
+components:
+  schemas:
+    # JSON Format Response Schema
+    RoutingJsonResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoutingResult'
+        properties:
+          $ref: '#/components/schemas/RoutingProperties'
+      required:
+        - results
+    
+    # GeoJSON Format Response Schema
+    RoutingGeoJsonResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [FeatureCollection]
+        features:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoutingGeoJsonFeature'
+        properties:
+          $ref: '#/components/schemas/RoutingProperties'
+      required:
+        - type
+        - features
+    
+    # Individual routing result object
+    RoutingResult:
+      type: object
+      properties:
+        mode:
+          type: string
+          description: Transportation mode used for routing
+        waypoints:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoutingWaypoint'
+        units:
+          type: string
+          enum: [metric, imperial]
+          description: Distance units
+        avoid:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoutingAvoid'
+          description: List of avoided road types or locations
+        details:
+          type: array
+          items:
+            type: string
+          description: Additional details requested
+        traffic:
+          type: string
+          enum: [free_flow, approximated]
+          description: Traffic model used
+        distance:
+          type: number
+          description: Total route distance
+        distance_units:
+          type: string
+          description: Distance units (Miles or Meters)
+        time:
+          type: number
+          description: Estimated travel time in seconds
+        max_speed:
+          type: number
+          description: Maximum speed setting for the route
+        toll:
+          type: boolean
+          description: True if the route has tolls
+        ferry:
+          type: boolean
+          description: True if the route uses a ferry
+        legs:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoutingLeg'
+          description: Array of route legs between waypoints
+        geometry:
+          type: array
+          items:
+            type: array
+            items:
+              type: array
+              items:
+                type: number
+              minItems: 2
+              maxItems: 2
+          description: Route geometry as MultiLineString coordinates
+    
+    # GeoJSON Feature for routing
+    RoutingGeoJsonFeature:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [Feature]
+        properties:
+          $ref: '#/components/schemas/RoutingResult'
+        geometry:
+          type: object
+          properties:
+            type:
+              type: string
+              enum: [MultiLineString]
+            coordinates:
+              type: array
+              items:
+                type: array
+                items:
+                  type: array
+                  items:
+                    type: number
+                  minItems: 2
+                  maxItems: 2
+      required:
+        - type
+        - properties
+        - geometry
+    
+    # Routing waypoint
+    RoutingWaypoint:
+      type: object
+      properties:
+        location:
+          type: array
+          items:
+            type: number
+          minItems: 2
+          maxItems: 2
+          description: Waypoint coordinates [longitude, latitude]
+        original_index:
+          type: integer
+          description: Original index of the waypoint
+    
+    # Route leg between two waypoints
+    RoutingLeg:
+      type: object
+      properties:
+        distance:
+          type: number
+          description: Distance of the route leg
+        time:
+          type: number
+          description: Estimated travel time in seconds
+        steps:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoutingStep'
+          description: Array of steps in this leg
+        elevation:
+          type: array
+          items:
+            type: number
+          description: Array of heights in meters (when elevation details requested)
+        elevation_range:
+          type: array
+          items:
+            type: array
+            items:
+              type: number
+            minItems: 2
+            maxItems: 2
+          description: Array of [distance, height] values in meters
+        country_code:
+          type: array
+          items:
+            type: string
+          description: List of country codes crossed by the route leg
+    
+    # Individual route step
+    RoutingStep:
+      type: object
+      properties:
+        distance:
+          type: number
+          description: Distance of the route segment
+        time:
+          type: number
+          description: Estimated travel time in seconds
+        from_index:
+          type: integer
+          description: Index where geometry starts in the leg geometry
+        to_index:
+          type: integer
+          description: Index where geometry ends in the leg geometry
+        toll:
+          type: boolean
+          description: True if the step has toll
+        ferry:
+          type: boolean
+          description: True if includes a ferry
+        tunnel:
+          type: boolean
+          description: True if is a tunnel
+        bridge:
+          type: boolean
+          description: True if is a bridge
+        roundabout:
+          type: boolean
+          description: True if is a roundabout
+        speed:
+          type: number
+          description: Estimated speed
+        speed_limit:
+          type: number
+          description: Speed limit
+        truck_limit:
+          type: number
+          description: Speed limit for trucks
+        surface:
+          type: string
+          enum: [paved_smooth, paved, paved_rough, compacted, dirt, gravel, path, impassable]
+          description: Road surface type
+        lane_count:
+          type: integer
+          description: Number of lanes
+        road_class:
+          type: string
+          enum: [motorway, trunk, primary, secondary, tertiary, unclassified, residential, service_other]
+          description: Road class
+        name:
+          type: string
+          description: Road name
+        rightside:
+          type: boolean
+          description: True for driving on the right side
+        traversability:
+          type: string
+          enum: [forward, backward, both]
+          description: Traversability direction
+        elevation:
+          type: number
+          description: Average elevation along the step
+        max_elevation:
+          type: number
+          description: Maximal elevation along the step
+        min_elevation:
+          type: number
+          description: Minimal elevation along the step
+        elevation_gain:
+          type: number
+          description: Elevation difference between first and last point
+        instruction:
+          $ref: '#/components/schemas/RoutingInstruction'
+    
+    # Step instruction for turn-by-turn navigation
+    RoutingInstruction:
+      type: object
+      properties:
+        text:
+          type: string
+          description: Navigation instruction text
+        type:
+          type: string
+          enum: [None, StartAt, StartAtRight, StartAtLeft, DestinationReached, DestinationReachedRight, DestinationReachedLeft, Straight, SlightRight, Right, SharpRight, TurnAroundRight, TurnAroundLeft, SharpLeft, Left, SlightLeft, ExitRight, ExitLeft, StayRight, StayLeft, Merge, Roundabout, FerryEnter, FerryExit, Transit, TransitTransfer, TransitRemainOn, TransitConnectionStart, TransitConnectionTransfer, TransitConnectionDestination, PostTransitConnectionDestination, MergeRight, MergeLeft]
+          description: Type of maneuver
+        transition_instruction:
+          type: string
+          description: Transition instruction
+        pre_transition_instruction:
+          type: string
+          description: Instruction before transition
+        post_transition_instruction:
+          type: string
+          description: Instruction after transition
+        streets:
+          type: array
+          items:
+            type: string
+          description: List of street names for the maneuver
+        exitNumber:
+          type: array
+          items:
+            type: string
+          description: List of exit numbers
+        exitRoadName:
+          type: array
+          items:
+            type: string
+          description: List of exit road names
+        exitTowards:
+          type: array
+          items:
+            type: string
+          description: List of exit directions
+        contains_next_instruction:
+          type: boolean
+          description: True when transition instruction contains part of next instruction
+        roundabout_exit:
+          type: integer
+          description: Roundabout exit number
+    
+    # Avoid configuration object
+    RoutingAvoid:
+      type: object
+      properties:
+        type:
+          type: string
+          description: Type of road or location to avoid
+        importance:
+          type: number
+          description: Importance level from 0 to 1 (optional)
+      required:
+        - type
+    
+    # Request properties
+    RoutingProperties:
+      type: object
+      properties:
+        mode:
+          type: string
+          description: Transportation mode
+        waypoints:
+          type: array
+          items:
+            type: array
+            items:
+              type: number
+          description: Original waypoints coordinates
+        units:
+          type: string
+          description: Distance units
+        avoid:
+          type: array
+          items:
+            type: string
+          description: Avoided road types or locations
+        details:
+          type: array
+          items:
+            type: string
+          description: Additional details requested
+        traffic:
+          type: string
+          description: Traffic model used
+    
+    # XML Format Response Schema
+    RoutingXmlResponse:
+      type: object
+      xml:
+        name: root
+      properties:
+        results:
+          type: array
+          xml:
+            wrapped: false
+          items:
+            type: object
+            xml:
+              name: results
+            properties:
+              mode:
+                type: string
+              waypoints:
+                type: array
+                xml:
+                  wrapped: false
+                items:
+                  type: object
+                  xml:
+                    name: waypoints
+                  properties:
+                    location:
+                      type: array
+                      xml:
+                        wrapped: false
+                      items:
+                        type: number
+                        xml:
+                          name: location
+                    original_index:
+                      type: integer
+              units:
+                type: string
+              avoid:
+                type: array
+                xml:
+                  wrapped: false
+                items:
+                  type: string
+                  xml:
+                    name: avoid
+              details:
+                type: array
+                xml:
+                  wrapped: false
+                items:
+                  type: string
+                  xml:
+                    name: details
+              traffic:
+                type: string
+              distance:
+                type: number
+              distance_units:
+                type: string
+              time:
+                type: integer
+              toll:
+                type: boolean
+              ferry:
+                type: boolean
+              legs:
+                type: array
+                xml:
+                  wrapped: false
+                items:
+                  type: object
+                  xml:
+                    name: legs
+                  properties:
+                    distance:
+                      type: number
+                    time:
+                      type: integer
+                    steps:
+                      type: array
+                      xml:
+                        wrapped: false
+                      items:
+                        type: object
+                        xml:
+                          name: steps
+                        properties:
+                          distance:
+                            type: number
+                          time:
+                            type: integer
+                          from_index:
+                            type: integer
+                          to_index:
+                            type: integer
+                          toll:
+                            type: boolean
+                          ferry:
+                            type: boolean
+                          instruction:
+                            type: object
+                            xml:
+                              name: instruction
+                            properties:
+                              text:
+                                type: string
+                              type:
+                                type: string
+              geometry:
+                type: array
+                xml:
+                  wrapped: false
+                items:
+                  type: array
+                  xml:
+                    name: geometry
+                  items:
+                    type: array
+                    xml:
+                      name: coordinate
+                    items:
+                      type: number
+        properties:
+          type: object
+          xml:
+            name: properties
+          properties:
+            mode:
+              type: string
+            waypoints:
+              type: array
+              xml:
+                wrapped: false
+              items:
+                type: array
+                xml:
+                  name: waypoints
+                items:
+                  type: number
+            units:
+              type: string
+            avoid:
+              type: array
+              xml:
+                wrapped: false
+              items:
+                type: string
+                xml:
+                  name: avoid
+            details:
+              type: array
+              xml:
+                wrapped: false
+              items:
+                type: string
+                xml:
+                  name: details
+            traffic:
+              type: string

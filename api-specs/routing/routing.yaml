@@ -88,9 +88,7 @@ paths:
             - `short`: Prioritizes the shortest possible route in terms of distance, potentially ignoring other factors like travel time.
             - `less_maneuvers`: Reduces the number of turns or complex maneuvers, providing a simpler route, which can be useful for larger vehicles or ease of navigation.
           schema:
-            type: string
-            enum: [ balanced, short, less_maneuvers ]
-            example: "short"
+            $ref: '../common/shared-components.yaml#/components/schemas/RouteTypeEnum'
         - name: units
           in: query
           required: false
@@ -102,9 +100,7 @@ paths:
 
             If not specified, the default is `metric`. Select the appropriate units based on the region or user preferences.
           schema:
-            type: string
-            enum: [ metric, imperial ]
-            example: "imperial"
+            $ref: '../common/shared-components.yaml#/components/schemas/UnitsEnum'
         - name: lang
           in: query
           required: false
@@ -161,9 +157,7 @@ paths:
 
             This parameter is only applicable to motorized vehicle modes, such as `drive`, `truck`, and other similar modes.
           schema:
-            type: string
-            enum: [ free_flow, approximated ]
-            example: "approximated"
+            $ref: '../common/shared-components.yaml#/components/schemas/TrafficEnum'
         - name: max_speed
           in: query
           required: false
@@ -3903,25 +3897,19 @@ components:
             $ref: '#/components/schemas/RoutingResult'
         properties:
           $ref: '#/components/schemas/RoutingProperties'
-      required:
-        - results
     
     # GeoJSON Format Response Schema
     RoutingGeoJsonResponse:
-      type: object
-      properties:
-        type:
-          type: string
-          enum: [FeatureCollection]
-        features:
-          type: array
-          items:
-            $ref: '#/components/schemas/RoutingGeoJsonFeature'
-        properties:
-          $ref: '#/components/schemas/RoutingProperties'
-      required:
-        - type
-        - features
+      allOf:
+        - $ref: '../common/shared-components.yaml#/components/schemas/GeoJsonFeatureCollection'
+        - type: object
+          properties:
+            features:
+              type: array
+              items:
+                $ref: '#/components/schemas/RoutingGeoJsonFeature'
+            properties:
+              $ref: '#/components/schemas/RoutingProperties'
     
     # Individual routing result object
     RoutingResult:
@@ -3935,9 +3923,7 @@ components:
           items:
             $ref: '#/components/schemas/RoutingWaypoint'
         units:
-          type: string
-          enum: [metric, imperial]
-          description: Distance units
+          $ref: '../common/shared-components.yaml#/components/schemas/UnitsEnum'
         avoid:
           type: array
           items:
@@ -3949,9 +3935,7 @@ components:
             type: string
           description: Additional details requested
         traffic:
-          type: string
-          enum: [free_flow, approximated]
-          description: Traffic model used
+          $ref: '../common/shared-components.yaml#/components/schemas/TrafficEnum'
         distance:
           type: number
           description: Total route distance
@@ -3989,19 +3973,18 @@ components:
     
     # GeoJSON Feature for routing
     RoutingGeoJsonFeature:
-      type: object
-      properties:
-        type:
-          type: string
-          enum: [Feature]
-        properties:
-          $ref: '#/components/schemas/RoutingResult'
-        geometry:
-          type: object
+      allOf:
+        - $ref: '../common/shared-components.yaml#/components/schemas/GeoJsonFeature'
+        - type: object
           properties:
-            type:
-              type: string
-              enum: [MultiLineString]
+            properties:
+              $ref: '#/components/schemas/RoutingResult'
+            geometry:
+              type: object
+              properties:
+                type:
+                  type: string
+                  enum: [MultiLineString]
             coordinates:
               type: array
               items:
@@ -4012,22 +3995,13 @@ components:
                     type: number
                   minItems: 2
                   maxItems: 2
-      required:
-        - type
-        - properties
-        - geometry
     
     # Routing waypoint
     RoutingWaypoint:
       type: object
       properties:
         location:
-          type: array
-          items:
-            type: number
-          minItems: 2
-          maxItems: 2
-          description: Waypoint coordinates [longitude, latitude]
+          $ref: '../common/shared-components.yaml#/components/schemas/CoordinateArray'
         original_index:
           type: integer
           description: Original index of the waypoint
@@ -4200,8 +4174,6 @@ components:
         importance:
           type: number
           description: Importance level from 0 to 1 (optional)
-      required:
-        - type
     
     # Request properties
     RoutingProperties:

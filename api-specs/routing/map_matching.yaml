@@ -311,37 +311,26 @@ components:
   schemas:
     # Main Map Matching Response (GeoJSON FeatureCollection)
     MapMatchingResponse:
-      type: object
-      properties:
-        type:
-          type: string
-          enum: [FeatureCollection]
-          description: GeoJSON object type
-        features:
-          type: array
-          items:
-            $ref: '#/components/schemas/MapMatchingFeature'
-          description: Array of matched route features (typically contains one feature)
-      required:
-        - type
-        - features
+      allOf:
+        - $ref: '../common/shared-components.yaml#/components/schemas/GeoJsonFeatureCollection'
+        - type: object
+          properties:
+            features:
+              type: array
+              items:
+                $ref: '#/components/schemas/MapMatchingFeature'
+              description: Array of matched route features (typically contains one feature)
     
     # Individual map matching feature
     MapMatchingFeature:
-      type: object
-      properties:
-        type:
-          type: string
-          enum: [Feature]
-          description: GeoJSON feature type
-        properties:
-          $ref: '#/components/schemas/MapMatchingProperties'
-        geometry:
-          $ref: '#/components/schemas/MapMatchingGeometry'
-      required:
-        - type
-        - properties
-        - geometry
+      allOf:
+        - $ref: '../common/shared-components.yaml#/components/schemas/GeoJsonFeature'
+        - type: object
+          properties:
+            properties:
+              $ref: '#/components/schemas/MapMatchingProperties'
+            geometry:
+              $ref: '#/components/schemas/MapMatchingGeometry'
     
     # Feature properties containing route details
     MapMatchingProperties:
@@ -366,12 +355,6 @@ components:
           items:
             $ref: '#/components/schemas/RouteLeg'
           description: An array of RouteLeg. Each leg represents separate parts of the route
-      required:
-        - distance
-        - time
-        - mode
-        - waypoints
-        - legs
     
     # Route geometry as MultiLineString
     MapMatchingGeometry:
@@ -392,9 +375,6 @@ components:
               minItems: 2
               maxItems: 2
           description: MultiLineString coordinates representing the matched route
-      required:
-        - type
-        - coordinates
     
     # Matched waypoint information
     MatchedWaypoint:
@@ -430,14 +410,6 @@ components:
         step_index:
           type: integer
           description: Step point, the waypoint belongs to
-      required:
-        - original_index
-        - location
-        - original_location
-        - match_type
-        - match_distance
-        - leg_index
-        - step_index
     
     # Route leg between locations
     RouteLeg:
@@ -454,10 +426,6 @@ components:
           items:
             $ref: '#/components/schemas/LegStep'
           description: An array of LegStep. Steps of the route
-      required:
-        - distance
-        - time
-        - steps
     
     # Individual step or segment of a route leg
     LegStep:

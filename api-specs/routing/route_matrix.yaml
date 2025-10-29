@@ -285,32 +285,15 @@ components:
             items:
               $ref: '#/components/schemas/RouteMatrixEntry'
           description: The time-distance matrix as a 2D array
-      required:
-        - sources
-        - targets
-        - sources_to_targets
     
     # Location object with original and matched coordinates
     RouteMatrixLocation:
       type: object
       properties:
         original_location:
-          type: array
-          items:
-            type: number
-          minItems: 2
-          maxItems: 2
-          description: Original location represented as an array of coordinates [longitude, latitude]
+          $ref: '../common/shared-components.yaml#/components/schemas/CoordinateArray'
         location:
-          type: array
-          items:
-            type: number
-          minItems: 2
-          maxItems: 2
-          description: Matched location represented as an array of coordinates [longitude, latitude]
-      required:
-        - original_location
-        - location
+          $ref: '../common/shared-components.yaml#/components/schemas/CoordinateArray'
     
     # Individual matrix entry with distance and time
     RouteMatrixEntry:
@@ -328,8 +311,3 @@ components:
         target_index:
           type: integer
           description: Index of the target waypoint
-      required:
-        - distance
-        - time
-        - source_index
-        - target_index

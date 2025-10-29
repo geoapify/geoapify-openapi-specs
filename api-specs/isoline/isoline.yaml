@@ -110,18 +110,14 @@ paths:
           description: |
             The traffic model to be used in route calculations. The default value is `free_flow`, which does not consider real-time traffic. Alternatively, use `approximated` for a traffic-influenced model.
           schema:
-            type: string
-            enum: [free_flow, approximated]
-            example: approximated
+            $ref: '../common/shared-components.yaml#/components/schemas/TrafficEnum'
         - name: route_type
           in: query
           required: false
           description: |
             Defines the type of route to calculate. Options include `balanced` for a mix of efficiency and speed, `short` for the shortest route, and `less_maneuvers` to minimize turns or complexity. The default is `balanced`.
           schema:
-            type: string
-            enum: [balanced, short, less_maneuvers]
-            example: short
+            $ref: '../common/shared-components.yaml#/components/schemas/RouteTypeEnum'
         - name: max_speed
           in: query
           required: false
@@ -136,9 +132,7 @@ paths:
           description: |
             Specifies the units of measurement for distances in the response. The default is metric. Use `imperial` for miles, feet, etc.
           schema:
-            type: string
-            enum: [metric, imperial]
-            example: imperial
+            $ref: '../common/shared-components.yaml#/components/schemas/UnitsEnum'
         - name: id
           in: query
           required: false
@@ -250,22 +244,17 @@ components:
   schemas:
     # Main Isoline Response (GeoJSON FeatureCollection)
     IsolineResponse:
-      type: object
-      properties:
-        type:
-          type: string
-          enum: [FeatureCollection]
-          description: GeoJSON object type
-        features:
-          type: array
-          items:
-            $ref: '#/components/schemas/IsolineFeature'
-          description: Array of isoline features, each representing an accessible area for a requested range
-        properties:
-          $ref: '#/components/schemas/IsolineResponseProperties'
-      required:
-        - type
-        - features
+      allOf:
+        - $ref: '../common/shared-components.yaml#/components/schemas/GeoJsonFeatureCollection'
+        - type: object
+          properties:
+            features:
+              type: array
+              items:
+                $ref: '#/components/schemas/IsolineFeature'
+              description: Array of isoline features, each representing an accessible area for a requested range
+            properties:
+              $ref: '#/components/schemas/IsolineResponseProperties'
     
     # Async processing response (202 status)
     IsolineAsyncResponse:
@@ -302,20 +291,14 @@ components:
     
     # Individual isoline feature
     IsolineFeature:
-      type: object
-      properties:
-        type:
-          type: string
-          enum: [Feature]
-          description: GeoJSON feature type
-        properties:
-          $ref: '#/components/schemas/IsolineFeatureProperties'
-        geometry:
-          $ref: '#/components/schemas/IsolineGeometry'
-      required:
-        - type
-        - properties
-        - geometry
+      allOf:
+        - $ref: '../common/shared-components.yaml#/components/schemas/GeoJsonFeature'
+        - type: object
+          properties:
+            properties:
+              $ref: '#/components/schemas/IsolineFeatureProperties'
+            geometry:
+              $ref: '#/components/schemas/IsolineGeometry'
     
     # Feature properties containing isoline details
     IsolineFeatureProperties:
@@ -343,17 +326,11 @@ components:
             type: string
           description: Array of the avoided road types and locations
         traffic:
-          type: string
-          enum: [free_flow, approximated]
-          description: Traffic type used in calculation
+          $ref: '../common/shared-components.yaml#/components/schemas/TrafficEnum'
         route_type:
-          type: string
-          enum: [balanced, short, less_maneuvers]
-          description: Route type used in calculation
+          $ref: '../common/shared-components.yaml#/components/schemas/RouteTypeEnum'
         units:
-          type: string
-          enum: [metric, imperial]
-          description: Distance units used
+          $ref: '../common/shared-components.yaml#/components/schemas/UnitsEnum'
         max_speed:
           type: number
           description: Maximum speed setting used in calculation

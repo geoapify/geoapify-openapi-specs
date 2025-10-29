@@ -304,8 +304,6 @@ components:
             $ref: '#/components/schemas/ReverseGeocodingResult'
         query:
           $ref: '#/components/schemas/ReverseQueryInfo'
-      required:
-        - results
     
     # GeoJSON Format Response Schema  
     ReverseGeocodingGeoJsonResponse:
@@ -320,94 +318,47 @@ components:
             $ref: '#/components/schemas/ReverseGeoJsonFeature'
         query:
           $ref: '#/components/schemas/ReverseQueryInfo'
-      required:
-        - type
-        - features
     
     # Individual reverse geocoding result object (based on documentation table)
     ReverseGeocodingResult:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Location name
-        country:
-          type: string
-          description: Country component of the address
-        country_code:
-          type: string
-          description: ISO 3166-1 alpha-2 country code
-        state:
-          type: string
-          description: State component of the address
-        state_code:
-          type: string
-          description: State shortcode, the shortcode might be missing for some countries and languages
-        county:
-          type: string
-          description: County component of the address
-        county_code:
-          type: string
-          description: County shortcode, the shortcode might be missing for some countries and languages
-        postcode:
-          type: string
-          description: Postcode or ZIP code of the address
-        city:
-          type: string
-          description: City component of the address
-        street:
-          type: string
-          description: Street component of the address
-        housenumber:
-          type: string
-          description: House number component of an address
-        lat:
-          type: number
-          format: double
-          description: Latitude coordinate of the location
-        lon:
-          type: number
-          format: double
-          description: Longitude coordinate of the location
-        formatted:
-          type: string
-          description: Display address
-        address_line1:
-          type: string
-          description: Main part of the display address, contains building street and house number or amenity name
-        address_line2:
-          type: string
-          description: The second part of the display address, contains address parts not included to address_line1
-        result_type:
-          type: string
-          description: Found location type. Can take values from [unknown, amenity, building, street, suburb, district, postcode, city, county, state, country]
-        distance:
-          type: number
-          description: Distance in meters to the given coordinates
-        rank:
-          $ref: '#/components/schemas/ReverseRank'
-        datasource:
-          $ref: '#/components/schemas/ReverseDatasource'
-        category:
-          type: string
-          description: A place category from the list of Places API Categories
-        timezone:
-          $ref: '#/components/schemas/ReverseTimezone'
-        # Additional fields from examples (not in documentation table)
-        region:
-          type: string
-          description: Region name (from examples)
-        plus_code:
-          type: string
-          description: Plus code (Open Location Code)
-        plus_code_short:
-          type: string
-          description: Shortened plus code
-        place_id:
-          type: string
-          description: Unique identifier for the place
-        bbox:
-          $ref: '#/components/schemas/ReverseBoundingBox'
+      allOf:
+        - $ref: '../common/shared-components.yaml#/components/schemas/LatLonCoordinates'
+        - $ref: '../common/shared-components.yaml#/components/schemas/AddressComponents'
+        - $ref: '../common/shared-components.yaml#/components/schemas/FormattedAddressFields'
+        - type: object
+          properties:
+            name:
+              type: string
+              description: Location name
+            result_type:
+              $ref: '../common/shared-components.yaml#/components/schemas/ResultType'
+            distance:
+              type: number
+              description: Distance in meters to the given coordinates
+            rank:
+              $ref: '../common/shared-components.yaml#/components/schemas/Rank'
+            datasource:
+              $ref: '../common/shared-components.yaml#/components/schemas/Datasource'
+            category:
+              type: string
+              description: A place category from the list of Places API Categories
+            timezone:
+              $ref: '../common/shared-components.yaml#/components/schemas/Timezone'
+            # Additional fields from examples (not in documentation table)
+            region:
+              type: string
+              description: Region name (from examples)
+            plus_code:
+              type: string
+              description: Plus code (Open Location Code)
+            plus_code_short:
+              type: string
+              description: Shortened plus code
+            place_id:
+              type: string
+              description: Unique identifier for the place
+            bbox:
+              $ref: '../common/shared-components.yaml#/components/schemas/BoundingBox'
     
     # GeoJSON Feature
     ReverseGeoJsonFeature:
@@ -427,119 +378,12 @@ components:
             type: number
           minItems: 4
           maxItems: 4
-      required:
-        - type
-        - properties
-        - geometry
     
     # GeoJSON Geometry
     ReverseGeometry:
-      type: object
-      properties:
-        type:
-          type: string
-          enum: [Point]
-        coordinates:
-          type: array
-          description: Coordinates [longitude, latitude]
-          items:
-            type: number
-          minItems: 2
-          maxItems: 2
-      required:
-        - type
-        - coordinates
+      $ref: '../common/shared-components.yaml#/components/schemas/PointGeometry'
     
     # Datasource information
-    ReverseDatasource:
-      type: object
-      properties:
-        sourcename:
-          type: string
-          description: Name of the data source
-        attribution:
-          type: string
-          description: Attribution text
-        license:
-          type: string
-          description: License name
-        url:
-          type: string
-          format: uri
-          description: URL to license or source
-    
-    # Bounding box
-    ReverseBoundingBox:
-      type: object
-      properties:
-        lon1:
-          type: number
-          description: Minimum longitude
-        lat1:
-          type: number
-          description: Minimum latitude
-        lon2:
-          type: number
-          description: Maximum longitude
-        lat2:
-          type: number
-          description: Maximum latitude
-    
-    # Timezone information (based on documentation table)
-    ReverseTimezone:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Timezone name
-        name_alt:
-          type: string
-          description: The alternative name of the timezone, if exist
-        offset_STD:
-          type: string
-          description: Time offset
-        offset_STD_seconds:
-          type: integer
-          description: Time offset in seconds
-        offset_DST:
-          type: string
-          description: Time offset for daylight saving time
-        offset_DST_seconds:
-          type: integer
-          description: Time offset in seconds for daylight saving time
-        abbreviation_STD:
-          type: string
-          description: Timezone abbreviation. Provided when exists
-        abbreviation_DST:
-          type: string
-          description: Timezone abbreviation for daylight saving time. Provided when exists
-    
-    # Ranking information (based on documentation table + examples)
-    ReverseRank:
-      type: object
-      properties:
-        confidence:
-          type: number
-          description: Confidence value, takes values from 0 to 1
-        confidence_city_level:
-          type: number
-          description: City-level confidence, takes values from 0 to 1. Evaluates if the city is correct
-        confidence_street_level:
-          type: number
-          description: Street-level confidence, takes values from 0 to 1. Evaluates if the street is correct
-        confidence_building_level:
-          type: number
-          description: Building-level confidence, takes values from 0 to 1. Evaluates if the building position is correct
-        match_type:
-          type: string
-          description: Match type between requested address and result address. Can take values from [ full_match, inner_part, match_by_building match_by_street, match_by_postcode, match_by_city_or_disrict, match_by_country_or_state]
-        # Additional fields from examples
-        importance:
-          type: number
-          description: Importance score of the result
-        popularity:
-          type: number
-          description: Popularity score of the result
     
     # Query information
     ReverseQueryInfo:

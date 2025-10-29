@@ -458,8 +458,6 @@ components:
             $ref: '#/components/schemas/GeocodingResult'
         query:
           $ref: '#/components/schemas/QueryInfo'
-      required:
-        - results
     
     # GeoJSON Format Response Schema  
     GeocodingGeoJsonResponse:
@@ -474,96 +472,43 @@ components:
             $ref: '#/components/schemas/GeoJsonFeature'
         query:
           $ref: '#/components/schemas/QueryInfo'
-      required:
-        - type
-        - features
     
     # Individual geocoding result object
     GeocodingResult:
-      type: object
-      properties:
-        datasource:
-          $ref: '#/components/schemas/Datasource'
-        country:
-          type: string
-          description: Country name
-        country_code:
-          type: string
-          description: ISO 3166-1 alpha-2 country code
-        state:
-          type: string
-          description: State or region name
-        state_code:
-          type: string
-          description: State code
-        city:
-          type: string
-          description: City name
-        county:
-          type: string
-          description: County component of the address
-        county_code:
-          type: string
-          description: County shortcode, the shortcode might be missing for some countries and languages
-        postcode:
-          type: string
-          description: Postal code
-        district:
-          type: string
-          description: District name
-        suburb:
-          type: string
-          description: Suburb name
-        street:
-          type: string
-          description: Street name
-        housenumber:
-          type: string
-          description: House number
-        lon:
-          type: number
-          format: double
-          description: Longitude coordinate
-        lat:
-          type: number
-          format: double
-          description: Latitude coordinate
-        formatted:
-          type: string
-          description: Formatted address string
-        address_line1:
-          type: string
-          description: First line of the address
-        address_line2:
-          type: string
-          description: Second line of the address
-        category:
-          type: string
-          description: Category of the location
-        result_type:
-          type: string
-          description: Type of the result (e.g., building, street, city)
-        rank:
-          $ref: '#/components/schemas/Rank'
-        place_id:
-          type: string
-          description: Unique identifier for the place
-        bbox:
-          $ref: '#/components/schemas/BoundingBox'
-        timezone:
-          $ref: '#/components/schemas/Timezone'
-        plus_code:
-          type: string
-          description: Plus code (Open Location Code)
-        plus_code_short:
-          type: string
-          description: Shortened plus code
-        distance:
-          type: number
-          description: Distance in meters from the bias point (only present when using bias parameter)
-        name:
-          type: string
-          description: Name of the place or amenity
+      allOf:
+        - $ref: '../common/shared-components.yaml#/components/schemas/LatLonCoordinates'
+        - $ref: '../common/shared-components.yaml#/components/schemas/AddressComponents'
+        - $ref: '../common/shared-components.yaml#/components/schemas/FormattedAddressFields'
+        - type: object
+          properties:
+            datasource:
+              $ref: '../common/shared-components.yaml#/components/schemas/Datasource'
+            category:
+              type: string
+              description: Category of the location
+            result_type:
+              $ref: '../common/shared-components.yaml#/components/schemas/ResultType'
+            rank:
+              $ref: '../common/shared-components.yaml#/components/schemas/Rank'
+            place_id:
+              type: string
+              description: Unique identifier for the place
+            bbox:
+              $ref: '../common/shared-components.yaml#/components/schemas/BoundingBox'
+            timezone:
+              $ref: '../common/shared-components.yaml#/components/schemas/Timezone'
+            plus_code:
+              type: string
+              description: Plus code (Open Location Code)
+            plus_code_short:
+              type: string
+              description: Shortened plus code
+            distance:
+              type: number
+              description: Distance in meters from the bias point (only present when using bias parameter)
+            name:
+              type: string
+              description: Name of the place or amenity
     
     # GeoJSON Feature
     GeoJsonFeature:
@@ -583,115 +528,10 @@ components:
             type: number
           minItems: 4
           maxItems: 4
-      required:
-        - type
-        - properties
-        - geometry
     
     # GeoJSON Geometry
     Geometry:
-      type: object
-      properties:
-        type:
-          type: string
-          enum: [Point]
-        coordinates:
-          type: array
-          description: Coordinates [longitude, latitude]
-          items:
-            type: number
-          minItems: 2
-          maxItems: 2
-      required:
-        - type
-        - coordinates
-    
-    # Datasource information
-    Datasource:
-      type: object
-      properties:
-        sourcename:
-          type: string
-          description: Name of the data source
-        attribution:
-          type: string
-          description: Attribution text
-        license:
-          type: string
-          description: License name
-        url:
-          type: string
-          format: uri
-          description: URL to license or source
-    
-    # Bounding box
-    BoundingBox:
-      type: object
-      properties:
-        lon1:
-          type: number
-          description: Minimum longitude
-        lat1:
-          type: number
-          description: Minimum latitude
-        lon2:
-          type: number
-          description: Maximum longitude
-        lat2:
-          type: number
-          description: Maximum latitude
-    
-    # Timezone information
-    Timezone:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Timezone name (e.g., Europe/Berlin)
-        name_alt:
-          type: string
-          description: The alternative name of the timezone, if exist
-        offset_STD:
-          type: string
-          description: Standard time offset (e.g., +01:00)
-        offset_STD_seconds:
-          type: integer
-          description: Standard time offset in seconds
-        offset_DST:
-          type: string
-          description: Daylight saving time offset (e.g., +02:00)
-        offset_DST_seconds:
-          type: integer
-          description: Daylight saving time offset in seconds
-        abbreviation_STD:
-          type: string
-          description: Standard time abbreviation (e.g., CET)
-        abbreviation_DST:
-          type: string
-          description: Daylight saving time abbreviation (e.g., CEST)
-    
-    # Ranking and confidence information
-    Rank:
-      type: object
-      properties:
-        importance:
-          type: number
-          description: Importance score of the result
-        confidence:
-          type: number
-          description: Overall confidence score (0-1)
-        confidence_city_level:
-          type: number
-          description: Confidence at city level
-        confidence_street_level:
-          type: number
-          description: Confidence at street level
-        confidence_building_level:
-          type: number
-          description: Confidence at building level
-        match_type:
-          type: string
-          description: Type of match (e.g., match_by_building)
+      $ref: '../common/shared-components.yaml#/components/schemas/PointGeometry'
     
     # Query information
     QueryInfo:

@@ -479,86 +479,48 @@ components:
     
     # Individual forward batch geocoding result (based on documentation example)
     BatchForwardGeocodingResult:
-      type: object
-      properties:
-        query:
-          $ref: '#/components/schemas/BatchForwardQuery'
-        datasource:
-          $ref: '#/components/schemas/BatchDatasource'
-        housenumber:
-          type: string
-          description: House number component of an address
-        street:
-          type: string
-          description: Street component of the address
-        suburb:
-          type: string
-          description: Suburb component of the address
-        city:
-          type: string
-          description: City component of the address
-        county:
-          type: string
-          description: County component of the address
-        state:
-          type: string
-          description: State component of the address
-        postcode:
-          type: string
-          description: Postcode or ZIP code of the address
-        country:
-          type: string
-          description: Country component of the address
-        country_code:
-          type: string
-          description: ISO 3166-1 alpha-2 country code
-        lon:
-          type: number
-          format: double
-          description: Longitude coordinate of the location
-        lat:
-          type: number
-          format: double
-          description: Latitude coordinate of the location
-        formatted:
-          type: string
-          description: Display address
-        address_line1:
-          type: string
-          description: Main part of the display address
-        address_line2:
-          type: string
-          description: The second part of the display address
-        state_code:
-          type: string
-          description: State shortcode
-        result_type:
-          type: string
-          description: Found location type
-        rank:
-          $ref: '#/components/schemas/BatchRank'
-        place_id:
-          type: string
-          description: Unique identifier for the place
-        category:
-          type: string
-          description: A place category
-        name:
-          type: string
-          description: Location name
-        distance:
-          type: number
-          description: Distance in meters
-        timezone:
-          $ref: '#/components/schemas/BatchTimezone'
-        plus_code:
-          type: string
-          description: Plus code (Open Location Code)
-        plus_code_short:
-          type: string
-          description: Shortened plus code
-        bbox:
-          $ref: '#/components/schemas/BatchBoundingBox'
+      allOf:
+        - $ref: '../common/shared-components.yaml#/components/schemas/LatLonCoordinates'
+        - $ref: '../common/shared-components.yaml#/components/schemas/AddressComponents'
+        - $ref: '../common/shared-components.yaml#/components/schemas/FormattedAddressFields'
+        - type: object
+          properties:
+            query:
+              $ref: '#/components/schemas/BatchForwardQuery'
+            datasource:
+              $ref: '../common/shared-components.yaml#/components/schemas/Datasource'
+            address_line2:
+              type: string
+              description: The second part of the display address
+            state_code:
+              type: string
+              description: State shortcode
+            result_type:
+              $ref: '../common/shared-components.yaml#/components/schemas/ResultType'
+            rank:
+              $ref: '../common/shared-components.yaml#/components/schemas/Rank'
+            place_id:
+              type: string
+              description: Unique identifier for the place
+            category:
+              type: string
+              description: A place category
+            name:
+              type: string
+              description: Location name
+            distance:
+              type: number
+              description: Distance in meters
+            timezone:
+              $ref: '../common/shared-components.yaml#/components/schemas/Timezone'
+            plus_code:
+              type: string
+              description: Plus code (Open Location Code)
+            plus_code_short:
+              type: string
+              description: Shortened plus code
+            bbox:
+              $ref: '../common/shared-components.yaml#/components/schemas/BoundingBox'
     
     # Reverse Batch Geocoding Results
     BatchReverseGeocodingResults:
@@ -588,7 +550,7 @@ components:
           type: string
           description: County component of the address
         datasource:
-          $ref: '#/components/schemas/BatchDatasource'
+          $ref: '../common/shared-components.yaml#/components/schemas/Datasource'
         postcode:
           type: string
           description: Postcode or ZIP code of the address
@@ -625,7 +587,7 @@ components:
           type: string
           description: The second part of the display address
         timezone:
-          $ref: '#/components/schemas/BatchTimezone'
+          $ref: '../common/shared-components.yaml#/components/schemas/Timezone'
         plus_code:
           type: string
           description: Plus code (Open Location Code)
@@ -633,7 +595,7 @@ components:
           type: string
           description: Shortened plus code
         rank:
-          $ref: '#/components/schemas/BatchRank'
+          $ref: '../common/shared-components.yaml#/components/schemas/Rank'
         place_id:
           type: string
           description: Unique identifier for the place
@@ -690,92 +652,6 @@ components:
           type: string
           description: Plus code for the query coordinates
     
-    # Datasource information
-    BatchDatasource:
-      type: object
-      properties:
-        sourcename:
-          type: string
-          description: Name of the data source
-        attribution:
-          type: string
-          description: Attribution text
-        license:
-          type: string
-          description: License name
-        url:
-          type: string
-          format: uri
-          description: URL to license or source
     
-    # Timezone information
-    BatchTimezone:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Timezone name
-        name_alt:
-          type: string
-          description: The alternative name of the timezone, if exist
-        offset_STD:
-          type: string
-          description: Time offset
-        offset_STD_seconds:
-          type: integer
-          description: Time offset in seconds
-        offset_DST:
-          type: string
-          description: Time offset for daylight saving time
-        offset_DST_seconds:
-          type: integer
-          description: Time offset in seconds for daylight saving time
-        abbreviation_STD:
-          type: string
-          description: Timezone abbreviation. Provided when exists
-        abbreviation_DST:
-          type: string
-          description: Timezone abbreviation for daylight saving time. Provided when exists
     
-    # Ranking information
-    BatchRank:
-      type: object
-      properties:
-        importance:
-          type: number
-          description: Importance score of the result
-        popularity:
-          type: number
-          description: Popularity score of the result
-        confidence:
-          type: number
-          description: Confidence value, takes values from 0 to 1
-        confidence_city_level:
-          type: number
-          description: City-level confidence, takes values from 0 to 1
-        confidence_street_level:
-          type: number
-          description: Street-level confidence, takes values from 0 to 1
-        confidence_building_level:
-          type: number
-          description: Building-level confidence, takes values from 0 to 1
-        match_type:
-          type: string
-          description: Match type between requested address and result address
     
-    # Bounding box
-    BatchBoundingBox:
-      type: object
-      properties:
-        lon1:
-          type: number
-          description: Minimum longitude
-        lat1:
-          type: number
-          description: Minimum latitude
-        lon2:
-          type: number
-          description: Maximum longitude
-        lat2:
-          type: number
-          description: Maximum latitude

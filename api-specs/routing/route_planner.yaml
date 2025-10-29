@@ -636,23 +636,17 @@ components:
   schemas:
     # Main Route Planner Response (GeoJSON FeatureCollection)
     RoutePlannerResponse:
-      type: object
-      properties:
-        type:
-          type: string
-          enum: [FeatureCollection]
-          description: GeoJSON object type
-        properties:
-          $ref: '#/components/schemas/RoutePlannerProperties'
-        features:
-          type: array
-          items:
-            $ref: '#/components/schemas/AgentPlanFeature'
-          description: Array of agent plan features, each representing an optimized route for an agent
-      required:
-        - type
-        - properties
-        - features
+      allOf:
+        - $ref: '../common/shared-components.yaml#/components/schemas/GeoJsonFeatureCollection'
+        - type: object
+          properties:
+            properties:
+              $ref: '#/components/schemas/RoutePlannerProperties'
+            features:
+              type: array
+              items:
+                $ref: '#/components/schemas/AgentPlanFeature'
+              description: Array of agent plan features, each representing an optimized route for an agent
     
     # Route Planner response properties
     RoutePlannerProperties:
@@ -690,20 +684,14 @@ components:
     
     # Individual agent plan feature
     AgentPlanFeature:
-      type: object
-      properties:
-        type:
-          type: string
-          enum: [Feature]
-          description: GeoJSON feature type
-        geometry:
-          $ref: '#/components/schemas/AgentPlanGeometry'
-        properties:
-          $ref: '#/components/schemas/AgentPlanProperties'
-      required:
-        - type
-        - geometry
-        - properties
+      allOf:
+        - $ref: '../common/shared-components.yaml#/components/schemas/GeoJsonFeature'
+        - type: object
+          properties:
+            geometry:
+              $ref: '#/components/schemas/AgentPlanGeometry'
+            properties:
+              $ref: '#/components/schemas/AgentPlanProperties'
     
     # Agent plan geometry (MultiLineString)
     AgentPlanGeometry:
@@ -724,9 +712,6 @@ components:
               minItems: 2
               maxItems: 2
           description: MultiLineString coordinates representing the agent's route
-      required:
-        - type
-        - coordinates
     
     # Agent plan properties
     AgentPlanProperties:
@@ -768,17 +753,6 @@ components:
           items:
             $ref: '#/components/schemas/PlannerRouteLeg'
           description: An array of RouteLeg. Each leg represents a route from one waypoint to another
-      required:
-        - agent_index
-        - distance
-        - time
-        - total_time
-        - start_time
-        - end_time
-        - mode
-        - actions
-        - waypoints
-        - legs
     
     # Action object for route planner
     PlannerAction:
@@ -818,11 +792,6 @@ components:
         waypoint_index:
           type: integer
           description: Index of the corresponding waypoint
-      required:
-        - index
-        - type
-        - start_time
-        - duration
     
     # Waypoint object for route planner
     PlannerWaypoint:
@@ -865,12 +834,6 @@ components:
         next_leg_index:
           type: integer
           description: Route leg that leads off the waypoint
-      required:
-        - original_location
-        - location
-        - start_time
-        - duration
-        - actions
     
     # Route leg object for route planner
     PlannerRouteLeg:
@@ -893,12 +856,6 @@ components:
           items:
             $ref: '#/components/schemas/PlannerLegStep'
           description: An array of LegStep. Steps of the route
-      required:
-        - distance
-        - time
-        - from_waypoint_index
-        - to_waypoint_index
-        - steps
     
     # Leg step object for route planner
     PlannerLegStep:
@@ -916,8 +873,3 @@ components:
         to_index:
           type: integer
           description: An index of the way end point in the corresponding feature coordinates array
-      required:
-        - distance
-        - time
-        - from_index
-        - to_index

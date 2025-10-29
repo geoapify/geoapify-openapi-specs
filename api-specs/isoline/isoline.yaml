@@ -274,12 +274,6 @@ components:
             id:
               type: string
               description: Unique identifier that can be used to retrieve the isoline data later
-          required:
-            - id
-      required:
-        - type
-        - features
-        - properties
     
     # Response properties
     IsolineResponseProperties:
@@ -337,13 +331,6 @@ components:
         id:
           type: string
           description: Isoline unique identifier
-      required:
-        - lat
-        - lon
-        - type
-        - mode
-        - range
-        - id
     
     # Isoline geometry (Polygon or MultiPolygon)
     IsolineGeometry:
@@ -377,6 +364,3 @@ components:
                     minItems: 2
                     maxItems: 2
               description: MultiPolygon coordinates
-      required:
-        - type
-        - coordinates

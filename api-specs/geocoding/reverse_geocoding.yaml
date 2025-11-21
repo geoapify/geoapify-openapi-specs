@@ -93,6 +93,10 @@ paths:
           description: Successful response with reverse geocoded address data.
           content:
             application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/ReverseGeocodingJsonResponse'
+                  - $ref: '#/components/schemas/ReverseGeocodingGeoJsonResponse'
               examples: 
                 format=json:
                   value: |
@@ -220,6 +224,8 @@ paths:
                       }
                     }
             application/xml:
+              schema:
+                $ref: '#/components/schemas/ReverseGeocodingXmlResponse'
               examples: 
                 format=xml:
                   value: |
@@ -285,3 +291,249 @@ paths:
           description: Request limit exceeded. Too many requests have been sent in a short period, surpassing the allowed rate limits.
         '500':
           description: Internal Server Error. The server encountered an unexpected condition that prevented it from fulfilling the request. Please try again later or [contact support](mailto:info@geoapify.com) if the issue persists.
+
+components:
+  schemas:
+    # JSON Format Response Schema
+    ReverseGeocodingJsonResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReverseGeocodingResult'
+        query:
+          $ref: '#/components/schemas/ReverseQueryInfo'
+    
+    # GeoJSON Format Response Schema  
+    ReverseGeocodingGeoJsonResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [FeatureCollection]
+        features:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReverseGeoJsonFeature'
+        query:
+          $ref: '#/components/schemas/ReverseQueryInfo'
+    
+    # Individual reverse geocoding result object (based on documentation table)
+    ReverseGeocodingResult:
+      allOf:
+        - $ref: '../common/shared-components.yaml#/components/schemas/LatLonCoordinates'
+        - $ref: '../common/shared-components.yaml#/components/schemas/AddressComponents'
+        - $ref: '../common/shared-components.yaml#/components/schemas/FormattedAddressFields'
+        - type: object
+          properties:
+            name:
+              type: string
+              description: Location name
+            result_type:
+              $ref: '../common/shared-components.yaml#/components/schemas/ResultType'
+            distance:
+              type: number
+              description: Distance in meters to the given coordinates
+            rank:
+              $ref: '../common/shared-components.yaml#/components/schemas/Rank'
+            datasource:
+              $ref: '../common/shared-components.yaml#/components/schemas/Datasource'
+            category:
+              type: string
+              description: A place category from the list of Places API Categories
+            timezone:
+              $ref: '../common/shared-components.yaml#/components/schemas/Timezone'
+            # Additional fields from examples (not in documentation table)
+            region:
+              type: string
+              description: Region name (from examples)
+            plus_code:
+              type: string
+              description: Plus code (Open Location Code)
+            plus_code_short:
+              type: string
+              description: Shortened plus code
+            place_id:
+              type: string
+              description: Unique identifier for the place
+            bbox:
+              $ref: '../common/shared-components.yaml#/components/schemas/BoundingBox'
+    
+    # GeoJSON Feature
+    ReverseGeoJsonFeature:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [Feature]
+        properties:
+          $ref: '#/components/schemas/ReverseGeocodingResult'
+        geometry:
+          $ref: '#/components/schemas/ReverseGeometry'
+        bbox:
+          type: array
+          description: Bounding box [lon1, lat1, lon2, lat2]
+          items:
+            type: number
+          minItems: 4
+          maxItems: 4
+    
+    # GeoJSON Geometry
+    ReverseGeometry:
+      $ref: '../common/shared-components.yaml#/components/schemas/PointGeometry'
+    
+    # Datasource information
+    
+    # Query information
+    ReverseQueryInfo:
+      type: object
+      properties:
+        lat:
+          type: number
+          description: Query latitude
+        lon:
+          type: number
+          description: Query longitude
+        plus_code:
+          type: string
+          description: Plus code for the query coordinates
+    
+    # XML Format Response Schema
+    ReverseGeocodingXmlResponse:
+      type: object
+      xml:
+        name: root
+      properties:
+        results:
+          type: array
+          xml:
+            wrapped: false
+          items:
+            type: object
+            xml:
+              name: results
+            properties:
+              name:
+                type: string
+              country:
+                type: string
+              country_code:
+                type: string
+              state:
+                type: string
+              state_code:
+                type: string
+              county:
+                type: string
+              county_code:
+                type: string
+              postcode:
+                type: string
+              city:
+                type: string
+              street:
+                type: string
+              housenumber:
+                type: string
+              lat:
+                type: number
+              lon:
+                type: number
+              formatted:
+                type: string
+              address_line1:
+                type: string
+              address_line2:
+                type: string
+              result_type:
+                type: string
+              distance:
+                type: number
+              category:
+                type: string
+              region:
+                type: string
+              plus_code:
+                type: string
+              plus_code_short:
+                type: string
+              place_id:
+                type: string
+              datasource:
+                type: object
+                xml:
+                  name: datasource
+                properties:
+                  sourcename:
+                    type: string
+                  attribution:
+                    type: string
+                  license:
+                    type: string
+                  url:
+                    type: string
+              timezone:
+                type: object
+                xml:
+                  name: timezone
+                properties:
+                  name:
+                    type: string
+                  name_alt:
+                    type: string
+                  offset_STD:
+                    type: string
+                  offset_STD_seconds:
+                    type: integer
+                  offset_DST:
+                    type: string
+                  offset_DST_seconds:
+                    type: integer
+                  abbreviation_STD:
+                    type: string
+                  abbreviation_DST:
+                    type: string
+              rank:
+                type: object
+                xml:
+                  name: rank
+                properties:
+                  confidence:
+                    type: number
+                  confidence_city_level:
+                    type: number
+                  confidence_street_level:
+                    type: number
+                  confidence_building_level:
+                    type: number
+                  match_type:
+                    type: string
+                  importance:
+                    type: number
+                  popularity:
+                    type: number
+              bbox:
+                type: object
+                xml:
+                  name: bbox
+                properties:
+                  lon1:
+                    type: number
+                  lat1:
+                    type: number
+                  lon2:
+                    type: number
+                  lat2:
+                    type: number
+        query:
+          type: object
+          xml:
+            name: query
+          properties:
+            lat:
+              type: number
+            lon:
+              type: number
+            plus_code:
+              type: string

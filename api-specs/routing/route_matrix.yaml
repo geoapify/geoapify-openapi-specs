@@ -163,6 +163,8 @@ paths:
           description: Successful response containing the time-distance matrix, which provides travel times and distances between specified source and target locations.
           content:
             application/json:
+              schema:
+                $ref: '#/components/schemas/RouteMatrixResponse'
               example: |
                 {
                   "sources": [
@@ -259,3 +261,53 @@ paths:
           description: Request limit exceeded. Too many requests have been sent in a short period, surpassing the allowed rate limits.
         '500':
           description: Internal Server Error. The server encountered an unexpected condition that prevented it from fulfilling the request. Please try again later or [contact support](mailto:info@geoapify.com) if the issue persists.
+
+components:
+  schemas:
+    # Main Route Matrix Response
+    RouteMatrixResponse:
+      type: object
+      properties:
+        sources:
+          type: array
+          items:
+            $ref: '#/components/schemas/RouteMatrixLocation'
+          description: List of from-waypoints with original and matched to existing roads locations
+        targets:
+          type: array
+          items:
+            $ref: '#/components/schemas/RouteMatrixLocation'
+          description: List of to-waypoints with original and matched to existing roads locations
+        sources_to_targets:
+          type: array
+          items:
+            type: array
+            items:
+              $ref: '#/components/schemas/RouteMatrixEntry'
+          description: The time-distance matrix as a 2D array
+    
+    # Location object with original and matched coordinates
+    RouteMatrixLocation:
+      type: object
+      properties:
+        original_location:
+          $ref: '../common/shared-components.yaml#/components/schemas/CoordinateArray'
+        location:
+          $ref: '../common/shared-components.yaml#/components/schemas/CoordinateArray'
+    
+    # Individual matrix entry with distance and time
+    RouteMatrixEntry:
+      type: object
+      properties:
+        distance:
+          type: number
+          description: Distance in meters between source waypoint and target waypoint
+        time:
+          type: number
+          description: Travel time in seconds between source waypoint and target waypoint
+        source_index:
+          type: integer
+          description: Index of the source waypoint
+        target_index:
+          type: integer
+          description: Index of the target waypoint

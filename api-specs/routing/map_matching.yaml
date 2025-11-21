@@ -99,6 +99,8 @@ paths:
           description: A successful response containing the matched route and its properties.
           content:
             application/json:
+              schema:
+                $ref: '#/components/schemas/MapMatchingResponse'
               example: |
                 {
                   "type": "FeatureCollection",
@@ -304,3 +306,186 @@ paths:
           description: Request limit exceeded. Too many requests have been sent in a short period, surpassing the allowed rate limits.
         '500':
           description: Internal Server Error. The server encountered an unexpected condition that prevented it from fulfilling the request. Please try again later or [contact support](mailto:info@geoapify.com) if the issue persists.
+
+components:
+  schemas:
+    # Main Map Matching Response (GeoJSON FeatureCollection)
+    MapMatchingResponse:
+      allOf:
+        - $ref: '../common/shared-components.yaml#/components/schemas/GeoJsonFeatureCollection'
+        - type: object
+          properties:
+            features:
+              type: array
+              items:
+                $ref: '#/components/schemas/MapMatchingFeature'
+              description: Array of matched route features (typically contains one feature)
+    
+    # Individual map matching feature
+    MapMatchingFeature:
+      allOf:
+        - $ref: '../common/shared-components.yaml#/components/schemas/GeoJsonFeature'
+        - type: object
+          properties:
+            properties:
+              $ref: '#/components/schemas/MapMatchingProperties'
+            geometry:
+              $ref: '#/components/schemas/MapMatchingGeometry'
+    
+    # Feature properties containing route details
+    MapMatchingProperties:
+      type: object
+      properties:
+        distance:
+          type: number
+          description: Distance in meters for the whole route
+        time:
+          type: number
+          description: Time in seconds for the whole route
+        mode:
+          type: string
+          description: Requested transportation or travel mode
+        waypoints:
+          type: array
+          items:
+            $ref: '#/components/schemas/MatchedWaypoint'
+          description: An array of MatchedWaypoint
+        legs:
+          type: array
+          items:
+            $ref: '#/components/schemas/RouteLeg'
+          description: An array of RouteLeg. Each leg represents separate parts of the route
+    
+    # Route geometry as MultiLineString
+    MapMatchingGeometry:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [MultiLineString]
+          description: GeoJSON geometry type
+        coordinates:
+          type: array
+          items:
+            type: array
+            items:
+              type: array
+              items:
+                type: number
+              minItems: 2
+              maxItems: 2
+          description: MultiLineString coordinates representing the matched route
+    
+    # Matched waypoint information
+    MatchedWaypoint:
+      type: object
+      properties:
+        original_index:
+          type: integer
+          description: Original index of the waypoint in request
+        location:
+          type: array
+          items:
+            type: number
+          minItems: 2
+          maxItems: 2
+          description: Matched location. An array of the coordinates [lon, lat]
+        original_location:
+          type: array
+          items:
+            type: number
+          minItems: 2
+          maxItems: 2
+          description: Original location. An array of the coordinates [lon, lat]
+        match_type:
+          type: string
+          enum: [matched, unmatched, interpolated]
+          description: Matched type. Possible values matched, unmatched, interpolated
+        match_distance:
+          type: number
+          description: Distance in meters between matched and original locations
+        leg_index:
+          type: integer
+          description: Leg index, the waypoint belongs to
+        step_index:
+          type: integer
+          description: Step point, the waypoint belongs to
+    
+    # Route leg between locations
+    RouteLeg:
+      type: object
+      properties:
+        distance:
+          type: number
+          description: Length of the route in meters
+        time:
+          type: number
+          description: Time in seconds for the route
+        steps:
+          type: array
+          items:
+            $ref: '#/components/schemas/LegStep'
+          description: An array of LegStep. Steps of the route
+    
+    # Individual step or segment of a route leg
+    LegStep:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Route step name. Usually a street name
+        road_class:
+          type: string
+          enum: [unclassified, motorway, trunk, primary, secondary, tertiary, residential, service_other]
+          description: Road class. Possible values unclassified, motorway, trunk, primary, secondary, tertiary, unclassified, residential, service_other
+        surface:
+          type: string
+          enum: [paved_smooth, paved, paved_rough, compacted, dirt, gravel, path, impassable]
+          description: Type of surface. Possible values paved_smooth, paved, paved_rough, compacted, dirt, gravel, path, impassable
+        traversability:
+          type: string
+          enum: [forward, backward, both]
+          description: Traversability of the road segment. Possible values forward, backward, both
+        speed:
+          type: number
+          description: Actual (calculated) speed
+        speed_limit:
+          type: number
+          description: Speed limit for the road segment
+        lane_count:
+          type: integer
+          description: Number of lanes
+        toll:
+          type: boolean
+          description: Indicates whether the step is a part of a toll route
+        tunnel:
+          type: boolean
+          description: Indicates whether the step is a part of a tunnel
+        bridge:
+          type: boolean
+          description: Indicates whether the step is a part of a bridge
+        time:
+          type: number
+          description: Time in seconds required to pass the road segment
+        distance:
+          type: number
+          description: Length of the route segment in meters
+        begin_bearing:
+          type: number
+          description: Starting bearing
+        end_bearing:
+          type: number
+          description: Final bearing
+        from_index:
+          type: integer
+          description: An index of the starting point for the segment in the corresponding feature coordinates array
+        to_index:
+          type: integer
+          description: An index of the end point for the segment in the corresponding feature coordinates array
+        osm_way_id:
+          type: integer
+          description: OpenStreetMap way id. You can get additional route parameters from the OSM database by using the id parameter. Note that the OpenStreetMap ID is not static and may be changed in the future
+        # Additional fields from examples
+        roundabout:
+          type: boolean
+          description: Indicates whether the step is a part of a roundabout

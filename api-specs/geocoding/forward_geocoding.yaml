@@ -190,8 +190,13 @@ paths:
           description: The geocoded results.
           content:
             application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/GeocodingJsonResponse'
+                  - $ref: '#/components/schemas/GeocodingGeoJsonResponse'
               examples: 
                 format=json: 
+                  summary: JSON format response (format=json)
                   value: |
                     {
                       "results": [
@@ -267,7 +272,8 @@ paths:
                         }
                       }
                     }
-                format=geojson: 
+                format=geojson:
+                  summary: GeoJSON format response (format=geojson, default)
                   value: |
                     {
                       "type": "FeatureCollection",
@@ -355,82 +361,82 @@ paths:
                       }
                     }
             application/xml:
-              examples:
-                format=xml: 
-                  value: |
-                    <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-                    <root>
-                      <results>
-                        <datasource>
-                          <sourcename>openstreetmap</sourcename>
-                          <attribution>© OpenStreetMap contributors</attribution>
-                          <license>Open Database License</license>
-                          <url>https://www.openstreetmap.org/copyright</url>
-                        </datasource>
-                        <country>Germany</country>
-                        <country_code>de</country_code>
-                        <state>Bavaria</state>
-                        <city>Munich</city>
-                        <postcode>80997</postcode>
-                        <district>Moosach-Bahnhof</district>
-                        <suburb>Moosach</suburb>
-                        <street>Hannoverstraße</street>
-                        <housenumber>8</housenumber>
-                        <lon>11.50395619013508</lon>
-                        <lat>48.18515935</lat>
-                        <state_code>BY</state_code>
-                        <result_type>building</result_type>
-                        <formatted>Hannoverstraße 8, 80997 Munich, Germany</formatted>
-                        <address_line1>Hannoverstraße 8</address_line1>
-                        <address_line2>80997 Munich, Germany</address_line2>
-                        <category>building.residential</category>
-                        <timezone>
-                          <name>Europe/Berlin</name>
-                          <offset_STD>+01:00</offset_STD>
-                          <offset_STD_seconds>3600</offset_STD_seconds>
-                          <offset_DST>+02:00</offset_DST>
-                          <offset_DST_seconds>7200</offset_DST_seconds>
-                          <abbreviation_STD>CET</abbreviation_STD>
-                          <abbreviation_DST>CEST</abbreviation_DST>
-                        </timezone>
-                        <plus_code>8FWH5GP3+3H</plus_code>
-                        <plus_code_short>5GP3+3H Munich, Bavaria, Germany</plus_code_short>
-                        <rank>
-                          <importance>0.00000999999999995449</importance>
-                          <confidence>0</confidence>
-                          <confidence_city_level>0</confidence_city_level>
-                          <confidence_street_level>0</confidence_street_level>
-                          <confidence_building_level>0</confidence_building_level>
-                          <match_type>match_by_building</match_type>
-                        </rank>
-                        <place_id>516d7eb68b06022740593966344db3174840f00102f901e098c30500000000c00203</place_id>
-                        <bbox>
-                          <lon1>11.5037848</lon1>
-                          <lat1>48.1850482</lat1>
-                          <lon2>11.5041224</lon2>
-                          <lat2>48.1852642</lat2>
-                        </bbox>
-                      </results>
-                      <query>
-                        <text>Hannoverstr</text>
-                        <housenumber>1A</housenumber>
-                        <street>Hannoverstraße</street>
-                        <postcode>44651</postcode>
-                        <city>Herne</city>
-                        <state>Westphalia</state>
-                        <country>Germany</country>
-                        <parsed>
-                          <house>hannoverstr hannoverstraße</house>
-                          <housenumber>1A</housenumber>
-                          <street>Hannoverstraße</street>
-                          <postcode>44651</postcode>
-                          <city>Herne</city>
-                          <state>Westphalia</state>
-                          <country>Germany</country>
-                          <expected_type>amenity</expected_type>
-                        </parsed>
-                      </query>
-                    </root>
+              schema:
+                $ref: '#/components/schemas/GeocodingXmlResponse'
+              example: |
+                <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+                <root>
+                  <results>
+                    <datasource>
+                      <sourcename>openstreetmap</sourcename>
+                      <attribution>© OpenStreetMap contributors</attribution>
+                      <license>Open Database License</license>
+                      <url>https://www.openstreetmap.org/copyright</url>
+                    </datasource>
+                    <country>Germany</country>
+                    <country_code>de</country_code>
+                    <state>Bavaria</state>
+                    <city>Munich</city>
+                    <postcode>80997</postcode>
+                    <district>Moosach-Bahnhof</district>
+                    <suburb>Moosach</suburb>
+                    <street>Hannoverstraße</street>
+                    <housenumber>8</housenumber>
+                    <lon>11.50395619013508</lon>
+                    <lat>48.18515935</lat>
+                    <state_code>BY</state_code>
+                    <result_type>building</result_type>
+                    <formatted>Hannoverstraße 8, 80997 Munich, Germany</formatted>
+                    <address_line1>Hannoverstraße 8</address_line1>
+                    <address_line2>80997 Munich, Germany</address_line2>
+                    <category>building.residential</category>
+                    <timezone>
+                      <name>Europe/Berlin</name>
+                      <offset_STD>+01:00</offset_STD>
+                      <offset_STD_seconds>3600</offset_STD_seconds>
+                      <offset_DST>+02:00</offset_DST>
+                      <offset_DST_seconds>7200</offset_DST_seconds>
+                      <abbreviation_STD>CET</abbreviation_STD>
+                      <abbreviation_DST>CEST</abbreviation_DST>
+                    </timezone>
+                    <plus_code>8FWH5GP3+3H</plus_code>
+                    <plus_code_short>5GP3+3H Munich, Bavaria, Germany</plus_code_short>
+                    <rank>
+                      <importance>0.00000999999999995449</importance>
+                      <confidence>0</confidence>
+                      <confidence_city_level>0</confidence_city_level>
+                      <confidence_street_level>0</confidence_street_level>
+                      <confidence_building_level>0</confidence_building_level>
+                      <match_type>match_by_building</match_type>
+                    </rank>
+                    <place_id>516d7eb68b06022740593966344db3174840f00102f901e098c30500000000c00203</place_id>
+                    <bbox>
+                      <lon1>11.5037848</lon1>
+                      <lat1>48.1850482</lat1>
+                      <lon2>11.5041224</lon2>
+                      <lat2>48.1852642</lat2>
+                    </bbox>
+                  </results>
+                  <query>
+                    <text>Hannoverstr</text>
+                    <housenumber>1A</housenumber>
+                    <street>Hannoverstraße</street>
+                    <postcode>44651</postcode>
+                    <city>Herne</city>
+                    <state>Westphalia</state>
+                    <country>Germany</country>
+                    <parsed>
+                      <house>hannoverstr hannoverstraße</house>
+                      <housenumber>1A</housenumber>
+                      <street>Hannoverstraße</street>
+                      <postcode>44651</postcode>
+                      <city>Herne</city>
+                      <state>Westphalia</state>
+                      <country>Germany</country>
+                      <expected_type>amenity</expected_type>
+                    </parsed>
+                  </query>
+                </root>
         '400':
           description: Bad Request. The input provided is invalid or improperly formatted. Please verify and correct your request parameters.
         '401':
@@ -439,3 +445,304 @@ paths:
           description: Request limit exceeded. Too many requests have been sent in a short period, surpassing the allowed rate limits.
         '500':
           description: Internal Server Error. The server encountered an unexpected condition that prevented it from fulfilling the request. Please try again later or [contact support](mailto:info@geoapify.com) if the issue persists.
+
+components:
+  schemas:
+    # JSON Format Response Schema
+    GeocodingJsonResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/GeocodingResult'
+        query:
+          $ref: '#/components/schemas/QueryInfo'
+    
+    # GeoJSON Format Response Schema  
+    GeocodingGeoJsonResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [FeatureCollection]
+        features:
+          type: array
+          items:
+            $ref: '#/components/schemas/GeoJsonFeature'
+        query:
+          $ref: '#/components/schemas/QueryInfo'
+    
+    # Individual geocoding result object
+    GeocodingResult:
+      allOf:
+        - $ref: '../common/shared-components.yaml#/components/schemas/LatLonCoordinates'
+        - $ref: '../common/shared-components.yaml#/components/schemas/AddressComponents'
+        - $ref: '../common/shared-components.yaml#/components/schemas/FormattedAddressFields'
+        - type: object
+          properties:
+            datasource:
+              $ref: '../common/shared-components.yaml#/components/schemas/Datasource'
+            category:
+              type: string
+              description: Category of the location
+            result_type:
+              $ref: '../common/shared-components.yaml#/components/schemas/ResultType'
+            rank:
+              $ref: '../common/shared-components.yaml#/components/schemas/Rank'
+            place_id:
+              type: string
+              description: Unique identifier for the place
+            bbox:
+              $ref: '../common/shared-components.yaml#/components/schemas/BoundingBox'
+            timezone:
+              $ref: '../common/shared-components.yaml#/components/schemas/Timezone'
+            plus_code:
+              type: string
+              description: Plus code (Open Location Code)
+            plus_code_short:
+              type: string
+              description: Shortened plus code
+            distance:
+              type: number
+              description: Distance in meters from the bias point (only present when using bias parameter)
+            name:
+              type: string
+              description: Name of the place or amenity
+    
+    # GeoJSON Feature
+    GeoJsonFeature:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [Feature]
+        properties:
+          $ref: '#/components/schemas/GeocodingResult'
+        geometry:
+          $ref: '#/components/schemas/Geometry'
+        bbox:
+          type: array
+          description: Bounding box [lon1, lat1, lon2, lat2]
+          items:
+            type: number
+          minItems: 4
+          maxItems: 4
+    
+    # GeoJSON Geometry
+    Geometry:
+      $ref: '../common/shared-components.yaml#/components/schemas/PointGeometry'
+    
+    # Query information
+    QueryInfo:
+      type: object
+      properties:
+        text:
+          type: string
+          description: Original query text
+        housenumber:
+          type: string
+          description: House number from query
+        street:
+          type: string
+          description: Street from query
+        postcode:
+          type: string
+          description: Postcode from query
+        city:
+          type: string
+          description: City from query
+        state:
+          type: string
+          description: State from query
+        country:
+          type: string
+          description: Country from query
+        parsed:
+          type: object
+          description: Parsed query components
+          properties:
+            house:
+              type: string
+            housenumber:
+              type: string
+            street:
+              type: string
+            postcode:
+              type: string
+            city:
+              type: string
+            state:
+              type: string
+            country:
+              type: string
+            expected_type:
+              type: string
+    
+    # XML Format Response Schema
+    GeocodingXmlResponse:
+      type: object
+      xml:
+        name: root
+      properties:
+        results:
+          type: array
+          xml:
+            wrapped: false
+          items:
+            type: object
+            xml:
+              name: results
+            properties:
+              datasource:
+                type: object
+                xml:
+                  name: datasource
+                properties:
+                  sourcename:
+                    type: string
+                  attribution:
+                    type: string
+                  license:
+                    type: string
+                  url:
+                    type: string
+              country:
+                type: string
+              country_code:
+                type: string
+              state:
+                type: string
+              state_code:
+                type: string
+              city:
+                type: string
+              county:
+                type: string
+              county_code:
+                type: string
+              postcode:
+                type: string
+              district:
+                type: string
+              suburb:
+                type: string
+              street:
+                type: string
+              housenumber:
+                type: string
+              lon:
+                type: number
+              lat:
+                type: number
+              formatted:
+                type: string
+              address_line1:
+                type: string
+              address_line2:
+                type: string
+              category:
+                type: string
+              result_type:
+                type: string
+              place_id:
+                type: string
+              plus_code:
+                type: string
+              plus_code_short:
+                type: string
+              distance:
+                type: number
+              name:
+                type: string
+              timezone:
+                type: object
+                xml:
+                  name: timezone
+                properties:
+                  name:
+                    type: string
+                  name_alt:
+                    type: string
+                  offset_STD:
+                    type: string
+                  offset_STD_seconds:
+                    type: integer
+                  offset_DST:
+                    type: string
+                  offset_DST_seconds:
+                    type: integer
+                  abbreviation_STD:
+                    type: string
+                  abbreviation_DST:
+                    type: string
+              rank:
+                type: object
+                xml:
+                  name: rank
+                properties:
+                  importance:
+                    type: number
+                  confidence:
+                    type: number
+                  confidence_city_level:
+                    type: number
+                  confidence_street_level:
+                    type: number
+                  confidence_building_level:
+                    type: number
+                  match_type:
+                    type: string
+              bbox:
+                type: object
+                xml:
+                  name: bbox
+                properties:
+                  lon1:
+                    type: number
+                  lat1:
+                    type: number
+                  lon2:
+                    type: number
+                  lat2:
+                    type: number
+        query:
+          type: object
+          xml:
+            name: query
+          properties:
+            text:
+              type: string
+            housenumber:
+              type: string
+            street:
+              type: string
+            postcode:
+              type: string
+            city:
+              type: string
+            state:
+              type: string
+            country:
+              type: string
+            parsed:
+              type: object
+              xml:
+                name: parsed
+              properties:
+                house:
+                  type: string
+                housenumber:
+                  type: string
+                street:
+                  type: string
+                postcode:
+                  type: string
+                city:
+                  type: string
+                state:
+                  type: string
+                country:
+                  type: string
+                expected_type:
+                  type: string

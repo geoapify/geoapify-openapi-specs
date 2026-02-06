@@ -65,7 +65,7 @@ paths:
             - `locality`: Search for administrative areas, which can include postcodes, districts, cities, counties, and states.
           schema:
             type: string
-            enum: [ country, state, city, postcode, street, amenity ]
+            enum: [ country, state, city, postcode, street, amenity, locality ]
             example: "city"
         - name: limit
           in: query

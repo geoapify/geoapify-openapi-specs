@@ -28,8 +28,8 @@ paths:
         Predicates (contains, crosses, disjoint, intersects, within, valid) - test spatial relationships.
         Transformations (buffer, simplify, transformRotate, transformScale, transformTranslate) - modify geometries.
         Centers (center, centerMean, centerMedian, centerOfMass) - find center points.
-        Clustering (clustersDbscan, clustersKmeans, voronoi, concave, convex, tin) - group points.
-        Line Operations (pointOnLine, nearestPointOnLine, lineIntersect, along) - work with lines.
+        Clustering (clustersDbscan, clustersKmeans, voronoi, concave requires maxEdge, convex, tin) - group points.
+        Line Operations (pointOnLine returns boolean, nearestPointOnLine, lineIntersect, along) - work with lines.
         Bounding (bbox, envelope) - get bounding boxes.
         Generators (grid, randomPoint, randomLineString, randomPolygon) - create geometries.
         Advanced (pointsWithinPolygon, greatCircle, tesselate) - specialized operations.
@@ -289,7 +289,7 @@ paths:
                       description: Minimum points for clustersDbscan
                     maxEdge:
                       type: number
-                      description: Max edge length for concave hull
+                      description: Max edge length for concave hull (required for concave operation)
                     concavity:
                       type: number
                       description: Concavity for convex hull

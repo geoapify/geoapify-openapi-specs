@@ -44,7 +44,7 @@ paths:
         - `voronoi`: Create Voronoi diagram from points
         - `clustersDbscan`: DBSCAN clustering algorithm
         - `clustersKmeans`: K-means clustering algorithm
-        - `concave`: Create concave hull around points
+        - `concave`: Create concave hull around points (requires maxEdge param)
         - `convex`: Create convex hull around points
         - `tin`: Triangulated irregular network
         
@@ -63,7 +63,7 @@ paths:
         - `pointToPolygonDistance`: Distance from point to polygon
         
         ### 5. Line Operations
-        - `pointOnLine`: Find point on line
+        - `pointOnLine`: Check if point is on line (boolean)
         - `nearestPointOnLine`: Find nearest point on line
         - `lineIntersect`: Find intersection of two lines
         - `along`: Get point at distance along line
@@ -514,7 +514,7 @@ components:
           description: Number of clusters for K-means
         maxEdge:
           type: number
-          description: Maximum edge length for concave hull
+          description: Maximum edge length for concave hull (required for concave operation)
         concavity:
           type: number
           description: Concavity for convex hull

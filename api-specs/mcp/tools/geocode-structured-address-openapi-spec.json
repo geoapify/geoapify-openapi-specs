@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Geoapify MCP Tool: Geocoding: Geocode Structured Address",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "AI-focused, tool-specific OpenAPI specification for geocode_structured_address over the Geoapify JSON-RPC transport. Import this specification when an integration needs this tool without the full MCP catalog."
   },
   "servers": [

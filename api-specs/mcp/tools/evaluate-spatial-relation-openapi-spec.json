@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Geoapify MCP Tool: Utilities: Evaluate Spatial Relation",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "AI-focused, tool-specific OpenAPI specification for evaluate_spatial_relation over the Geoapify JSON-RPC transport. Import this specification when an integration needs this tool without the full MCP catalog."
   },
   "servers": [
@@ -625,264 +625,6 @@
           }
         }
       },
-      "McpGeoJsonPointInput": {
-        "type": "object",
-        "additionalProperties": false,
-        "required": [
-          "type",
-          "coordinates"
-        ],
-        "properties": {
-          "type": {
-            "type": "string",
-            "enum": [
-              "Point"
-            ]
-          },
-          "coordinates": {
-            "type": "array",
-            "minItems": 2,
-            "maxItems": 3,
-            "prefixItems": [
-              {
-                "type": "number",
-                "minimum": -180,
-                "maximum": 180
-              },
-              {
-                "type": "number",
-                "minimum": -90,
-                "maximum": 90
-              },
-              {
-                "type": "number"
-              }
-            ],
-            "items": false
-          }
-        }
-      },
-      "McpGeoJsonLineStringInput": {
-        "type": "object",
-        "additionalProperties": false,
-        "required": [
-          "type",
-          "coordinates"
-        ],
-        "properties": {
-          "type": {
-            "type": "string",
-            "enum": [
-              "LineString"
-            ]
-          },
-          "coordinates": {
-            "type": "array",
-            "minItems": 2,
-            "items": {
-              "type": "array",
-              "minItems": 2,
-              "maxItems": 3,
-              "prefixItems": [
-                {
-                  "type": "number",
-                  "minimum": -180,
-                  "maximum": 180
-                },
-                {
-                  "type": "number",
-                  "minimum": -90,
-                  "maximum": 90
-                },
-                {
-                  "type": "number"
-                }
-              ],
-              "items": false
-            }
-          }
-        }
-      },
-      "McpGeoJsonPolygonInput": {
-        "type": "object",
-        "additionalProperties": false,
-        "required": [
-          "type",
-          "coordinates"
-        ],
-        "properties": {
-          "type": {
-            "type": "string",
-            "enum": [
-              "Polygon"
-            ]
-          },
-          "coordinates": {
-            "type": "array",
-            "minItems": 1,
-            "items": {
-              "type": "array",
-              "minItems": 4,
-              "items": {
-                "type": "array",
-                "minItems": 2,
-                "maxItems": 3,
-                "prefixItems": [
-                  {
-                    "type": "number",
-                    "minimum": -180,
-                    "maximum": 180
-                  },
-                  {
-                    "type": "number",
-                    "minimum": -90,
-                    "maximum": 90
-                  },
-                  {
-                    "type": "number"
-                  }
-                ],
-                "items": false
-              }
-            }
-          }
-        }
-      },
-      "McpGeoJsonMultiPointInput": {
-        "type": "object",
-        "additionalProperties": false,
-        "required": [
-          "type",
-          "coordinates"
-        ],
-        "properties": {
-          "type": {
-            "type": "string",
-            "enum": [
-              "MultiPoint"
-            ]
-          },
-          "coordinates": {
-            "type": "array",
-            "minItems": 1,
-            "items": {
-              "type": "array",
-              "minItems": 2,
-              "maxItems": 3,
-              "prefixItems": [
-                {
-                  "type": "number",
-                  "minimum": -180,
-                  "maximum": 180
-                },
-                {
-                  "type": "number",
-                  "minimum": -90,
-                  "maximum": 90
-                },
-                {
-                  "type": "number"
-                }
-              ],
-              "items": false
-            }
-          }
-        }
-      },
-      "McpGeoJsonMultiLineStringInput": {
-        "type": "object",
-        "additionalProperties": false,
-        "required": [
-          "type",
-          "coordinates"
-        ],
-        "properties": {
-          "type": {
-            "type": "string",
-            "enum": [
-              "MultiLineString"
-            ]
-          },
-          "coordinates": {
-            "type": "array",
-            "minItems": 1,
-            "items": {
-              "type": "array",
-              "minItems": 2,
-              "items": {
-                "type": "array",
-                "minItems": 2,
-                "maxItems": 3,
-                "prefixItems": [
-                  {
-                    "type": "number",
-                    "minimum": -180,
-                    "maximum": 180
-                  },
-                  {
-                    "type": "number",
-                    "minimum": -90,
-                    "maximum": 90
-                  },
-                  {
-                    "type": "number"
-                  }
-                ],
-                "items": false
-              }
-            }
-          }
-        }
-      },
-      "McpGeoJsonMultiPolygonInput": {
-        "type": "object",
-        "additionalProperties": false,
-        "required": [
-          "type",
-          "coordinates"
-        ],
-        "properties": {
-          "type": {
-            "type": "string",
-            "enum": [
-              "MultiPolygon"
-            ]
-          },
-          "coordinates": {
-            "type": "array",
-            "minItems": 1,
-            "items": {
-              "type": "array",
-              "minItems": 1,
-              "items": {
-                "type": "array",
-                "minItems": 4,
-                "items": {
-                  "type": "array",
-                  "minItems": 2,
-                  "maxItems": 3,
-                  "prefixItems": [
-                    {
-                      "type": "number",
-                      "minimum": -180,
-                      "maximum": 180
-                    },
-                    {
-                      "type": "number",
-                      "minimum": -90,
-                      "maximum": 90
-                    },
-                    {
-                      "type": "number"
-                    }
-                  ],
-                  "items": false
-                }
-              }
-            }
-          }
-        }
-      },
       "EvaluateSpatialRelationContainsInput": {
         "type": "object",
         "title": "contains",
@@ -899,54 +641,17 @@
             "description": "Return true when geometry contains other_geometry."
           },
           "geometry": {
-            "description": "Subject GeoJSON geometry. Operand order is significant.",
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/McpGeoJsonPointInput"
-              },
-              {
-                "$ref": "#/components/schemas/McpGeoJsonLineStringInput"
-              },
-              {
-                "$ref": "#/components/schemas/McpGeoJsonPolygonInput"
-              },
-              {
-                "$ref": "#/components/schemas/McpGeoJsonMultiPointInput"
-              },
-              {
-                "$ref": "#/components/schemas/McpGeoJsonMultiLineStringInput"
-              },
-              {
-                "$ref": "#/components/schemas/McpGeoJsonMultiPolygonInput"
-              }
-            ]
+            "type": "object",
+            "description": "Subject operand; GeoJSON Geometry (Point, LineString, Polygon, MultiPoint, MultiLineString, or MultiPolygon); not a Feature or FeatureCollection. Operand order is significant."
           },
           "other_geometry": {
-            "description": "Comparison GeoJSON geometry.",
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/McpGeoJsonPointInput"
-              },
-              {
-                "$ref": "#/components/schemas/McpGeoJsonLineStringInput"
-              },
-              {
-                "$ref": "#/components/schemas/McpGeoJsonPolygonInput"
-              },
-              {
-                "$ref": "#/components/schemas/McpGeoJsonMultiPointInput"
-              },
-              {
-                "$ref": "#/components/schemas/McpGeoJsonMultiLineStringInput"
-              },
-              {
-                "$ref": "#/components/schemas/McpGeoJsonMultiPolygonInput"
-              }
-            ]
+            "type": "object",
+            "description": "Comparison operand; GeoJSON Geometry (Point, LineString, Polygon, MultiPoint, MultiLineString, or MultiPolygon); not a Feature or FeatureCollection."
           }
         }
       },
       "McpGeometryBooleanResult": {
+        "type": "object",
         "description": "Typed geometry-operation result. The type value determines the data schema.",
         "oneOf": [
           {
@@ -998,50 +703,12 @@
             "description": "Return true when the geometries cross one another."
           },
           "geometry": {
-            "description": "Subject GeoJSON geometry. Operand order is significant.",
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/McpGeoJsonPointInput"
-              },
-              {
-                "$ref": "#/components/schemas/McpGeoJsonLineStringInput"
-              },
-              {
-                "$ref": "#/components/schemas/McpGeoJsonPolygonInput"
-              },
-              {
-                "$ref": "#/components/schemas/McpGeoJsonMultiPointInput"
-              },
-              {
-                "$ref": "#/components/schemas/McpGeoJsonMultiLineStringInput"
-              },
-              {
-                "$ref": "#/components/schemas/McpGeoJsonMultiPolygonInput"
-              }
-            ]
+            "type": "object",
+            "description": "Subject operand; GeoJSON Geometry (Point, LineString, Polygon, MultiPoint, MultiLineString, or MultiPolygon); not a Feature or FeatureCollection. Operand order is significant."
           },
           "other_geometry": {
-            "description": "Comparison GeoJSON geometry.",
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/McpGeoJsonPointInput"
-              },
-              {
-                "$ref": "#/components/schemas/McpGeoJsonLineStringInput"
-              },
-              {
-                "$ref": "#/components/schemas/McpGeoJsonPolygonInput"
-              },
-              {
-                "$ref": "#/components/schemas/McpGeoJsonMultiPointInput"
-              },
-              {
-                "$ref": "#/components/schemas/McpGeoJsonMultiLineStringInput"
-              },
-              {
-                "$ref": "#/components/schemas/McpGeoJsonMultiPolygonInput"
-              }
-            ]
+            "type": "object",
+            "description": "Comparison operand; GeoJSON Geometry (Point, LineString, Polygon, MultiPoint, MultiLineString, or MultiPolygon); not a Feature or FeatureCollection."
           }
         }
       },
@@ -1070,50 +737,12 @@
             "description": "Return true when the geometries share no point."
           },
           "geometry": {
-            "description": "Subject GeoJSON geometry. Operand order is significant.",
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/McpGeoJsonPointInput"
-              },
-              {
-                "$ref": "#/components/schemas/McpGeoJsonLineStringInput"
-              },
-              {
-                "$ref": "#/components/schemas/McpGeoJsonPolygonInput"
-              },
-              {
-                "$ref": "#/components/schemas/McpGeoJsonMultiPointInput"
-              },
-              {
-                "$ref": "#/components/schemas/McpGeoJsonMultiLineStringInput"
-              },
-              {
-                "$ref": "#/components/schemas/McpGeoJsonMultiPolygonInput"
-              }
-            ]
+            "type": "object",
+            "description": "Subject operand; GeoJSON Geometry (Point, LineString, Polygon, MultiPoint, MultiLineString, or MultiPolygon); not a Feature or FeatureCollection. Operand order is significant."
           },
           "other_geometry": {
-            "description": "Comparison GeoJSON geometry.",
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/McpGeoJsonPointInput"
-              },
-              {
-                "$ref": "#/components/schemas/McpGeoJsonLineStringInput"
-              },
-              {
-                "$ref": "#/components/schemas/McpGeoJsonPolygonInput"
-              },
-              {
-                "$ref": "#/components/schemas/McpGeoJsonMultiPointInput"
-              },
-              {
-                "$ref": "#/components/schemas/McpGeoJsonMultiLineStringInput"
-              },
-              {
-                "$ref": "#/components/schemas/McpGeoJsonMultiPolygonInput"
-              }
-            ]
+            "type": "object",
+            "description": "Comparison operand; GeoJSON Geometry (Point, LineString, Polygon, MultiPoint, MultiLineString, or MultiPolygon); not a Feature or FeatureCollection."
           }
         }
       },
@@ -1142,50 +771,12 @@
             "description": "Return true when the geometries share at least one point."
           },
           "geometry": {
-            "description": "Subject GeoJSON geometry. Operand order is significant.",
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/McpGeoJsonPointInput"
-              },
-              {
-                "$ref": "#/components/schemas/McpGeoJsonLineStringInput"
-              },
-              {
-                "$ref": "#/components/schemas/McpGeoJsonPolygonInput"
-              },
-              {
-                "$ref": "#/components/schemas/McpGeoJsonMultiPointInput"
-              },
-              {
-                "$ref": "#/components/schemas/McpGeoJsonMultiLineStringInput"
-              },
-              {
-                "$ref": "#/components/schemas/McpGeoJsonMultiPolygonInput"
-              }
-            ]
+            "type": "object",
+            "description": "Subject operand; GeoJSON Geometry (Point, LineString, Polygon, MultiPoint, MultiLineString, or MultiPolygon); not a Feature or FeatureCollection. Operand order is significant."
           },
           "other_geometry": {
-            "description": "Comparison GeoJSON geometry.",
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/McpGeoJsonPointInput"
-              },
-              {
-                "$ref": "#/components/schemas/McpGeoJsonLineStringInput"
-              },
-              {
-                "$ref": "#/components/schemas/McpGeoJsonPolygonInput"
-              },
-              {
-                "$ref": "#/components/schemas/McpGeoJsonMultiPointInput"
-              },
-              {
-                "$ref": "#/components/schemas/McpGeoJsonMultiLineStringInput"
-              },
-              {
-                "$ref": "#/components/schemas/McpGeoJsonMultiPolygonInput"
-              }
-            ]
+            "type": "object",
+            "description": "Comparison operand; GeoJSON Geometry (Point, LineString, Polygon, MultiPoint, MultiLineString, or MultiPolygon); not a Feature or FeatureCollection."
           }
         }
       },
@@ -1214,50 +805,12 @@
             "description": "Return true when geometry is completely within other_geometry."
           },
           "geometry": {
-            "description": "Subject GeoJSON geometry. Operand order is significant.",
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/McpGeoJsonPointInput"
-              },
-              {
-                "$ref": "#/components/schemas/McpGeoJsonLineStringInput"
-              },
-              {
-                "$ref": "#/components/schemas/McpGeoJsonPolygonInput"
-              },
-              {
-                "$ref": "#/components/schemas/McpGeoJsonMultiPointInput"
-              },
-              {
-                "$ref": "#/components/schemas/McpGeoJsonMultiLineStringInput"
-              },
-              {
-                "$ref": "#/components/schemas/McpGeoJsonMultiPolygonInput"
-              }
-            ]
+            "type": "object",
+            "description": "Subject operand; GeoJSON Geometry (Point, LineString, Polygon, MultiPoint, MultiLineString, or MultiPolygon); not a Feature or FeatureCollection. Operand order is significant."
           },
           "other_geometry": {
-            "description": "Comparison GeoJSON geometry.",
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/McpGeoJsonPointInput"
-              },
-              {
-                "$ref": "#/components/schemas/McpGeoJsonLineStringInput"
-              },
-              {
-                "$ref": "#/components/schemas/McpGeoJsonPolygonInput"
-              },
-              {
-                "$ref": "#/components/schemas/McpGeoJsonMultiPointInput"
-              },
-              {
-                "$ref": "#/components/schemas/McpGeoJsonMultiLineStringInput"
-              },
-              {
-                "$ref": "#/components/schemas/McpGeoJsonMultiPolygonInput"
-              }
-            ]
+            "type": "object",
+            "description": "Comparison operand; GeoJSON Geometry (Point, LineString, Polygon, MultiPoint, MultiLineString, or MultiPolygon); not a Feature or FeatureCollection."
           }
         }
       },
@@ -1285,27 +838,8 @@
             "description": "Return true when geometry is a valid GeoJSON geometry."
           },
           "geometry": {
-            "description": "A GeoJSON geometry in WGS84 [longitude, latitude, optional elevation] coordinate order.",
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/McpGeoJsonPointInput"
-              },
-              {
-                "$ref": "#/components/schemas/McpGeoJsonLineStringInput"
-              },
-              {
-                "$ref": "#/components/schemas/McpGeoJsonPolygonInput"
-              },
-              {
-                "$ref": "#/components/schemas/McpGeoJsonMultiPointInput"
-              },
-              {
-                "$ref": "#/components/schemas/McpGeoJsonMultiLineStringInput"
-              },
-              {
-                "$ref": "#/components/schemas/McpGeoJsonMultiPolygonInput"
-              }
-            ]
+            "type": "object",
+            "description": "GeoJSON Geometry (Point, LineString, Polygon, MultiPoint, MultiLineString, or MultiPolygon); not a Feature or FeatureCollection."
           }
         }
       },
@@ -1334,20 +868,12 @@
             "description": "Return true when the Point lies on the LineString."
           },
           "geometry": {
-            "description": "Point to test.",
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/McpGeoJsonPointInput"
-              }
-            ]
+            "type": "object",
+            "description": "Point to test; GeoJSON Geometry (Point); not a Feature or FeatureCollection."
           },
           "other_geometry": {
-            "description": "LineString on which to test the point.",
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/McpGeoJsonLineStringInput"
-              }
-            ]
+            "type": "object",
+            "description": "Line to test against; GeoJSON Geometry (LineString); not a Feature or FeatureCollection."
           }
         }
       },

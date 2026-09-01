@@ -1,0 +1,2904 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Geoapify Route Matrix API",
+    "version": "1.0.0",
+    "description": "Calculate travel-time and distance matrices between source and target locations."
+  },
+  "servers": [
+    {
+      "url": "https://api.geoapify.com/v1",
+      "description": "Default API endpoint."
+    },
+    {
+      "url": "https://api-eu.geoapify.com/v1",
+      "description": "EU-focused endpoint. Geoapify service processing uses EU infrastructure."
+    }
+  ],
+  "tags": [
+    {
+      "name": "Route Matrix"
+    }
+  ],
+  "paths": {
+    "/routematrix": {
+      "post": {
+        "tags": [
+          "Route Matrix"
+        ],
+        "operationId": "calculateRouteMatrix",
+        "summary": "Calculate a source-to-target route matrix",
+        "description": "Calculates travel distances and times from every source to every target.\n\n- Send a JSON body with `mode`, `sources`, and `targets`.\n- Each `location` uses GeoJSON coordinate order: `[longitude, latitude]`.\n- `sources_to_targets[i][j]` describes the route from `sources[i]` to `targets[j]`.\n- Repeat the same locations in `sources` and `targets` to calculate a square all-to-all matrix.\n- A regular API call supports up to 1,000 matrix cells (`sources.length × targets.length`).\n- `distance` or `time` can be `null` when no route is available for a source-target pair.\n\n**Example:** a 3 × 3 passenger-car matrix with `mode=drive`.",
+        "requestBody": {
+          "required": true,
+          "description": "Route Matrix configuration. The request body must be JSON.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RouteMatrixRequest"
+              },
+              "example": {
+                "mode": "drive",
+                "sources": [
+                  {
+                    "location": [
+                      -121.32485316561406,
+                      38.67387210503517
+                    ]
+                  },
+                  {
+                    "location": [
+                      -121.31172308967166,
+                      38.66553576111227
+                    ]
+                  },
+                  {
+                    "location": [
+                      -121.31533025339189,
+                      38.661141891975916
+                    ]
+                  }
+                ],
+                "targets": [
+                  {
+                    "location": [
+                      -121.32485316561406,
+                      38.67387210503517
+                    ]
+                  },
+                  {
+                    "location": [
+                      -121.31172308967166,
+                      38.66553576111227
+                    ]
+                  },
+                  {
+                    "location": [
+                      -121.31533025339189,
+                      38.661141891975916
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Matrix rows correspond to `sources`; columns correspond to `targets`. Distances use the requested unit system and times are in seconds.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RouteMatrixResponse"
+                },
+                "example": {
+                  "sources": [
+                    {
+                      "original_location": [
+                        -121.32485316561406,
+                        38.67387210503517
+                      ],
+                      "location": [
+                        -121.324908,
+                        38.673825
+                      ]
+                    },
+                    {
+                      "original_location": [
+                        -121.31172308967166,
+                        38.66553576111227
+                      ],
+                      "location": [
+                        -121.311626,
+                        38.665659
+                      ]
+                    },
+                    {
+                      "original_location": [
+                        -121.31533025339189,
+                        38.661141891975916
+                      ],
+                      "location": [
+                        -121.31544,
+                        38.661144
+                      ]
+                    }
+                  ],
+                  "targets": [
+                    {
+                      "original_location": [
+                        -121.32485316561406,
+                        38.67387210503517
+                      ],
+                      "location": [
+                        -121.324908,
+                        38.673825
+                      ]
+                    },
+                    {
+                      "original_location": [
+                        -121.31172308967166,
+                        38.66553576111227
+                      ],
+                      "location": [
+                        -121.311626,
+                        38.665659
+                      ]
+                    },
+                    {
+                      "original_location": [
+                        -121.31533025339189,
+                        38.661141891975916
+                      ],
+                      "location": [
+                        -121.31544,
+                        38.661144
+                      ]
+                    }
+                  ],
+                  "sources_to_targets": [
+                    [
+                      {
+                        "distance": 0,
+                        "time": 0,
+                        "source_index": 0,
+                        "target_index": 0
+                      },
+                      {
+                        "distance": 3421,
+                        "time": 274,
+                        "source_index": 0,
+                        "target_index": 1
+                      },
+                      {
+                        "distance": 3279,
+                        "time": 251,
+                        "source_index": 0,
+                        "target_index": 2
+                      }
+                    ],
+                    [
+                      {
+                        "distance": 2545,
+                        "time": 227,
+                        "source_index": 1,
+                        "target_index": 0
+                      },
+                      {
+                        "distance": 0,
+                        "time": 0,
+                        "source_index": 1,
+                        "target_index": 1
+                      },
+                      {
+                        "distance": 828,
+                        "time": 108,
+                        "source_index": 1,
+                        "target_index": 2
+                      }
+                    ],
+                    [
+                      {
+                        "distance": 3239,
+                        "time": 239,
+                        "source_index": 2,
+                        "target_index": 0
+                      },
+                      {
+                        "distance": 828,
+                        "time": 102,
+                        "source_index": 2,
+                        "target_index": 1
+                      },
+                      {
+                        "distance": 0,
+                        "time": 0,
+                        "source_index": 2,
+                        "target_index": 2
+                      }
+                    ]
+                  ],
+                  "units": "metric",
+                  "distance_units": "meters",
+                  "mode": "drive"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request data, an oversized matrix, or source-target distances that exceed gateway limits.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GatewayError"
+                },
+                "examples": {
+                  "missingSources": {
+                    "summary": "Missing required sources",
+                    "value": {
+                      "statusCode": 400,
+                      "error": "Bad Request",
+                      "message": "\"sources\" is required"
+                    }
+                  },
+                  "matrixTooLarge": {
+                    "summary": "Matrix contains too many cells",
+                    "value": {
+                      "statusCode": 400,
+                      "error": "Bad Request",
+                      "message": "Matrix is too big. Matrix size should not exceed 1000 elements for a regular API call, and 2000 elements for an asynchronous batch API call. Requested matrix size is 2500"
+                    }
+                  },
+                  "routeTooLong": {
+                    "summary": "A source-target distance exceeds the travel-mode limit",
+                    "description": "This example uses `walk`, which allows 100 km for regular calls and 200 km for asynchronous batch calls.",
+                    "value": {
+                      "statusCode": 400,
+                      "error": "Bad Request",
+                      "message": "Too long distance between locations. Distance should not exceed 100000 meters for a regular API call, and 200000 meters for an asynchronous batch API call. Estimated distance is 250000 meter(s)."
+                    }
+                  },
+                  "sumDistanceTooLong": {
+                    "summary": "Estimated total distance is too large",
+                    "value": {
+                      "statusCode": 400,
+                      "error": "Bad Request",
+                      "message": "Too long sum distance. Sum distance of all possible routes should not exceed 300000000 meters for a regular API call, and 1000000000 meters for an asynchronous batch API call. Estimated sum distance is 350000000 meter(s)."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid Geoapify API key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GatewayError"
+                },
+                "example": {
+                  "statusCode": 401,
+                  "error": "Unauthorized",
+                  "message": "Invalid apiKey"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit or quota exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GatewayError"
+                },
+                "example": {
+                  "statusCode": 429,
+                  "error": "Too Many Requests",
+                  "message": "Quota exceeded"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal gateway error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GatewayError"
+                },
+                "example": {
+                  "statusCode": 500,
+                  "error": "Internal Server Error",
+                  "message": "Request failed, please try again later"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "RouteMatrixRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "mode",
+          "sources",
+          "targets"
+        ],
+        "properties": {
+          "mode": {
+            "type": "string",
+            "enum": [
+              "walk",
+              "hike",
+              "scooter",
+              "motorcycle",
+              "drive",
+              "light_truck",
+              "bicycle",
+              "mountain_bike",
+              "road_bike",
+              "bus",
+              "medium_truck",
+              "truck",
+              "truck_dangerous_goods",
+              "heavy_truck",
+              "long_truck"
+            ],
+            "example": "drive",
+            "description": "Travel profile used to calculate speeds, access rules, and road restrictions. `drive` represents a passenger car."
+          },
+          "sources": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 1000,
+            "description": "Origin locations. Each source produces one row in `sources_to_targets`.",
+            "items": {
+              "$ref": "#/components/schemas/MatrixLocation"
+            }
+          },
+          "targets": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 1000,
+            "description": "Destination locations. Each target produces one column in every `sources_to_targets` row.",
+            "items": {
+              "$ref": "#/components/schemas/MatrixLocation"
+            }
+          },
+          "avoid": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "type"
+              ],
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "tolls",
+                    "ferries",
+                    "highways",
+                    "green_zones",
+                    "transfers",
+                    "locations",
+                    "polygons",
+                    "country_codes"
+                  ]
+                },
+                "importance": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                "values": {
+                  "type": "array",
+                  "items": {}
+                }
+              }
+            },
+            "maxItems": 100,
+            "description": "Road features, locations, polygons, or countries the router should avoid. Each rule requires a `type`; `importance` ranges from 0 to 1."
+          },
+          "traffic": {
+            "type": "string",
+            "enum": [
+              "free_flow",
+              "approximated"
+            ],
+            "default": "free_flow",
+            "description": "Traffic model for motorized modes. `free_flow` assumes uncongested roads; `approximated` reduces speeds on roads likely to be congested."
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "balanced",
+              "short",
+              "less_maneuvers"
+            ],
+            "default": "balanced",
+            "description": "Route preference. `balanced` balances time and distance; `short` prioritizes distance; `less_maneuvers` penalizes turns."
+          },
+          "max_speed": {
+            "type": "number",
+            "minimum": 6.5,
+            "maximum": 252,
+            "example": 80,
+            "description": "Maximum speed for driving, truck, and bus modes. Use 10–252 km/h with `units=metric`, or 6.5–155 mph with `units=imperial`."
+          },
+          "units": {
+            "type": "string",
+            "enum": [
+              "metric",
+              "imperial"
+            ],
+            "default": "metric",
+            "description": "Unit system for matrix distances. `metric` returns meters; `imperial` returns miles."
+          }
+        }
+      },
+      "MatrixLocation": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "location"
+        ],
+        "properties": {
+          "location": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 2,
+            "prefixItems": [
+              {
+                "type": "number",
+                "minimum": -180,
+                "maximum": 180,
+                "description": "Longitude."
+              },
+              {
+                "type": "number",
+                "minimum": -90,
+                "maximum": 90,
+                "description": "Latitude."
+              }
+            ],
+            "items": false,
+            "description": "Coordinate in GeoJSON order: `[longitude, latitude]`."
+          }
+        }
+      },
+      "LongitudeLatitude": {
+        "type": "array",
+        "minItems": 2,
+        "maxItems": 2,
+        "prefixItems": [
+          {
+            "type": "number",
+            "minimum": -180,
+            "maximum": 180
+          },
+          {
+            "type": "number",
+            "minimum": -90,
+            "maximum": 90
+          }
+        ],
+        "items": false
+      },
+      "JsonValue": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "number"
+          },
+          {
+            "type": "boolean"
+          },
+          {
+            "type": "null"
+          },
+          {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/JsonValue"
+            }
+          },
+          {
+            "$ref": "#/components/schemas/JsonObject"
+          }
+        ]
+      },
+      "JsonObject": {
+        "type": "object",
+        "additionalProperties": {
+          "$ref": "#/components/schemas/JsonValue"
+        }
+      },
+      "LocationData": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "lat",
+          "lon"
+        ],
+        "properties": {
+          "lat": {
+            "type": "number",
+            "minimum": -90,
+            "maximum": 90
+          },
+          "lon": {
+            "type": "number",
+            "minimum": -180,
+            "maximum": 180
+          },
+          "address": {
+            "type": "string"
+          }
+        }
+      },
+      "Avoid": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "tolls",
+              "ferries",
+              "highways",
+              "locations",
+              "polygons",
+              "green_zones",
+              "country_codes",
+              "transfers"
+            ]
+          },
+          "importance": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "values": {
+            "oneOf": [
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/LocationData"
+                }
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LocationData"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
+      "MultiLineStringGeometry": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type",
+          "coordinates"
+        ],
+        "properties": {
+          "type": {
+            "const": "MultiLineString"
+          },
+          "coordinates": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "minItems": 2,
+              "items": {
+                "$ref": "#/components/schemas/LongitudeLatitude"
+              }
+            }
+          }
+        }
+      },
+      "PolygonGeometry": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type",
+          "coordinates"
+        ],
+        "properties": {
+          "type": {
+            "const": "Polygon"
+          },
+          "coordinates": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "minItems": 4,
+              "items": {
+                "$ref": "#/components/schemas/LongitudeLatitude"
+              }
+            }
+          }
+        }
+      },
+      "MultiPolygonGeometry": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type",
+          "coordinates"
+        ],
+        "properties": {
+          "type": {
+            "const": "MultiPolygon"
+          },
+          "coordinates": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "array",
+                "minItems": 4,
+                "items": {
+                  "$ref": "#/components/schemas/LongitudeLatitude"
+                }
+              }
+            }
+          }
+        }
+      },
+      "IsolineGeometry": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/PolygonGeometry"
+          },
+          {
+            "$ref": "#/components/schemas/MultiPolygonGeometry"
+          }
+        ]
+      },
+      "RouteInstruction": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "text"
+        ],
+        "properties": {
+          "text": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "transition_instruction": {
+            "type": "string"
+          },
+          "pre_transition_instruction": {
+            "type": "string"
+          },
+          "post_transition_instruction": {
+            "type": "string"
+          },
+          "contains_next_instruction": {
+            "type": "boolean"
+          },
+          "streets": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "exit_number": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "exit_road_name": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "exit_towards": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "roundabout_exit": {
+            "type": "number"
+          }
+        }
+      },
+      "RouteStep": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "from_index",
+          "to_index",
+          "time",
+          "distance"
+        ],
+        "properties": {
+          "from_index": {
+            "type": "integer"
+          },
+          "to_index": {
+            "type": "integer"
+          },
+          "time": {
+            "type": "number"
+          },
+          "distance": {
+            "type": "number"
+          },
+          "instruction": {
+            "$ref": "#/components/schemas/RouteInstruction"
+          },
+          "toll": {
+            "type": "boolean"
+          },
+          "ferry": {
+            "type": "boolean"
+          },
+          "bridge": {
+            "type": "boolean"
+          },
+          "tunnel": {
+            "type": "boolean"
+          },
+          "elevation": {
+            "type": "number"
+          },
+          "elevation_gain": {
+            "type": "number"
+          },
+          "max_elevation": {
+            "type": "number"
+          },
+          "min_elevation": {
+            "type": "number"
+          },
+          "admin_area": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "speed": {
+            "type": "number"
+          },
+          "speed_limit": {
+            "type": "number"
+          },
+          "truck_limit": {
+            "type": "number"
+          },
+          "surface": {
+            "type": "string"
+          },
+          "lane_count": {
+            "type": "number"
+          },
+          "road_class": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "roundabout": {
+            "type": "boolean"
+          },
+          "rightside": {
+            "type": "boolean"
+          },
+          "traversability": {
+            "type": "string"
+          },
+          "from_stop_id": {
+            "type": "string"
+          },
+          "from_stop_name": {
+            "type": "string"
+          },
+          "to_stop_id": {
+            "type": "string"
+          },
+          "to_stop_name": {
+            "type": "string"
+          }
+        }
+      },
+      "RouteLeg": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "time",
+          "distance",
+          "steps"
+        ],
+        "properties": {
+          "time": {
+            "type": "number"
+          },
+          "distance": {
+            "type": "number"
+          },
+          "steps": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RouteStep"
+            }
+          },
+          "country_code": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "elevation": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            }
+          },
+          "elevation_range": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 2,
+              "prefixItems": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "number"
+                }
+              ],
+              "items": false
+            }
+          },
+          "agency_name": {
+            "type": "string"
+          },
+          "agency_id": {
+            "type": "string"
+          },
+          "agency_url": {
+            "type": "string"
+          },
+          "route_id": {
+            "type": "string"
+          },
+          "route_short_name": {
+            "type": "string"
+          },
+          "route_long_name": {
+            "type": "string"
+          },
+          "trip_id": {
+            "type": "string"
+          }
+        }
+      },
+      "SnappedRouteWaypoint": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "location"
+        ],
+        "properties": {
+          "original_index": {
+            "type": "integer"
+          },
+          "location": {
+            "$ref": "#/components/schemas/LongitudeLatitude"
+          }
+        }
+      },
+      "InputRouteWaypoint": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "lat",
+          "lon"
+        ],
+        "properties": {
+          "lat": {
+            "type": "number",
+            "minimum": -90,
+            "maximum": 90
+          },
+          "lon": {
+            "type": "number",
+            "minimum": -180,
+            "maximum": 180
+          },
+          "address": {
+            "type": "string"
+          }
+        }
+      },
+      "RouteWaypoint": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/SnappedRouteWaypoint"
+          },
+          {
+            "$ref": "#/components/schemas/InputRouteWaypoint"
+          }
+        ]
+      },
+      "RoutingResponseOptions": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "mode",
+          "units",
+          "waypoints"
+        ],
+        "properties": {
+          "mode": {
+            "type": "string",
+            "enum": [
+              "walk",
+              "hike",
+              "scooter",
+              "motorcycle",
+              "drive",
+              "light_truck",
+              "bicycle",
+              "mountain_bike",
+              "road_bike",
+              "bus",
+              "medium_truck",
+              "truck",
+              "truck_dangerous_goods",
+              "heavy_truck",
+              "long_truck",
+              "transit",
+              "approximated_transit"
+            ]
+          },
+          "units": {
+            "type": "string",
+            "enum": [
+              "metric",
+              "imperial"
+            ]
+          },
+          "waypoints": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RouteWaypoint"
+            }
+          },
+          "avoid": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Avoid"
+            }
+          },
+          "details": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "instruction_details",
+                "route_details",
+                "elevation",
+                "admin_areas"
+              ]
+            }
+          },
+          "traffic": {
+            "type": "string",
+            "enum": [
+              "free_flow",
+              "approximated"
+            ]
+          },
+          "intermediate_waypoint_mode": {
+            "type": "string",
+            "enum": [
+              "stopover",
+              "through_stop",
+              "pass_through"
+            ]
+          }
+        }
+      },
+      "RouteAdminArea": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "country_code"
+        ],
+        "properties": {
+          "country_code": {
+            "type": "string"
+          },
+          "country_text": {
+            "type": "string"
+          },
+          "state_code": {
+            "type": "string"
+          },
+          "state_text": {
+            "type": "string"
+          }
+        }
+      },
+      "RouteAdminAreaCrossing": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "from_admin_index",
+          "to_admin_index",
+          "begin_shape_index",
+          "end_shape_index"
+        ],
+        "properties": {
+          "from_admin_index": {
+            "type": "integer"
+          },
+          "to_admin_index": {
+            "type": "integer"
+          },
+          "begin_shape_index": {
+            "type": "integer"
+          },
+          "end_shape_index": {
+            "type": "integer"
+          }
+        }
+      },
+      "RoutingFeatureProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "mode",
+          "units",
+          "waypoints",
+          "distance",
+          "time",
+          "legs"
+        ],
+        "properties": {
+          "mode": {
+            "type": "string",
+            "enum": [
+              "walk",
+              "hike",
+              "scooter",
+              "motorcycle",
+              "drive",
+              "light_truck",
+              "bicycle",
+              "mountain_bike",
+              "road_bike",
+              "bus",
+              "medium_truck",
+              "truck",
+              "truck_dangerous_goods",
+              "heavy_truck",
+              "long_truck",
+              "transit",
+              "approximated_transit"
+            ]
+          },
+          "units": {
+            "type": "string",
+            "enum": [
+              "metric",
+              "imperial"
+            ]
+          },
+          "waypoints": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RouteWaypoint"
+            }
+          },
+          "avoid": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Avoid"
+            }
+          },
+          "details": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "instruction_details",
+                "route_details",
+                "elevation",
+                "admin_areas"
+              ]
+            }
+          },
+          "traffic": {
+            "type": "string",
+            "enum": [
+              "free_flow",
+              "approximated"
+            ]
+          },
+          "intermediate_waypoint_mode": {
+            "type": "string",
+            "enum": [
+              "stopover",
+              "through_stop",
+              "pass_through"
+            ]
+          },
+          "distance": {
+            "type": "number"
+          },
+          "time": {
+            "type": "number"
+          },
+          "distance_units": {
+            "type": "string",
+            "enum": [
+              "meters",
+              "miles"
+            ]
+          },
+          "max_speed": {
+            "type": "number"
+          },
+          "legs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RouteLeg"
+            }
+          },
+          "country_code": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "admin_areas": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RouteAdminArea"
+            }
+          },
+          "admin_area_crossings": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RouteAdminAreaCrossing"
+            }
+          },
+          "toll": {
+            "type": "boolean"
+          },
+          "ferry": {
+            "type": "boolean"
+          }
+        }
+      },
+      "RoutingFeature": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type",
+          "geometry",
+          "properties"
+        ],
+        "properties": {
+          "type": {
+            "const": "Feature"
+          },
+          "geometry": {
+            "$ref": "#/components/schemas/MultiLineStringGeometry"
+          },
+          "properties": {
+            "$ref": "#/components/schemas/RoutingFeatureProperties"
+          },
+          "id": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              }
+            ]
+          },
+          "bbox": {
+            "type": "array",
+            "minItems": 4,
+            "maxItems": 6,
+            "items": {
+              "type": "number"
+            }
+          }
+        }
+      },
+      "RoutingFeatureCollection": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type",
+          "features",
+          "properties"
+        ],
+        "properties": {
+          "type": {
+            "const": "FeatureCollection"
+          },
+          "features": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RoutingFeature"
+            }
+          },
+          "bbox": {
+            "type": "array",
+            "minItems": 4,
+            "maxItems": 6,
+            "items": {
+              "type": "number"
+            }
+          },
+          "properties": {
+            "$ref": "#/components/schemas/RoutingResponseOptions"
+          }
+        }
+      },
+      "RoutingJsonPoint": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "lon",
+          "lat"
+        ],
+        "properties": {
+          "lon": {
+            "type": "number",
+            "minimum": -180,
+            "maximum": 180
+          },
+          "lat": {
+            "type": "number",
+            "minimum": -90,
+            "maximum": 90
+          }
+        }
+      },
+      "RoutingJsonResult": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "mode",
+          "units",
+          "waypoints",
+          "distance",
+          "time",
+          "legs",
+          "geometry"
+        ],
+        "properties": {
+          "mode": {
+            "type": "string",
+            "enum": [
+              "walk",
+              "hike",
+              "scooter",
+              "motorcycle",
+              "drive",
+              "light_truck",
+              "bicycle",
+              "mountain_bike",
+              "road_bike",
+              "bus",
+              "medium_truck",
+              "truck",
+              "truck_dangerous_goods",
+              "heavy_truck",
+              "long_truck",
+              "transit",
+              "approximated_transit"
+            ]
+          },
+          "units": {
+            "type": "string",
+            "enum": [
+              "metric",
+              "imperial"
+            ]
+          },
+          "waypoints": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RouteWaypoint"
+            }
+          },
+          "avoid": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Avoid"
+            }
+          },
+          "details": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "instruction_details",
+                "route_details",
+                "elevation",
+                "admin_areas"
+              ]
+            }
+          },
+          "traffic": {
+            "type": "string",
+            "enum": [
+              "free_flow",
+              "approximated"
+            ]
+          },
+          "intermediate_waypoint_mode": {
+            "type": "string",
+            "enum": [
+              "stopover",
+              "through_stop",
+              "pass_through"
+            ]
+          },
+          "distance": {
+            "type": "number"
+          },
+          "time": {
+            "type": "number"
+          },
+          "distance_units": {
+            "type": "string",
+            "enum": [
+              "meters",
+              "miles"
+            ]
+          },
+          "max_speed": {
+            "type": "number"
+          },
+          "legs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RouteLeg"
+            }
+          },
+          "country_code": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "admin_areas": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RouteAdminArea"
+            }
+          },
+          "admin_area_crossings": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RouteAdminAreaCrossing"
+            }
+          },
+          "toll": {
+            "type": "boolean"
+          },
+          "ferry": {
+            "type": "boolean"
+          },
+          "geometry": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/RoutingJsonPoint"
+              }
+            }
+          }
+        }
+      },
+      "RoutingJsonResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "results",
+          "properties"
+        ],
+        "properties": {
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RoutingJsonResult"
+            }
+          },
+          "properties": {
+            "$ref": "#/components/schemas/RoutingResponseOptions"
+          },
+          "bbox": {
+            "type": "array",
+            "minItems": 4,
+            "maxItems": 6,
+            "items": {
+              "type": "number"
+            }
+          }
+        }
+      },
+      "MapMatchingStepAddress": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [],
+        "properties": {
+          "street": {
+            "type": "string"
+          },
+          "suburb": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "county": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          },
+          "postcode": {
+            "type": "string"
+          },
+          "country": {
+            "type": "string"
+          },
+          "country_code": {
+            "type": "string"
+          }
+        }
+      },
+      "MapMatchingStepOverlap": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "osm_way_id",
+          "osmtags",
+          "intersection_points"
+        ],
+        "properties": {
+          "osm_way_id": {
+            "type": "number"
+          },
+          "osmtags": {
+            "$ref": "#/components/schemas/JsonObject"
+          },
+          "intersection_points": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LongitudeLatitude"
+            }
+          }
+        }
+      },
+      "MapMatchingStep": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "from_index",
+          "to_index",
+          "time",
+          "distance",
+          "osm_way_id"
+        ],
+        "properties": {
+          "from_index": {
+            "type": "integer"
+          },
+          "to_index": {
+            "type": "integer"
+          },
+          "time": {
+            "type": "number"
+          },
+          "distance": {
+            "type": "number"
+          },
+          "instruction": {
+            "$ref": "#/components/schemas/RouteInstruction"
+          },
+          "toll": {
+            "type": "boolean"
+          },
+          "ferry": {
+            "type": "boolean"
+          },
+          "bridge": {
+            "type": "boolean"
+          },
+          "tunnel": {
+            "type": "boolean"
+          },
+          "elevation": {
+            "type": "number"
+          },
+          "elevation_gain": {
+            "type": "number"
+          },
+          "max_elevation": {
+            "type": "number"
+          },
+          "min_elevation": {
+            "type": "number"
+          },
+          "admin_area": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "speed": {
+            "type": "number"
+          },
+          "speed_limit": {
+            "type": "number"
+          },
+          "truck_limit": {
+            "type": "number"
+          },
+          "surface": {
+            "type": "string"
+          },
+          "lane_count": {
+            "type": "number"
+          },
+          "road_class": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "roundabout": {
+            "type": "boolean"
+          },
+          "rightside": {
+            "type": "boolean"
+          },
+          "traversability": {
+            "type": "string"
+          },
+          "from_stop_id": {
+            "type": "string"
+          },
+          "from_stop_name": {
+            "type": "string"
+          },
+          "to_stop_id": {
+            "type": "string"
+          },
+          "to_stop_name": {
+            "type": "string"
+          },
+          "osm_way_id": {
+            "type": "number"
+          },
+          "address": {
+            "$ref": "#/components/schemas/MapMatchingStepAddress"
+          },
+          "osmtags": {
+            "$ref": "#/components/schemas/JsonObject"
+          },
+          "overlaps": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MapMatchingStepOverlap"
+            }
+          },
+          "begin_bearing": {
+            "type": "number"
+          },
+          "end_bearing": {
+            "type": "number"
+          }
+        }
+      },
+      "MapMatchingLeg": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "time",
+          "distance",
+          "steps"
+        ],
+        "properties": {
+          "time": {
+            "type": "number"
+          },
+          "distance": {
+            "type": "number"
+          },
+          "steps": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MapMatchingStep"
+            }
+          }
+        }
+      },
+      "MapMatchingWaypoint": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "original_index",
+          "location",
+          "original_location",
+          "match_type"
+        ],
+        "properties": {
+          "original_index": {
+            "type": "integer"
+          },
+          "location": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/LongitudeLatitude"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "original_location": {
+            "$ref": "#/components/schemas/LongitudeLatitude"
+          },
+          "match_type": {
+            "type": "string",
+            "enum": [
+              "matched",
+              "unmatched",
+              "interpolated",
+              "merged"
+            ]
+          },
+          "match_distance": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "leg_index": {
+            "type": "integer"
+          },
+          "step_index": {
+            "type": "integer"
+          }
+        }
+      },
+      "MapMatchingFeatureProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "distance",
+          "time",
+          "legs",
+          "mode",
+          "waypoints"
+        ],
+        "properties": {
+          "distance": {
+            "type": "number"
+          },
+          "time": {
+            "type": "number"
+          },
+          "legs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MapMatchingLeg"
+            }
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "walk",
+              "hike",
+              "scooter",
+              "motorcycle",
+              "drive",
+              "light_truck",
+              "bicycle",
+              "mountain_bike",
+              "road_bike",
+              "bus",
+              "medium_truck",
+              "truck",
+              "truck_dangerous_goods",
+              "heavy_truck",
+              "long_truck",
+              "transit",
+              "approximated_transit"
+            ]
+          },
+          "waypoints": {
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/MapMatchingWaypoint"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "MapMatchingFeature": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type",
+          "geometry",
+          "properties"
+        ],
+        "properties": {
+          "type": {
+            "const": "Feature"
+          },
+          "geometry": {
+            "$ref": "#/components/schemas/MultiLineStringGeometry"
+          },
+          "properties": {
+            "$ref": "#/components/schemas/MapMatchingFeatureProperties"
+          },
+          "id": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              }
+            ]
+          },
+          "bbox": {
+            "type": "array",
+            "minItems": 4,
+            "maxItems": 6,
+            "items": {
+              "type": "number"
+            }
+          }
+        }
+      },
+      "MapMatchingFeatureCollection": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type",
+          "features"
+        ],
+        "properties": {
+          "type": {
+            "const": "FeatureCollection"
+          },
+          "features": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MapMatchingFeature"
+            }
+          },
+          "bbox": {
+            "type": "array",
+            "minItems": 4,
+            "maxItems": 6,
+            "items": {
+              "type": "number"
+            }
+          },
+          "properties": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/JsonObject"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      },
+      "RouteMatrixLocation": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "original_location"
+        ],
+        "properties": {
+          "original_location": {
+            "$ref": "#/components/schemas/LongitudeLatitude"
+          },
+          "location": {
+            "$ref": "#/components/schemas/LongitudeLatitude"
+          }
+        }
+      },
+      "RouteMatrixCell": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "distance",
+          "time",
+          "source_index",
+          "target_index"
+        ],
+        "properties": {
+          "distance": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "time": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "source_index": {
+            "type": "integer"
+          },
+          "target_index": {
+            "type": "integer"
+          }
+        }
+      },
+      "RouteMatrixResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "sources",
+          "targets",
+          "sources_to_targets",
+          "units",
+          "distance_units",
+          "mode"
+        ],
+        "properties": {
+          "sources": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RouteMatrixLocation"
+            }
+          },
+          "targets": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RouteMatrixLocation"
+            }
+          },
+          "sources_to_targets": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/RouteMatrixCell"
+              }
+            }
+          },
+          "units": {
+            "type": "string",
+            "enum": [
+              "metric",
+              "imperial"
+            ]
+          },
+          "distance_units": {
+            "type": "string",
+            "enum": [
+              "meters",
+              "miles"
+            ]
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "walk",
+              "hike",
+              "scooter",
+              "motorcycle",
+              "drive",
+              "light_truck",
+              "bicycle",
+              "mountain_bike",
+              "road_bike",
+              "bus",
+              "medium_truck",
+              "truck",
+              "truck_dangerous_goods",
+              "heavy_truck",
+              "long_truck",
+              "transit",
+              "approximated_transit"
+            ]
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "balanced",
+              "short",
+              "less_maneuvers"
+            ]
+          },
+          "max_speed": {
+            "type": "number"
+          },
+          "avoid": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Avoid"
+            }
+          },
+          "traffic": {
+            "type": "string",
+            "enum": [
+              "free_flow",
+              "approximated"
+            ]
+          }
+        }
+      },
+      "IsolineDetails": {
+        "type": "object",
+        "additionalProperties": {
+          "$ref": "#/components/schemas/JsonValue"
+        },
+        "properties": {
+          "population": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [],
+            "properties": {
+              "attribution": {
+                "type": "string"
+              },
+              "value": {
+                "type": "number"
+              }
+            }
+          }
+        }
+      },
+      "IsolineFeatureProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "lat",
+          "lon",
+          "mode",
+          "type",
+          "range"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "lat": {
+            "type": "number",
+            "minimum": -90,
+            "maximum": 90
+          },
+          "lon": {
+            "type": "number",
+            "minimum": -180,
+            "maximum": 180
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "walk",
+              "hike",
+              "scooter",
+              "motorcycle",
+              "drive",
+              "light_truck",
+              "bicycle",
+              "mountain_bike",
+              "road_bike",
+              "bus",
+              "medium_truck",
+              "truck",
+              "truck_dangerous_goods",
+              "heavy_truck",
+              "long_truck",
+              "transit",
+              "approximated_transit"
+            ]
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "time",
+              "distance"
+            ]
+          },
+          "range": {
+            "type": "number"
+          },
+          "details": {
+            "$ref": "#/components/schemas/IsolineDetails"
+          },
+          "route_type": {
+            "type": "string",
+            "enum": [
+              "balanced",
+              "short",
+              "less_maneuvers"
+            ]
+          },
+          "max_speed": {
+            "type": "number"
+          },
+          "units": {
+            "type": "string",
+            "enum": [
+              "metric",
+              "imperial"
+            ]
+          },
+          "traffic": {
+            "type": "string",
+            "enum": [
+              "free_flow",
+              "approximated"
+            ]
+          },
+          "avoid": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Avoid"
+            }
+          }
+        }
+      },
+      "IsolineCollectionProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      },
+      "IsolineFeature": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type",
+          "geometry",
+          "properties"
+        ],
+        "properties": {
+          "type": {
+            "const": "Feature"
+          },
+          "geometry": {
+            "$ref": "#/components/schemas/IsolineGeometry"
+          },
+          "properties": {
+            "$ref": "#/components/schemas/IsolineFeatureProperties"
+          },
+          "id": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              }
+            ]
+          },
+          "bbox": {
+            "type": "array",
+            "minItems": 4,
+            "maxItems": 6,
+            "items": {
+              "type": "number"
+            }
+          }
+        }
+      },
+      "IsolineFeatureCollection": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type",
+          "features",
+          "properties"
+        ],
+        "properties": {
+          "type": {
+            "const": "FeatureCollection"
+          },
+          "features": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IsolineFeature"
+            }
+          },
+          "bbox": {
+            "type": "array",
+            "minItems": 4,
+            "maxItems": 6,
+            "items": {
+              "type": "number"
+            }
+          },
+          "properties": {
+            "$ref": "#/components/schemas/IsolineCollectionProperties"
+          }
+        }
+      },
+      "RoutePlannerParamLocation": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "location"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "location": {
+            "$ref": "#/components/schemas/LongitudeLatitude"
+          }
+        }
+      },
+      "RoutePlannerParamStop": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "location_index",
+          "location",
+          "duration",
+          "time_windows"
+        ],
+        "properties": {
+          "location_index": {
+            "type": "integer"
+          },
+          "location": {
+            "$ref": "#/components/schemas/LongitudeLatitude"
+          },
+          "duration": {
+            "type": "number"
+          },
+          "time_windows": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 2,
+              "prefixItems": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "number"
+                }
+              ],
+              "items": false
+            }
+          }
+        }
+      },
+      "RoutePlannerParamShipment": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "pickup",
+          "delivery",
+          "priority",
+          "amount",
+          "requirements"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "pickup": {
+            "$ref": "#/components/schemas/RoutePlannerParamStop"
+          },
+          "delivery": {
+            "$ref": "#/components/schemas/RoutePlannerParamStop"
+          },
+          "priority": {
+            "type": "number"
+          },
+          "amount": {
+            "type": "number"
+          },
+          "requirements": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "RoutePlannerParamJob": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "location_index": {
+            "type": "integer"
+          },
+          "location": {
+            "$ref": "#/components/schemas/LongitudeLatitude"
+          },
+          "priority": {
+            "type": "number"
+          },
+          "duration": {
+            "type": "number"
+          },
+          "time_windows": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 2,
+              "prefixItems": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "number"
+                }
+              ],
+              "items": false
+            }
+          },
+          "delivery_amount": {
+            "type": "number"
+          },
+          "pickup_amount": {
+            "type": "number"
+          },
+          "requirements": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "RoutePlannerParamAgent": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "start_location_index": {
+            "type": "integer"
+          },
+          "start_location": {
+            "$ref": "#/components/schemas/LongitudeLatitude"
+          },
+          "end_location_index": {
+            "type": "integer"
+          },
+          "end_location": {
+            "$ref": "#/components/schemas/LongitudeLatitude"
+          },
+          "delivery_capacity": {
+            "type": "number"
+          },
+          "pickup_capacity": {
+            "type": "number"
+          },
+          "capabilities": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "time_windows": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 2,
+              "prefixItems": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "number"
+                }
+              ],
+              "items": false
+            }
+          },
+          "breaks": {
+            "$ref": "#/components/schemas/JsonValue"
+          }
+        }
+      },
+      "RoutePlannerParams": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "locations",
+          "agents",
+          "mode"
+        ],
+        "properties": {
+          "locations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RoutePlannerParamLocation"
+            }
+          },
+          "agents": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RoutePlannerParamAgent"
+            }
+          },
+          "jobs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RoutePlannerParamJob"
+            }
+          },
+          "shipments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RoutePlannerParamShipment"
+            }
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "walk",
+              "hike",
+              "scooter",
+              "motorcycle",
+              "drive",
+              "light_truck",
+              "bicycle",
+              "mountain_bike",
+              "road_bike",
+              "bus",
+              "medium_truck",
+              "truck",
+              "truck_dangerous_goods",
+              "heavy_truck",
+              "long_truck",
+              "transit",
+              "approximated_transit"
+            ]
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "balanced",
+              "short",
+              "less_maneuvers"
+            ]
+          },
+          "max_speed": {
+            "type": "number"
+          },
+          "traffic": {
+            "type": "string",
+            "enum": [
+              "free_flow",
+              "approximated"
+            ]
+          },
+          "units": {
+            "type": "string",
+            "enum": [
+              "metric",
+              "imperial"
+            ]
+          },
+          "avoid": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Avoid"
+            }
+          }
+        }
+      },
+      "RoutePlannerAction": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "index",
+          "type",
+          "start_time",
+          "duration"
+        ],
+        "properties": {
+          "index": {
+            "type": "integer"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "start",
+              "end",
+              "job",
+              "pickup",
+              "delivery",
+              "break"
+            ]
+          },
+          "start_time": {
+            "type": "number"
+          },
+          "duration": {
+            "type": "number"
+          },
+          "location_index": {
+            "type": "integer"
+          },
+          "location_id": {
+            "type": "string"
+          },
+          "shipment_id": {
+            "type": "string"
+          },
+          "shipment_index": {
+            "type": "integer"
+          },
+          "job_id": {
+            "type": "string"
+          },
+          "job_index": {
+            "type": "integer"
+          },
+          "waypoint_index": {
+            "type": "integer"
+          }
+        }
+      },
+      "RoutePlannerWaypoint": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "original_location",
+          "location",
+          "start_time",
+          "duration",
+          "actions"
+        ],
+        "properties": {
+          "next_leg_index": {
+            "type": "integer"
+          },
+          "prev_leg_index": {
+            "type": "integer"
+          },
+          "original_location": {
+            "$ref": "#/components/schemas/LongitudeLatitude"
+          },
+          "location": {
+            "$ref": "#/components/schemas/LongitudeLatitude"
+          },
+          "start_time": {
+            "type": "number"
+          },
+          "duration": {
+            "type": "number"
+          },
+          "actions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RoutePlannerAction"
+            }
+          },
+          "original_location_index": {
+            "type": "integer"
+          },
+          "original_location_id": {
+            "type": "string"
+          }
+        }
+      },
+      "RoutePlannerStep": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "from_index",
+          "to_index",
+          "time",
+          "distance"
+        ],
+        "properties": {
+          "from_index": {
+            "type": "integer"
+          },
+          "to_index": {
+            "type": "integer"
+          },
+          "time": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "distance": {
+            "type": [
+              "number",
+              "null"
+            ]
+          }
+        }
+      },
+      "RoutePlannerLeg": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "time",
+          "distance",
+          "from_waypoint_index",
+          "to_waypoint_index",
+          "steps"
+        ],
+        "properties": {
+          "time": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "distance": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "from_waypoint_index": {
+            "type": "integer"
+          },
+          "to_waypoint_index": {
+            "type": "integer"
+          },
+          "steps": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RoutePlannerStep"
+            }
+          }
+        }
+      },
+      "RoutePlannerFeatureProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "agent_index",
+          "time",
+          "start_time",
+          "end_time",
+          "distance",
+          "legs",
+          "mode",
+          "actions",
+          "waypoints"
+        ],
+        "properties": {
+          "agent_index": {
+            "type": "integer"
+          },
+          "agent_id": {
+            "type": "string"
+          },
+          "time": {
+            "type": "number"
+          },
+          "start_time": {
+            "type": "number"
+          },
+          "end_time": {
+            "type": "number"
+          },
+          "distance": {
+            "type": "number"
+          },
+          "legs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RoutePlannerLeg"
+            }
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "walk",
+              "hike",
+              "scooter",
+              "motorcycle",
+              "drive",
+              "light_truck",
+              "bicycle",
+              "mountain_bike",
+              "road_bike",
+              "bus",
+              "medium_truck",
+              "truck",
+              "truck_dangerous_goods",
+              "heavy_truck",
+              "long_truck",
+              "transit",
+              "approximated_transit"
+            ]
+          },
+          "actions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RoutePlannerAction"
+            }
+          },
+          "waypoints": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RoutePlannerWaypoint"
+            }
+          }
+        }
+      },
+      "RoutePlannerIssues": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [],
+        "properties": {
+          "unassigned_shipments": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "unassigned_agents": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "unassigned_jobs": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          }
+        }
+      },
+      "RoutePlannerCollectionProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "mode",
+          "params"
+        ],
+        "properties": {
+          "mode": {
+            "type": "string",
+            "enum": [
+              "walk",
+              "hike",
+              "scooter",
+              "motorcycle",
+              "drive",
+              "light_truck",
+              "bicycle",
+              "mountain_bike",
+              "road_bike",
+              "bus",
+              "medium_truck",
+              "truck",
+              "truck_dangerous_goods",
+              "heavy_truck",
+              "long_truck",
+              "transit",
+              "approximated_transit"
+            ]
+          },
+          "params": {
+            "$ref": "#/components/schemas/RoutePlannerParams"
+          },
+          "issues": {
+            "$ref": "#/components/schemas/RoutePlannerIssues"
+          }
+        }
+      },
+      "RoutePlannerFeature": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type",
+          "geometry",
+          "properties"
+        ],
+        "properties": {
+          "type": {
+            "const": "Feature"
+          },
+          "geometry": {
+            "$ref": "#/components/schemas/MultiLineStringGeometry"
+          },
+          "properties": {
+            "$ref": "#/components/schemas/RoutePlannerFeatureProperties"
+          },
+          "id": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              }
+            ]
+          },
+          "bbox": {
+            "type": "array",
+            "minItems": 4,
+            "maxItems": 6,
+            "items": {
+              "type": "number"
+            }
+          }
+        }
+      },
+      "RoutePlannerFeatureCollection": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type",
+          "features",
+          "properties"
+        ],
+        "properties": {
+          "type": {
+            "const": "FeatureCollection"
+          },
+          "features": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RoutePlannerFeature"
+            }
+          },
+          "bbox": {
+            "type": "array",
+            "minItems": 4,
+            "maxItems": 6,
+            "items": {
+              "type": "number"
+            }
+          },
+          "properties": {
+            "$ref": "#/components/schemas/RoutePlannerCollectionProperties"
+          }
+        }
+      },
+      "RoutePlannerDataError": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "error",
+          "message"
+        ],
+        "properties": {
+          "error": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "RoutePlannerResponse": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/RoutePlannerFeatureCollection"
+          },
+          {
+            "$ref": "#/components/schemas/RoutePlannerDataError"
+          }
+        ]
+      },
+      "GatewayError": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "statusCode",
+          "error",
+          "message"
+        ],
+        "properties": {
+          "statusCode": {
+            "type": "integer",
+            "description": "HTTP status code returned by the API gateway."
+          },
+          "error": {
+            "type": "string",
+            "description": "Standard HTTP error name."
+          },
+          "message": {
+            "type": "string",
+            "description": "Human-readable explanation of the error."
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "ApiKeyInQuery": {
+        "type": "apiKey",
+        "in": "query",
+        "name": "apiKey",
+        "description": "Geoapify API key query parameter. Recommended authentication method for public APIs. API keys in URLs can be logged; use x-api-key for server-to-server clients."
+      },
+      "ApiKeyInHeader": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "x-api-key",
+        "description": "Geoapify API key header. Supported as an alternative authentication method for public APIs."
+      }
+    }
+  },
+  "security": [
+    {
+      "ApiKeyInQuery": []
+    },
+    {
+      "ApiKeyInHeader": []
+    }
+  ]
+}

@@ -1,0 +1,521 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Geoapify Elevation API",
+    "version": "1.0.0",
+    "description": "Retrieve terrain elevation in meters or feet for up to 1,000 geographic locations in one request."
+  },
+  "servers": [
+    {
+      "url": "https://api.geoapify.com/v1",
+      "description": "Default API endpoint."
+    },
+    {
+      "url": "https://api-eu.geoapify.com/v1",
+      "description": "EU-focused endpoint. Geoapify service processing uses EU infrastructure."
+    }
+  ],
+  "tags": [
+    {
+      "name": "Elevation",
+      "description": "Retrieve terrain height and optional point-to-point distances for geographic locations."
+    }
+  ],
+  "paths": {
+    "/geodata/elevation": {
+      "post": {
+        "tags": [
+          "Elevation"
+        ],
+        "operationId": "getElevations",
+        "summary": "Get elevations for multiple locations",
+        "description": "Returns terrain elevation for 1–1,000 geographic locations while preserving their input order.\n\n- Send locations as `[longitude, latitude]` arrays (recommended) or objects with numeric `lat` and `lon` fields.\n- `format=json` returns a `results` array. `format=geojson` returns one GeoJSON Point feature per input location.\n- `units=metric` returns elevation in meters (`m`); `units=imperial` returns rounded feet (`ft`).\n- Set `includeDistance=true` to include the distance from the previous location. The first result has distance `0`.\n- Elevation or distance can be `null` when the underlying terrain service has no value.\n\n**Example:** four locations northeast of San Antonio, Texas, requested as JSON with metric units.",
+        "requestBody": {
+          "required": true,
+          "description": "Elevation options and 1–1,000 input locations.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ElevationRequest"
+              },
+              "example": {
+                "format": "json",
+                "units": "metric",
+                "locations": [
+                  [
+                    -98.46045764038479,
+                    29.449545406273216
+                  ],
+                  [
+                    -98.37684875217269,
+                    29.52563189448243
+                  ],
+                  [
+                    -98.31794249002297,
+                    29.616529803295933
+                  ],
+                  [
+                    -98.26853723789759,
+                    29.765095100869075
+                  ]
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Elevation result in the requested format.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ElevationJsonResponse"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ElevationFeatureCollection"
+                    }
+                  ]
+                },
+                "example": {
+                  "results": [
+                    {
+                      "location": {
+                        "lon": -98.46045764038479,
+                        "lat": 29.449545406273216
+                      },
+                      "elevation": 226,
+                      "units": "m"
+                    },
+                    {
+                      "location": {
+                        "lon": -98.37684875217269,
+                        "lat": 29.52563189448243
+                      },
+                      "elevation": 240,
+                      "units": "m"
+                    },
+                    {
+                      "location": {
+                        "lon": -98.31794249002297,
+                        "lat": 29.616529803295933
+                      },
+                      "elevation": 253,
+                      "units": "m"
+                    },
+                    {
+                      "location": {
+                        "lon": -98.26853723789759,
+                        "lat": 29.765095100869075
+                      },
+                      "elevation": 333,
+                      "units": "m"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid JSON body, missing locations, invalid coordinates, or more than 1,000 locations.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GatewayError"
+                },
+                "examples": {
+                  "missingLocations": {
+                    "summary": "Missing required locations",
+                    "value": {
+                      "statusCode": 400,
+                      "error": "Bad Request",
+                      "message": "\"locations\" is required"
+                    }
+                  },
+                  "emptyLocations": {
+                    "summary": "Empty locations array",
+                    "value": {
+                      "statusCode": 400,
+                      "error": "Bad Request",
+                      "message": "\"locations\" must contain at least 1 items"
+                    }
+                  },
+                  "tooManyLocations": {
+                    "summary": "More than 1,000 locations",
+                    "value": {
+                      "statusCode": 400,
+                      "error": "Bad Request",
+                      "message": "\"locations\" must contain less than or equal to 1000 items"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid Geoapify API key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GatewayError"
+                },
+                "example": {
+                  "statusCode": 401,
+                  "error": "Unauthorized",
+                  "message": "Invalid apiKey"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit or quota exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GatewayError"
+                },
+                "example": {
+                  "statusCode": 429,
+                  "error": "Too Many Requests",
+                  "message": "Quota exceeded"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal gateway error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GatewayError"
+                },
+                "example": {
+                  "statusCode": 500,
+                  "error": "Internal Server Error",
+                  "message": "Request failed, please try again later"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ElevationRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "locations"
+        ],
+        "properties": {
+          "format": {
+            "type": "string",
+            "enum": [
+              "json",
+              "geojson"
+            ],
+            "default": "json",
+            "description": "Response representation. `json` returns a results array; `geojson` returns a FeatureCollection."
+          },
+          "units": {
+            "type": "string",
+            "enum": [
+              "metric",
+              "imperial"
+            ],
+            "default": "metric",
+            "description": "Elevation and optional distance units. Metric results use meters (`m`); imperial results use rounded feet (`ft`)."
+          },
+          "includeDistance": {
+            "type": "boolean",
+            "default": false,
+            "description": "When `true`, include the distance from the previous input location. The first result has distance `0`."
+          },
+          "locations": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 1000,
+            "description": "Ordered input locations. Use `[longitude, latitude]` arrays or objects with `lat` and `lon`. Results preserve this order.",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/Position"
+                },
+                {
+                  "$ref": "#/components/schemas/ElevationLocation"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "Position": {
+        "type": "array",
+        "minItems": 2,
+        "maxItems": 2,
+        "prefixItems": [
+          {
+            "type": "number",
+            "minimum": -180,
+            "maximum": 180,
+            "description": "Longitude."
+          },
+          {
+            "type": "number",
+            "minimum": -90,
+            "maximum": 90,
+            "description": "Latitude."
+          }
+        ],
+        "items": false,
+        "description": "Coordinate in GeoJSON order: `[longitude, latitude]`."
+      },
+      "ElevationLocation": {
+        "type": "object",
+        "additionalProperties": false,
+        "oneOf": [
+          {
+            "required": [
+              "lat",
+              "lon"
+            ]
+          },
+          {
+            "required": [
+              "latlon"
+            ]
+          },
+          {
+            "required": [
+              "lonlat"
+            ]
+          }
+        ],
+        "properties": {
+          "lat": {
+            "type": "number",
+            "minimum": -90,
+            "maximum": 90,
+            "description": "Latitude in decimal degrees."
+          },
+          "lon": {
+            "type": "number",
+            "minimum": -180,
+            "maximum": 180,
+            "description": "Longitude in decimal degrees."
+          },
+          "latlon": {
+            "description": "Legacy coordinate property. Values are processed in `[longitude, latitude]` order; prefer `lat` with `lon` or a direct coordinate array.",
+            "$ref": "#/components/schemas/Position"
+          },
+          "lonlat": {
+            "description": "Coordinate in `[longitude, latitude]` order.",
+            "$ref": "#/components/schemas/Position"
+          }
+        }
+      },
+      "ElevationResult": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "location",
+          "elevation",
+          "units"
+        ],
+        "properties": {
+          "location": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "lon",
+              "lat"
+            ],
+            "properties": {
+              "lon": {
+                "type": "number",
+                "minimum": -180,
+                "maximum": 180
+              },
+              "lat": {
+                "type": "number",
+                "minimum": -90,
+                "maximum": 90
+              }
+            }
+          },
+          "elevation": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "description": "Terrain elevation, or `null` when unavailable."
+          },
+          "units": {
+            "type": "string",
+            "enum": [
+              "m",
+              "ft"
+            ],
+            "description": "Elevation unit: meters or feet."
+          },
+          "distance": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "description": "Distance from the previous input location. Present when `includeDistance=true`; the first value is `0`."
+          },
+          "distance_units": {
+            "type": "string",
+            "enum": [
+              "m",
+              "ft"
+            ],
+            "description": "Distance unit: meters or feet. Present when `includeDistance=true`."
+          }
+        }
+      },
+      "ElevationJsonResponse": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "results"
+        ],
+        "properties": {
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ElevationResult"
+            }
+          }
+        }
+      },
+      "ElevationFeatureCollection": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "type",
+          "features"
+        ],
+        "properties": {
+          "type": {
+            "const": "FeatureCollection"
+          },
+          "features": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "type",
+                "properties",
+                "geometry"
+              ],
+              "properties": {
+                "type": {
+                  "const": "Feature"
+                },
+                "properties": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "elevation": {
+                      "type": [
+                        "number",
+                        "null"
+                      ]
+                    },
+                    "units": {
+                      "type": "string",
+                      "enum": [
+                        "m",
+                        "ft"
+                      ]
+                    },
+                    "distance": {
+                      "type": [
+                        "number",
+                        "null"
+                      ]
+                    },
+                    "distance_units": {
+                      "type": "string",
+                      "enum": [
+                        "m",
+                        "ft"
+                      ]
+                    }
+                  }
+                },
+                "geometry": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "type",
+                    "coordinates"
+                  ],
+                  "properties": {
+                    "type": {
+                      "const": "Point"
+                    },
+                    "coordinates": {
+                      "$ref": "#/components/schemas/Position"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "GatewayError": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "statusCode",
+          "error",
+          "message"
+        ],
+        "properties": {
+          "statusCode": {
+            "type": "integer",
+            "description": "HTTP status code returned by the API gateway."
+          },
+          "error": {
+            "type": "string",
+            "description": "Standard HTTP error name."
+          },
+          "message": {
+            "type": "string",
+            "description": "Human-readable explanation of the error."
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "ApiKeyInQuery": {
+        "type": "apiKey",
+        "in": "query",
+        "name": "apiKey",
+        "description": "Geoapify API key query parameter. Recommended authentication method for public APIs. API keys in URLs can be logged; use x-api-key for server-to-server clients."
+      },
+      "ApiKeyInHeader": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "x-api-key",
+        "description": "Geoapify API key header. Supported as an alternative authentication method for public APIs."
+      }
+    }
+  },
+  "security": [
+    {
+      "ApiKeyInQuery": []
+    },
+    {
+      "ApiKeyInHeader": []
+    }
+  ]
+}

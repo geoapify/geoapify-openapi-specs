@@ -1,121 +1,108 @@
-# Geoapify OpenAPI Specifications
+# Geoapify OpenAPI specifications
 
-## Overview
-The **Geoapify OpenAPI Specifications** repository provides detailed OpenAPI documentation for interacting with Geoapify's geolocation services. These services include routing, geocoding, map data, and more. Developers can use these specifications to generate API client libraries, explore endpoints, and integrate Geoapify's geolocation capabilities into their applications.
+Machine-readable [OpenAPI 3.1](https://spec.openapis.org/oas/v3.1.0) definitions for Geoapify APIs and MCP tools. Use them to discover endpoints, inspect request and response schemas, generate clients, or provide tools to an AI agent.
 
-The Geoapify OpenAPI specifications provide a convenient way to interact with the Geoapify geolocation services, including:
+[![Open API Explorer](https://img.shields.io/badge/Open_API_Explorer-Open_in_GitHub_Pages-1f6bff?style=for-the-badge&logo=swagger&logoColor=white)](https://geoapify.github.io/geoapify-openapi-specs/)
 
-- [Address Autocomplete API](https://apidocs.geoapify.com/docs/geocoding/address-autocomplete/)
-- [Batch Geocoding API](https://apidocs.geoapify.com/docs/geocoding/batch/)
-- [Forward Geocoding API](https://apidocs.geoapify.com/docs/geocoding/forward-geocoding/)
-- [Reverse Geocoding API](https://apidocs.geoapify.com/docs/geocoding/reverse-geocoding/)
-- [IP Geolocation API](https://apidocs.geoapify.com/docs/ip-geolocation/)
-- [Routing API](https://apidocs.geoapify.com/docs/routing/)
-- [Route Matrix API](https://apidocs.geoapify.com/docs/route-matrix/)
-- [Map Matching API](https://apidocs.geoapify.com/docs/map-matching/)
-- [Route Planner API](https://apidocs.geoapify.com/docs/route-planner/)
-- [Isoline API](https://apidocs.geoapify.com/docs/isolines/)
-- [Places API](https://apidocs.geoapify.com/docs/places/)
+The specifications in `api-specs/` are generated artifacts. Their schemas are authoritative; this README provides discovery and usage guidance.
 
-## Before You Start
+## AI and agent quick start
 
-### API Key Setup
+Start with [`api-specs/index.json`](api-specs/index.json), the machine-readable catalog of every specification in this repository.
 
-Before using Geoapify APIs, you’ll need an API key for authentication. In the provided specs, replace the `YOUR_API_KEY` placeholder in any requests with your actual API key. You can obtain a free API key by signing up at [Geoapify](https://myprojects.geoapify.com/).
+1. Match the task to an entry using its `id`, `category`, and `description`.
+2. Load the file named by `openApiSpec`. Paths are relative to `api-specs/index.json`.
+3. Load only the selected specification unless the task requires multiple APIs. This reduces context use and avoids exposing unrelated operations to the agent.
+4. Treat the selected OpenAPI document as the source of truth for endpoints, parameters, authentication, and schemas. Use `documentationUrl` for guides and examples.
+5. Never invent an endpoint or parameter that is absent from the selected specification.
 
----
-
-## How to Use the Specs
-
-### Open Online with Swagger Editor
-
-Alternatively, you can open the specifications directly using the **online Swagger editor**:
-
-1. Go to [https://editor.swagger.io/](https://editor.swagger.io/).
-2. Click on **File** in the top-left menu.
-3. Choose **Import URL**.
-4. Enter the URL of the raw OpenAPI spec file hosted in this repository. For example:
-
-```
-https://raw.githubusercontent.com/geoapify/geoapify-openapi-specs/refs/heads/main/api-specs/geocoding/forward_geocoding.yaml
-```
-
-This will load the specifications into the editor, where you can view, edit, and interact with the API.
-
-You can also generate client code directly from the **Swagger Editor**:
-
-1. Once the specifications are loaded, click the **Generate Client** button at the top.
-2. Select the desired language from the dropdown list (e.g., `JavaScript`, `Python`, `Java`).
-3. The generated client code will be downloaded as a ZIP file.
-
----
-
-### Use Swagger UI Locally
-
-You can explore the API specifications locally by using a simple HTTP server.
-
-To get started, clone the repository and install the necessary dependencies.
+Example discovery with `jq`:
 
 ```bash
-git clone https://github.com/geoapify/geoapify-openapi-specs.git
-cd geoapify-openapi-specs
+# List available specifications
+jq -r '.apis[] | [.id, .title, .openApiSpec] | @tsv' api-specs/index.json
+
+# Find routing-related specifications
+jq '.apis[] | select((.id + " " + .description) | test("route|routing"; "i"))' api-specs/index.json
+```
+
+### Choosing an MCP specification
+
+Use [`api-specs/mcp/tools/index.json`](api-specs/mcp/tools/index.json) to choose an MCP tool. Its descriptions explain when to use each tool and when another tool is a better match.
+
+- Use a focused file under `api-specs/mcp/tools/` when an AI workflow needs one or a small number of tools. These definitions have explicit, typed operations and use less schema context.
+- Use [`api-specs/mcp/mcp-api-openapi-specs.json`](api-specs/mcp/mcp-api-openapi-specs.json) when implementing or inspecting the complete MCP JSON-RPC endpoint. It contains all tool schemas behind one `POST /mcp` operation.
+
+The focused files and aggregate MCP file describe the same service for different consumers. Keep both.
+
+## Specification catalog
+
+The catalog currently covers these groups:
+
+| Group | APIs |
+| --- | --- |
+| Geocoding | Address Autocomplete, Batch Geocoding, Forward Geocoding, Reverse Geocoding |
+| Routing | Routing, Route Matrix, Route Planner, Map Matching, Isoline |
+| Places and location data | Places, Place Details, Place Info, Boundaries, Postcode, IP Geolocation, Elevation |
+| Maps and geometry | Map Tiles, Static Maps, Map Marker, Geometry, Geometry Operations |
+| Request orchestration | Batch API |
+| MCP | Complete protocol specification and focused tool specifications |
+
+Do not maintain a second exhaustive file list in this README. `api-specs/index.json` is generated with the specifications and prevents discovery information from drifting out of date.
+
+## Authentication
+
+Create an API key in the [Geoapify Projects dashboard](https://myprojects.geoapify.com/). Public API specifications support the authentication methods declared in each document, commonly:
+
+- Query parameter: `apiKey=YOUR_API_KEY`
+- Request header: `x-api-key: YOUR_API_KEY`
+
+The header is preferable for server-to-server clients because URLs may be stored in logs, browser history, and analytics systems. Browser integrations may use the query parameter where required. MCP specifications use the `x-api-key` header.
+
+Never commit a real API key to source control or embed a secret server key in public client code.
+
+## Browse the specifications
+
+Install dependencies and start the local Swagger UI:
+
+```bash
 npm install
-```
-
-Run the following command to start the local server:
-
-```bash
 npm start
 ```
 
-After running the command, the specs will be available in your browser at:
+Then open [http://localhost:8080/docs/index.html](http://localhost:8080/docs/index.html). The bundled Swagger UI supports the OpenAPI 3.1 definitions in this repository.
 
-```bash
-http://localhost:8080/docs/index.html
+To use [Swagger Editor](https://editor.swagger.io/), import a raw specification URL such as:
+
+```text
+https://raw.githubusercontent.com/geoapify/geoapify-openapi-specs/main/api-specs/forward-geocoding/forward-geocoding-api-openapi-specs.json
 ```
 
-This will open an interactive Swagger UI, allowing you to view and interact with the OpenAPI specs for Geoapify services.
+## Generate a client
 
-### Generating Code Locally with OpenAPI Generator
-
-You can generate client code from the provided OpenAPI specs for different programming languages using **OpenAPI Generator**.
-
-1. **Install OpenAPI Generator** if you don't have it:
+Use a generator and target that support OpenAPI 3.1. For example, with [OpenAPI Generator](https://openapi-generator.tech/):
 
 ```bash
-npm install @openapitools/openapi-generator-cli -g
+npx @openapitools/openapi-generator-cli generate \
+  -i api-specs/forward-geocoding/forward-geocoding-api-openapi-specs.json \
+  -g typescript-fetch \
+  -o generated-client
 ```
 
-2. **Generate client code**:
+Generated clients may still require project-specific configuration, authentication handling, and runtime validation.
 
-```bash
-openapi-generator-cli generate -i api-specs/forward_geocoding.yaml -g <language> -o ./generated-client
-```
+## Validate the specifications
 
-Replace `<language>` with the language of your choice (e.g., `javascript`, `python`, `java`).
-
-For more detailed options, refer to the [OpenAPI Generator documentation](https://openapi-generator.tech/docs/generators).
-
----
-
-### Running Lint and Validation
-
-To ensure the OpenAPI specifications conform to best practices, you can run the following command to lint the API specs:
+Run the repository's Spectral rules against all OpenAPI files:
 
 ```bash
 npm run lint
 ```
 
-This will use **Spectral** to lint the specs against the rules defined in `ruleset.spectral.yaml`.
+## Contributing
 
----
+The specifications and discovery catalogs are generated artifacts. For schema changes, update the source and regenerate them instead of patching generated JSON. For repository tooling or documentation changes, open an issue or pull request in this repository.
 
-### Contributing
+## License
 
-We welcome contributions! If you have suggestions, bug reports, or ideas for improving the specs, feel free to open an issue or submit a pull request. 
-
----
-
-### License
-
-This repository is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
+This repository is licensed under the [MIT License](LICENSE).

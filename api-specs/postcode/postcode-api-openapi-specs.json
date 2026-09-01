@@ -1,0 +1,2361 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Geoapify Postcode API",
+    "version": "1.0.0",
+    "description": "OpenAPI specification for Geoapify postcode search and autocomplete endpoints."
+  },
+  "servers": [
+    {
+      "url": "https://api.geoapify.com/v1",
+      "description": "Default API endpoint."
+    },
+    {
+      "url": "https://api-eu.geoapify.com/v1",
+      "description": "EU-focused endpoint. Geoapify service processing uses EU infrastructure."
+    }
+  ],
+  "tags": [
+    {
+      "name": "Postcode",
+      "description": "Search and list postcode results."
+    }
+  ],
+  "paths": {
+    "/postcode/search": {
+      "get": {
+        "tags": [
+          "Postcode"
+        ],
+        "operationId": "searchPostcodes",
+        "summary": "Search postcodes",
+        "description": "Searches for postcode features by postcode text or geographic coordinates.\n\n- Provide `postcode`, or provide both `lat` and `lon`.\n- Do not combine `postcode` with coordinate search.\n- Use `geometry=point` for a point representation or `geometry=original` for source geometry.\n\n**Example:** `postcode=10117`",
+        "parameters": [
+          {
+            "name": "postcode",
+            "in": "query",
+            "required": false,
+            "description": "Postcode text to search. Mutually exclusive with lat/lon coordinate search.",
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1024
+            },
+            "example": "10117"
+          },
+          {
+            "name": "lat",
+            "in": "query",
+            "required": false,
+            "description": "Latitude for reverse postcode search. Must be used together with lon and without postcode.",
+            "schema": {
+              "type": "number",
+              "minimum": -90,
+              "maximum": 90
+            }
+          },
+          {
+            "name": "lon",
+            "in": "query",
+            "required": false,
+            "description": "Longitude for reverse postcode search. Must be used together with lat and without postcode.",
+            "schema": {
+              "type": "number",
+              "minimum": -180,
+              "maximum": 180
+            }
+          },
+          {
+            "name": "countrycode",
+            "in": "query",
+            "required": false,
+            "description": "Optional ISO 3166-1 alpha-2 country code filter.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "ad",
+                "ae",
+                "af",
+                "ag",
+                "ai",
+                "al",
+                "am",
+                "an",
+                "ao",
+                "ap",
+                "aq",
+                "ar",
+                "as",
+                "at",
+                "au",
+                "aw",
+                "az",
+                "ba",
+                "bb",
+                "bd",
+                "be",
+                "bf",
+                "bg",
+                "bh",
+                "bi",
+                "bj",
+                "bm",
+                "bn",
+                "bo",
+                "br",
+                "bs",
+                "bt",
+                "bv",
+                "bw",
+                "by",
+                "bz",
+                "ca",
+                "cc",
+                "cd",
+                "cf",
+                "cg",
+                "ch",
+                "ci",
+                "ck",
+                "cl",
+                "cm",
+                "cn",
+                "co",
+                "cr",
+                "cu",
+                "cv",
+                "cx",
+                "cy",
+                "cz",
+                "de",
+                "dj",
+                "dk",
+                "dm",
+                "do",
+                "dz",
+                "ec",
+                "ee",
+                "eg",
+                "eh",
+                "er",
+                "es",
+                "et",
+                "eu",
+                "fi",
+                "fj",
+                "fk",
+                "fm",
+                "fo",
+                "fr",
+                "ga",
+                "gb",
+                "gd",
+                "ge",
+                "gf",
+                "gg",
+                "gh",
+                "gi",
+                "gl",
+                "gm",
+                "gn",
+                "gp",
+                "gq",
+                "gr",
+                "gs",
+                "gt",
+                "gu",
+                "gw",
+                "gy",
+                "hk",
+                "hm",
+                "hn",
+                "hr",
+                "ht",
+                "hu",
+                "id",
+                "ie",
+                "im",
+                "il",
+                "in",
+                "io",
+                "iq",
+                "ir",
+                "is",
+                "it",
+                "je",
+                "jm",
+                "jo",
+                "jp",
+                "ke",
+                "kg",
+                "kh",
+                "ki",
+                "km",
+                "kn",
+                "kp",
+                "kr",
+                "kw",
+                "ky",
+                "kz",
+                "la",
+                "lb",
+                "lc",
+                "li",
+                "lk",
+                "lr",
+                "ls",
+                "lt",
+                "lu",
+                "lv",
+                "ly",
+                "ma",
+                "mc",
+                "md",
+                "me",
+                "mg",
+                "mh",
+                "mk",
+                "ml",
+                "mm",
+                "mn",
+                "mo",
+                "mp",
+                "mq",
+                "mr",
+                "ms",
+                "mt",
+                "mu",
+                "mv",
+                "mw",
+                "mx",
+                "my",
+                "mz",
+                "na",
+                "nc",
+                "ne",
+                "nf",
+                "ng",
+                "ni",
+                "nl",
+                "no",
+                "np",
+                "nr",
+                "nu",
+                "nz",
+                "om",
+                "pa",
+                "pe",
+                "pf",
+                "pg",
+                "ph",
+                "pk",
+                "pl",
+                "pm",
+                "pr",
+                "ps",
+                "pt",
+                "pw",
+                "py",
+                "qa",
+                "re",
+                "ro",
+                "rs",
+                "ru",
+                "rw",
+                "sa",
+                "sb",
+                "sc",
+                "sd",
+                "se",
+                "sg",
+                "sh",
+                "si",
+                "sj",
+                "sk",
+                "sl",
+                "sm",
+                "sn",
+                "so",
+                "sr",
+                "st",
+                "sv",
+                "sy",
+                "sz",
+                "tc",
+                "td",
+                "tf",
+                "tg",
+                "th",
+                "tj",
+                "tk",
+                "tm",
+                "tn",
+                "to",
+                "tr",
+                "tt",
+                "tv",
+                "tw",
+                "tz",
+                "ua",
+                "ug",
+                "um",
+                "us",
+                "uy",
+                "uz",
+                "va",
+                "vc",
+                "ve",
+                "vg",
+                "vi",
+                "vn",
+                "vu",
+                "wf",
+                "ws",
+                "ye",
+                "yt",
+                "za",
+                "zm",
+                "zw"
+              ]
+            },
+            "example": "de"
+          },
+          {
+            "name": "lang",
+            "in": "query",
+            "required": false,
+            "description": "Result language as a supported two-letter language code.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "ab",
+                "aa",
+                "af",
+                "ak",
+                "sq",
+                "am",
+                "ar",
+                "an",
+                "hy",
+                "as",
+                "av",
+                "ae",
+                "ay",
+                "az",
+                "bm",
+                "ba",
+                "eu",
+                "be",
+                "bn",
+                "bh",
+                "bi",
+                "bs",
+                "br",
+                "bg",
+                "my",
+                "ca",
+                "ch",
+                "ce",
+                "ny",
+                "zh",
+                "cv",
+                "kw",
+                "co",
+                "cr",
+                "hr",
+                "cs",
+                "da",
+                "dv",
+                "nl",
+                "en",
+                "eo",
+                "et",
+                "ee",
+                "fo",
+                "fj",
+                "fi",
+                "fr",
+                "ff",
+                "gl",
+                "ka",
+                "de",
+                "el",
+                "gn",
+                "gu",
+                "ht",
+                "ha",
+                "he",
+                "hz",
+                "hi",
+                "ho",
+                "hu",
+                "ia",
+                "id",
+                "ie",
+                "ga",
+                "ig",
+                "ik",
+                "io",
+                "is",
+                "it",
+                "iu",
+                "ja",
+                "jv",
+                "kl",
+                "kn",
+                "kr",
+                "ks",
+                "kk",
+                "km",
+                "ki",
+                "rw",
+                "ky",
+                "kv",
+                "kg",
+                "ko",
+                "ku",
+                "kj",
+                "la",
+                "lb",
+                "lg",
+                "li",
+                "ln",
+                "lo",
+                "lt",
+                "lu",
+                "lv",
+                "gv",
+                "mk",
+                "mg",
+                "ms",
+                "ml",
+                "mt",
+                "mi",
+                "mr",
+                "mh",
+                "mn",
+                "na",
+                "nv",
+                "nb",
+                "nd",
+                "ne",
+                "ng",
+                "nn",
+                "no",
+                "ii",
+                "nr",
+                "oc",
+                "oj",
+                "cu",
+                "om",
+                "or",
+                "os",
+                "pa",
+                "pi",
+                "fa",
+                "pl",
+                "ps",
+                "pt",
+                "qu",
+                "rm",
+                "rn",
+                "ro",
+                "ru",
+                "sa",
+                "sc",
+                "sd",
+                "se",
+                "sm",
+                "sg",
+                "sr",
+                "gd",
+                "sn",
+                "si",
+                "sk",
+                "sl",
+                "so",
+                "st",
+                "es",
+                "su",
+                "sw",
+                "ss",
+                "sv",
+                "ta",
+                "te",
+                "tg",
+                "th",
+                "ti",
+                "bo",
+                "tk",
+                "tl",
+                "tn",
+                "to",
+                "tr",
+                "ts",
+                "tt",
+                "tw",
+                "ty",
+                "ug",
+                "uk",
+                "ur",
+                "uz",
+                "ve",
+                "vi",
+                "vo",
+                "wa",
+                "cy",
+                "wo",
+                "fy",
+                "xh",
+                "yi",
+                "yo",
+                "za"
+              ],
+              "default": "en"
+            },
+            "example": "en"
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "required": false,
+            "description": "Response format.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "json",
+                "geojson",
+                "xml"
+              ],
+              "default": "geojson"
+            }
+          },
+          {
+            "name": "geometry",
+            "in": "query",
+            "required": false,
+            "description": "Postcode geometry representation. Use point for centroid geometry or original for source geometry.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "point",
+                "original"
+              ],
+              "default": "point"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Postcode search result in the requested format.",
+            "content": {
+              "application/geo+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PostcodeFeatureCollection"
+                },
+                "example": {
+                  "type": "FeatureCollection",
+                  "features": [
+                    {
+                      "type": "Feature",
+                      "properties": {
+                        "datasource": {
+                          "sourcename": "openstreetmap",
+                          "attribution": "© OpenStreetMap contributors",
+                          "license": "Open Database License",
+                          "url": "https://www.openstreetmap.org/copyright"
+                        },
+                        "postcode": "10117",
+                        "ref": "10117",
+                        "country": "Germany",
+                        "country_code": "de",
+                        "city": "Berlin",
+                        "district": "Mitte",
+                        "suburb": "Mitte",
+                        "iso3166_2": "DE-BE",
+                        "lon": 13.387368588217525,
+                        "lat": 52.519693726586084,
+                        "state": "Berlin",
+                        "state_code": "BE",
+                        "formatted": "10117 Berlin, Germany",
+                        "address_line1": "10117 Berlin",
+                        "address_line2": "Germany",
+                        "timezone": {
+                          "name": "Europe/Berlin",
+                          "offset_STD": "+01:00",
+                          "offset_DST": "+02:00",
+                          "offset_STD_seconds": 3600,
+                          "offset_DST_seconds": 7200,
+                          "abbreviation_STD": "CET",
+                          "abbreviation_DST": "CEST"
+                        },
+                        "plus_code": "9F4MG99P+VW",
+                        "plus_code_short": "G99P+VW Berlin, Germany",
+                        "place_id": "51afc8f32c55c62a4059d2cff35285424a40f00101f9012e65150000000000c0020792030831303131372b6465"
+                      },
+                      "geometry": {
+                        "type": "Feature",
+                        "properties": {},
+                        "geometry": {
+                          "type": "Point",
+                          "coordinates": [
+                            13.387368588217525,
+                            52.519693726586084
+                          ]
+                        }
+                      },
+                      "bbox": [
+                        13.3873055,
+                        52.5168623,
+                        13.3874055,
+                        52.5169623
+                      ]
+                    }
+                  ]
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PostcodeJsonResponse"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing or invalid postcode search parameters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GatewayError"
+                },
+                "example": {
+                  "statusCode": 400,
+                  "error": "Bad Request",
+                  "message": "\"value\" must contain at least one of [postcode, lat]"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid Geoapify API key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GatewayError"
+                },
+                "example": {
+                  "statusCode": 401,
+                  "error": "Unauthorized",
+                  "message": "Invalid apiKey"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit or quota exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GatewayError"
+                },
+                "example": {
+                  "statusCode": 429,
+                  "error": "Too Many Requests",
+                  "message": "Quota exceeded"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal gateway error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GatewayError"
+                },
+                "example": {
+                  "statusCode": 500,
+                  "error": "Internal Server Error",
+                  "message": "Request failed, please try again later"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/postcode/list": {
+      "get": {
+        "tags": [
+          "Postcode"
+        ],
+        "operationId": "listPostcodes",
+        "summary": "List postcodes",
+        "description": "Lists postcode features using optional text, spatial, and country constraints.\n\n- `filter` restricts which results are returned.\n- `bias` influences result order without excluding matches.\n- Use `limit` and `offset` to paginate results.\n- Use `geometry=point` for point representations or `geometry=original` for source geometry.",
+        "parameters": [
+          {
+            "name": "text",
+            "in": "query",
+            "required": false,
+            "description": "Free-text postcode query.",
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1024
+            },
+            "example": "101"
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "description": "Optional spatial or place filter. Supported values include rect:lon1,lat1,lon2,lat2, circle:lon,lat,radius, and place:place_id. Multiple filters can be repeated or separated with |.",
+            "style": "pipeDelimited",
+            "explode": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^(rect:-?\\d+(\\.\\d+)?,-?\\d+(\\.\\d+)?,-?\\d+(\\.\\d+)?,-?\\d+(\\.\\d+)?|circle:-?\\d+(\\.\\d+)?,-?\\d+(\\.\\d+)?,\\d+(\\.\\d+)?|place:?[a-f0-9]{2,2048})$"
+              }
+            },
+            "examples": {
+              "rectangle": {
+                "summary": "Rectangle filter",
+                "value": [
+                  "rect:13.0884,52.3383,13.7611,52.6755"
+                ]
+              },
+              "circle": {
+                "summary": "Circle filter",
+                "value": [
+                  "circle:13.405,52.52,5000"
+                ]
+              },
+              "place": {
+                "summary": "Place filter",
+                "value": [
+                  "place:51f076656bb5d12a4059dc0a6139b98e4a40f00101f90123"
+                ]
+              }
+            }
+          },
+          {
+            "name": "bias",
+            "in": "query",
+            "required": false,
+            "description": "Optional result bias. Supported values include proximity:lon,lat, circle:lon,lat,radius, and rect:lon1,lat1,lon2,lat2. Multiple bias values can be repeated or separated with |.",
+            "style": "pipeDelimited",
+            "explode": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^(proximity:-?\\d+(\\.\\d+)?,-?\\d+(\\.\\d+)?|rect:-?\\d+(\\.\\d+)?,-?\\d+(\\.\\d+)?,-?\\d+(\\.\\d+)?,-?\\d+(\\.\\d+)?|circle:-?\\d+(\\.\\d+)?,-?\\d+(\\.\\d+)?,\\d+(\\.\\d+)?)$"
+              }
+            },
+            "examples": {
+              "proximity": {
+                "summary": "Proximity bias",
+                "value": [
+                  "proximity:13.405,52.52"
+                ]
+              },
+              "circle": {
+                "summary": "Circle bias",
+                "value": [
+                  "circle:13.405,52.52,5000"
+                ]
+              }
+            }
+          },
+          {
+            "name": "countrycode",
+            "in": "query",
+            "required": false,
+            "description": "Optional ISO 3166-1 alpha-2 country code filter.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "ad",
+                "ae",
+                "af",
+                "ag",
+                "ai",
+                "al",
+                "am",
+                "an",
+                "ao",
+                "ap",
+                "aq",
+                "ar",
+                "as",
+                "at",
+                "au",
+                "aw",
+                "az",
+                "ba",
+                "bb",
+                "bd",
+                "be",
+                "bf",
+                "bg",
+                "bh",
+                "bi",
+                "bj",
+                "bm",
+                "bn",
+                "bo",
+                "br",
+                "bs",
+                "bt",
+                "bv",
+                "bw",
+                "by",
+                "bz",
+                "ca",
+                "cc",
+                "cd",
+                "cf",
+                "cg",
+                "ch",
+                "ci",
+                "ck",
+                "cl",
+                "cm",
+                "cn",
+                "co",
+                "cr",
+                "cu",
+                "cv",
+                "cx",
+                "cy",
+                "cz",
+                "de",
+                "dj",
+                "dk",
+                "dm",
+                "do",
+                "dz",
+                "ec",
+                "ee",
+                "eg",
+                "eh",
+                "er",
+                "es",
+                "et",
+                "eu",
+                "fi",
+                "fj",
+                "fk",
+                "fm",
+                "fo",
+                "fr",
+                "ga",
+                "gb",
+                "gd",
+                "ge",
+                "gf",
+                "gg",
+                "gh",
+                "gi",
+                "gl",
+                "gm",
+                "gn",
+                "gp",
+                "gq",
+                "gr",
+                "gs",
+                "gt",
+                "gu",
+                "gw",
+                "gy",
+                "hk",
+                "hm",
+                "hn",
+                "hr",
+                "ht",
+                "hu",
+                "id",
+                "ie",
+                "im",
+                "il",
+                "in",
+                "io",
+                "iq",
+                "ir",
+                "is",
+                "it",
+                "je",
+                "jm",
+                "jo",
+                "jp",
+                "ke",
+                "kg",
+                "kh",
+                "ki",
+                "km",
+                "kn",
+                "kp",
+                "kr",
+                "kw",
+                "ky",
+                "kz",
+                "la",
+                "lb",
+                "lc",
+                "li",
+                "lk",
+                "lr",
+                "ls",
+                "lt",
+                "lu",
+                "lv",
+                "ly",
+                "ma",
+                "mc",
+                "md",
+                "me",
+                "mg",
+                "mh",
+                "mk",
+                "ml",
+                "mm",
+                "mn",
+                "mo",
+                "mp",
+                "mq",
+                "mr",
+                "ms",
+                "mt",
+                "mu",
+                "mv",
+                "mw",
+                "mx",
+                "my",
+                "mz",
+                "na",
+                "nc",
+                "ne",
+                "nf",
+                "ng",
+                "ni",
+                "nl",
+                "no",
+                "np",
+                "nr",
+                "nu",
+                "nz",
+                "om",
+                "pa",
+                "pe",
+                "pf",
+                "pg",
+                "ph",
+                "pk",
+                "pl",
+                "pm",
+                "pr",
+                "ps",
+                "pt",
+                "pw",
+                "py",
+                "qa",
+                "re",
+                "ro",
+                "rs",
+                "ru",
+                "rw",
+                "sa",
+                "sb",
+                "sc",
+                "sd",
+                "se",
+                "sg",
+                "sh",
+                "si",
+                "sj",
+                "sk",
+                "sl",
+                "sm",
+                "sn",
+                "so",
+                "sr",
+                "st",
+                "sv",
+                "sy",
+                "sz",
+                "tc",
+                "td",
+                "tf",
+                "tg",
+                "th",
+                "tj",
+                "tk",
+                "tm",
+                "tn",
+                "to",
+                "tr",
+                "tt",
+                "tv",
+                "tw",
+                "tz",
+                "ua",
+                "ug",
+                "um",
+                "us",
+                "uy",
+                "uz",
+                "va",
+                "vc",
+                "ve",
+                "vg",
+                "vi",
+                "vn",
+                "vu",
+                "wf",
+                "ws",
+                "ye",
+                "yt",
+                "za",
+                "zm",
+                "zw"
+              ]
+            },
+            "example": "de"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "description": "Maximum number of postcode results to return.",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 500,
+              "default": 5
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "description": "Number of matching results to skip.",
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0
+            }
+          },
+          {
+            "name": "lang",
+            "in": "query",
+            "required": false,
+            "description": "Result language as a supported two-letter language code.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "ab",
+                "aa",
+                "af",
+                "ak",
+                "sq",
+                "am",
+                "ar",
+                "an",
+                "hy",
+                "as",
+                "av",
+                "ae",
+                "ay",
+                "az",
+                "bm",
+                "ba",
+                "eu",
+                "be",
+                "bn",
+                "bh",
+                "bi",
+                "bs",
+                "br",
+                "bg",
+                "my",
+                "ca",
+                "ch",
+                "ce",
+                "ny",
+                "zh",
+                "cv",
+                "kw",
+                "co",
+                "cr",
+                "hr",
+                "cs",
+                "da",
+                "dv",
+                "nl",
+                "en",
+                "eo",
+                "et",
+                "ee",
+                "fo",
+                "fj",
+                "fi",
+                "fr",
+                "ff",
+                "gl",
+                "ka",
+                "de",
+                "el",
+                "gn",
+                "gu",
+                "ht",
+                "ha",
+                "he",
+                "hz",
+                "hi",
+                "ho",
+                "hu",
+                "ia",
+                "id",
+                "ie",
+                "ga",
+                "ig",
+                "ik",
+                "io",
+                "is",
+                "it",
+                "iu",
+                "ja",
+                "jv",
+                "kl",
+                "kn",
+                "kr",
+                "ks",
+                "kk",
+                "km",
+                "ki",
+                "rw",
+                "ky",
+                "kv",
+                "kg",
+                "ko",
+                "ku",
+                "kj",
+                "la",
+                "lb",
+                "lg",
+                "li",
+                "ln",
+                "lo",
+                "lt",
+                "lu",
+                "lv",
+                "gv",
+                "mk",
+                "mg",
+                "ms",
+                "ml",
+                "mt",
+                "mi",
+                "mr",
+                "mh",
+                "mn",
+                "na",
+                "nv",
+                "nb",
+                "nd",
+                "ne",
+                "ng",
+                "nn",
+                "no",
+                "ii",
+                "nr",
+                "oc",
+                "oj",
+                "cu",
+                "om",
+                "or",
+                "os",
+                "pa",
+                "pi",
+                "fa",
+                "pl",
+                "ps",
+                "pt",
+                "qu",
+                "rm",
+                "rn",
+                "ro",
+                "ru",
+                "sa",
+                "sc",
+                "sd",
+                "se",
+                "sm",
+                "sg",
+                "sr",
+                "gd",
+                "sn",
+                "si",
+                "sk",
+                "sl",
+                "so",
+                "st",
+                "es",
+                "su",
+                "sw",
+                "ss",
+                "sv",
+                "ta",
+                "te",
+                "tg",
+                "th",
+                "ti",
+                "bo",
+                "tk",
+                "tl",
+                "tn",
+                "to",
+                "tr",
+                "ts",
+                "tt",
+                "tw",
+                "ty",
+                "ug",
+                "uk",
+                "ur",
+                "uz",
+                "ve",
+                "vi",
+                "vo",
+                "wa",
+                "cy",
+                "wo",
+                "fy",
+                "xh",
+                "yi",
+                "yo",
+                "za"
+              ],
+              "default": "en"
+            },
+            "example": "en"
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "required": false,
+            "description": "Response format.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "json",
+                "geojson",
+                "xml"
+              ],
+              "default": "geojson"
+            }
+          },
+          {
+            "name": "geometry",
+            "in": "query",
+            "required": false,
+            "description": "Postcode geometry representation. Use point for centroid geometry or original for source geometry.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "point",
+                "original"
+              ],
+              "default": "point"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Postcode list result in the requested format.",
+            "content": {
+              "application/geo+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PostcodeFeatureCollection"
+                },
+                "example": {
+                  "type": "FeatureCollection",
+                  "features": [
+                    {
+                      "type": "Feature",
+                      "properties": {
+                        "datasource": {
+                          "sourcename": "openstreetmap",
+                          "attribution": "© OpenStreetMap contributors",
+                          "license": "Open Database License",
+                          "url": "https://www.openstreetmap.org/copyright"
+                        },
+                        "postcode": "10178",
+                        "distance": 0,
+                        "ref": "10178",
+                        "country": "Germany",
+                        "country_code": "de",
+                        "city": "Berlin",
+                        "district": "Mitte",
+                        "suburb": "Mitte",
+                        "iso3166_2": "DE-BE",
+                        "lon": 13.409201028424656,
+                        "lat": 52.52275825582191,
+                        "state": "Berlin",
+                        "state_code": "BE",
+                        "formatted": "10178 Berlin, Germany",
+                        "address_line1": "10178 Berlin",
+                        "address_line2": "Germany",
+                        "timezone": {
+                          "name": "Europe/Berlin",
+                          "offset_STD": "+01:00",
+                          "offset_DST": "+02:00",
+                          "offset_STD_seconds": 3600,
+                          "offset_DST_seconds": 7200,
+                          "abbreviation_STD": "CET",
+                          "abbreviation_DST": "CEST"
+                        },
+                        "plus_code": "9F4MGCF5+4M",
+                        "plus_code_short": "F5+4M Berlin, Germany",
+                        "place_id": "519d2515cc82d12a40590c3c16bee9424a40f00101f9011065150000000000c0020792030831303137382b6465"
+                      },
+                      "geometry": {
+                        "type": "Feature",
+                        "properties": {},
+                        "geometry": {
+                          "type": "Point",
+                          "coordinates": [
+                            13.409201028424656,
+                            52.52275825582191
+                          ]
+                        }
+                      },
+                      "bbox": [
+                        13.4097489,
+                        52.5212345,
+                        13.4098489,
+                        52.5213345
+                      ]
+                    },
+                    {
+                      "type": "Feature",
+                      "properties": {
+                        "datasource": {
+                          "sourcename": "openstreetmap",
+                          "attribution": "© OpenStreetMap contributors",
+                          "license": "Open Database License",
+                          "url": "https://www.openstreetmap.org/copyright"
+                        },
+                        "postcode": "10179",
+                        "distance": 385.69837717,
+                        "ref": "10179",
+                        "country": "Germany",
+                        "country_code": "de",
+                        "city": "Berlin",
+                        "district": "Mitte",
+                        "suburb": "Mitte",
+                        "iso3166_2": "DE-BE",
+                        "lon": 13.414647452238802,
+                        "lat": 52.512734630596995,
+                        "state": "Berlin",
+                        "state_code": "BE",
+                        "formatted": "10179 Berlin, Germany",
+                        "address_line1": "10179 Berlin",
+                        "address_line2": "Germany",
+                        "timezone": {
+                          "name": "Europe/Berlin",
+                          "offset_STD": "+01:00",
+                          "offset_DST": "+02:00",
+                          "offset_STD_seconds": 3600,
+                          "offset_DST_seconds": 7200,
+                          "abbreviation_STD": "CET",
+                          "abbreviation_DST": "CEST"
+                        },
+                        "plus_code": "9F4MGC77+3V",
+                        "plus_code_short": "77+3V Berlin, Germany",
+                        "place_id": "518378bdab4cd42a40596af8d249a1414a40f00101f9011165150000000000c0020792030831303137392b6465"
+                      },
+                      "geometry": {
+                        "type": "Feature",
+                        "properties": {},
+                        "geometry": {
+                          "type": "Point",
+                          "coordinates": [
+                            13.414647452238802,
+                            52.512734630596995
+                          ]
+                        }
+                      },
+                      "bbox": [
+                        13.4163865,
+                        52.5120517,
+                        13.4164865,
+                        52.5121517
+                      ]
+                    },
+                    {
+                      "type": "Feature",
+                      "properties": {
+                        "datasource": {
+                          "sourcename": "openstreetmap",
+                          "attribution": "© OpenStreetMap contributors",
+                          "license": "Open Database License",
+                          "url": "https://www.openstreetmap.org/copyright"
+                        },
+                        "postcode": "10117",
+                        "distance": 500.90021423,
+                        "ref": "10117",
+                        "country": "Germany",
+                        "country_code": "de",
+                        "city": "Berlin",
+                        "district": "Mitte",
+                        "suburb": "Mitte",
+                        "iso3166_2": "DE-BE",
+                        "lon": 13.387368588217525,
+                        "lat": 52.519693726586084,
+                        "state": "Berlin",
+                        "state_code": "BE",
+                        "formatted": "10117 Berlin, Germany",
+                        "address_line1": "10117 Berlin",
+                        "address_line2": "Germany",
+                        "timezone": {
+                          "name": "Europe/Berlin",
+                          "offset_STD": "+01:00",
+                          "offset_DST": "+02:00",
+                          "offset_STD_seconds": 3600,
+                          "offset_DST_seconds": 7200,
+                          "abbreviation_STD": "CET",
+                          "abbreviation_DST": "CEST"
+                        },
+                        "plus_code": "9F4MG99P+VW",
+                        "plus_code_short": "G99P+VW Berlin, Germany",
+                        "place_id": "51afc8f32c55c62a4059d2cff35285424a40f00101f9012e65150000000000c0020792030831303131372b6465"
+                      },
+                      "geometry": {
+                        "type": "Feature",
+                        "properties": {},
+                        "geometry": {
+                          "type": "Point",
+                          "coordinates": [
+                            13.387368588217525,
+                            52.519693726586084
+                          ]
+                        }
+                      },
+                      "bbox": [
+                        13.3873055,
+                        52.5168623,
+                        13.3874055,
+                        52.5169623
+                      ]
+                    },
+                    {
+                      "type": "Feature",
+                      "properties": {
+                        "datasource": {
+                          "sourcename": "openstreetmap",
+                          "attribution": "© OpenStreetMap contributors",
+                          "license": "Open Database License",
+                          "url": "https://www.openstreetmap.org/copyright"
+                        },
+                        "postcode": "10115",
+                        "distance": 508.63259784,
+                        "ref": "10115",
+                        "country": "Germany",
+                        "country_code": "de",
+                        "city": "Berlin",
+                        "district": "Mitte",
+                        "suburb": "Mitte",
+                        "iso3166_2": "DE-BE",
+                        "lon": 13.391081118550714,
+                        "lat": 52.529733557391275,
+                        "state": "Berlin",
+                        "state_code": "BE",
+                        "formatted": "10115 Berlin, Germany",
+                        "address_line1": "10115 Berlin",
+                        "address_line2": "Germany",
+                        "timezone": {
+                          "name": "Europe/Berlin",
+                          "offset_STD": "+01:00",
+                          "offset_DST": "+02:00",
+                          "offset_STD_seconds": 3600,
+                          "offset_DST_seconds": 7200,
+                          "abbreviation_STD": "CET",
+                          "abbreviation_DST": "CEST"
+                        },
+                        "plus_code": "9F4MG9HR+VC",
+                        "plus_code_short": "G9HR+VC Berlin, Germany",
+                        "place_id": "514f84ccc83bc82a40596d4b284fce434a40f00101f9012c65150000000000c0020792030831303131352b6465"
+                      },
+                      "geometry": {
+                        "type": "Feature",
+                        "properties": {},
+                        "geometry": {
+                          "type": "Point",
+                          "coordinates": [
+                            13.391081118550714,
+                            52.529733557391275
+                          ]
+                        }
+                      },
+                      "bbox": [
+                        13.3845071,
+                        52.5321414,
+                        13.3846071,
+                        52.5322414
+                      ]
+                    },
+                    {
+                      "type": "Feature",
+                      "properties": {
+                        "datasource": {
+                          "sourcename": "openstreetmap",
+                          "attribution": "© OpenStreetMap contributors",
+                          "license": "Open Database License",
+                          "url": "https://www.openstreetmap.org/copyright"
+                        },
+                        "postcode": "10119",
+                        "distance": 545.49414668,
+                        "ref": "10119",
+                        "country": "Germany",
+                        "country_code": "de",
+                        "city": "Berlin",
+                        "district": "Mitte",
+                        "suburb": "Mitte",
+                        "iso3166_2": "DE-BE",
+                        "lon": 13.405236455084747,
+                        "lat": 52.53015279533896,
+                        "state": "Berlin",
+                        "state_code": "BE",
+                        "formatted": "10119 Berlin, Germany",
+                        "address_line1": "10119 Berlin",
+                        "address_line2": "Germany",
+                        "timezone": {
+                          "name": "Europe/Berlin",
+                          "offset_STD": "+01:00",
+                          "offset_DST": "+02:00",
+                          "offset_STD_seconds": 3600,
+                          "offset_DST_seconds": 7200,
+                          "abbreviation_STD": "CET",
+                          "abbreviation_DST": "CEST"
+                        },
+                        "plus_code": "9F4MGCJ4+33",
+                        "plus_code_short": "J4+33 Berlin, Germany",
+                        "place_id": "51d07813277bcf2a405991eefa0bdc434a40f00101f9012d65150000000000c0020792030831303131392b6465"
+                      },
+                      "geometry": {
+                        "type": "Feature",
+                        "properties": {},
+                        "geometry": {
+                          "type": "Point",
+                          "coordinates": [
+                            13.405236455084747,
+                            52.53015279533896
+                          ]
+                        }
+                      },
+                      "bbox": [
+                        13.4052772,
+                        52.5304285,
+                        13.4053772,
+                        52.5305285
+                      ]
+                    }
+                  ]
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PostcodeJsonResponse"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid postcode list parameters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GatewayError"
+                },
+                "example": {
+                  "statusCode": 400,
+                  "error": "Bad Request",
+                  "message": "\"limit\" must be less than or equal to 500"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid Geoapify API key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GatewayError"
+                },
+                "example": {
+                  "statusCode": 401,
+                  "error": "Unauthorized",
+                  "message": "Invalid apiKey"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit or quota exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GatewayError"
+                },
+                "example": {
+                  "statusCode": 429,
+                  "error": "Too Many Requests",
+                  "message": "Quota exceeded"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal gateway error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GatewayError"
+                },
+                "example": {
+                  "statusCode": 500,
+                  "error": "Internal Server Error",
+                  "message": "Request failed, please try again later"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "TimezoneOutput": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "offset_STD",
+          "offset_DST",
+          "offset_STD_seconds",
+          "offset_DST_seconds"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "name_alt": {
+            "type": "string"
+          },
+          "country_codes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "offset_STD": {
+            "type": "string"
+          },
+          "offset_DST": {
+            "type": "string"
+          },
+          "offset_STD_seconds": {
+            "type": "number"
+          },
+          "offset_DST_seconds": {
+            "type": "number"
+          },
+          "abbreviation_STD": {
+            "type": "string"
+          },
+          "abbreviation_DST": {
+            "type": "string"
+          }
+        }
+      },
+      "PublicDatasource": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "sourcename": {
+            "type": "string"
+          },
+          "attribution": {
+            "type": "string"
+          },
+          "license": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri"
+          }
+        }
+      },
+      "PlacesDatasource": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "raw"
+        ],
+        "properties": {
+          "sourcename": {
+            "type": "string"
+          },
+          "attribution": {
+            "type": "string"
+          },
+          "license": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "raw": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "PeliasPlaceDatasource": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "sourcename": {
+            "type": "string"
+          },
+          "attribution": {
+            "type": "string"
+          },
+          "license": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "pelias_gid": {
+            "type": "string"
+          },
+          "pelias_layer": {
+            "type": "string"
+          },
+          "osm_id": {
+            "type": "number"
+          },
+          "osm_type": {
+            "type": "string",
+            "enum": [
+              "N",
+              "W",
+              "R"
+            ]
+          },
+          "macrocounty": {
+            "type": "string"
+          },
+          "macrocounty_a": {
+            "type": "string"
+          },
+          "macroregion": {
+            "type": "string"
+          },
+          "macroregion_a": {
+            "type": "string"
+          },
+          "continent": {
+            "type": "string"
+          }
+        }
+      },
+      "GeocodingRank": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "confidence": {
+            "type": "number"
+          },
+          "confidence_city_level": {
+            "type": "number"
+          },
+          "confidence_street_level": {
+            "type": "number"
+          },
+          "confidence_building_level": {
+            "type": "number"
+          },
+          "match_type": {
+            "type": "string",
+            "enum": [
+              "full_match",
+              "inner_part",
+              "match_by_building",
+              "match_by_street",
+              "match_by_postcode",
+              "match_by_city_or_disrict",
+              "match_by_country_or_state"
+            ]
+          },
+          "importance": {
+            "type": "number"
+          },
+          "popularity": {
+            "type": "number"
+          }
+        }
+      },
+      "PlaceDetailValue": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "number"
+          },
+          {
+            "type": "boolean"
+          },
+          {
+            "type": "null"
+          },
+          {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PlaceDetailValue"
+            }
+          },
+          {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/PlaceDetailValue"
+            }
+          }
+        ]
+      },
+      "PlaceDetailGroup": {
+        "type": "object",
+        "additionalProperties": {
+          "$ref": "#/components/schemas/PlaceDetailValue"
+        }
+      },
+      "StringMap": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "string"
+        }
+      },
+      "BooleanMap": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "boolean"
+        }
+      },
+      "WikiPopulation": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "actual",
+          "by_years"
+        ],
+        "properties": {
+          "actual": {
+            "type": "string"
+          },
+          "by_years": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "PostcodeFeatureCollection": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type",
+          "features"
+        ],
+        "properties": {
+          "type": {
+            "const": "FeatureCollection"
+          },
+          "features": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PostcodeFeature"
+            }
+          },
+          "bbox": {
+            "type": "array",
+            "minItems": 4,
+            "maxItems": 6,
+            "items": {
+              "type": "number"
+            }
+          }
+        }
+      },
+      "PostcodeFeature": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type",
+          "properties",
+          "geometry"
+        ],
+        "properties": {
+          "type": {
+            "const": "Feature"
+          },
+          "properties": {
+            "$ref": "#/components/schemas/PostcodeProperties"
+          },
+          "geometry": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/PointGeometry"
+              },
+              {
+                "$ref": "#/components/schemas/GeoJsonGeometry"
+              },
+              {
+                "$ref": "#/components/schemas/PostcodePointGeometryFeature"
+              }
+            ]
+          },
+          "bbox": {
+            "type": "array",
+            "minItems": 4,
+            "maxItems": 6,
+            "items": {
+              "type": "number"
+            }
+          }
+        }
+      },
+      "PostcodeProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "continent": {
+            "type": "string"
+          },
+          "country": {
+            "type": "string"
+          },
+          "country_code": {
+            "type": "string"
+          },
+          "region": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          },
+          "state_code": {
+            "type": "string"
+          },
+          "state_COG": {
+            "type": "string"
+          },
+          "department_COG": {
+            "type": "string"
+          },
+          "state_district": {
+            "type": "string"
+          },
+          "province": {
+            "type": "string"
+          },
+          "department": {
+            "type": "string"
+          },
+          "arrondissement": {
+            "type": "string"
+          },
+          "county": {
+            "type": "string"
+          },
+          "county_code": {
+            "type": "string"
+          },
+          "county_district": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "city_district": {
+            "type": "string"
+          },
+          "postcode": {
+            "type": "string"
+          },
+          "postal_code": {
+            "type": "string"
+          },
+          "openGeoDB:postal_codes": {
+            "type": "string"
+          },
+          "district": {
+            "type": "string"
+          },
+          "suburb": {
+            "type": "string"
+          },
+          "municipality": {
+            "type": "string"
+          },
+          "commune": {
+            "type": "string"
+          },
+          "subdistrict": {
+            "type": "string"
+          },
+          "city_block": {
+            "type": "string"
+          },
+          "neighbourhood": {
+            "type": "string"
+          },
+          "quarter": {
+            "type": "string"
+          },
+          "section": {
+            "type": "string"
+          },
+          "sector": {
+            "type": "string"
+          },
+          "subdivision": {
+            "type": "string"
+          },
+          "croft": {
+            "type": "string"
+          },
+          "allotments": {
+            "type": "string"
+          },
+          "residental": {
+            "type": "string"
+          },
+          "farm": {
+            "type": "string"
+          },
+          "farmyard": {
+            "type": "string"
+          },
+          "industrial": {
+            "type": "string"
+          },
+          "commercial": {
+            "type": "string"
+          },
+          "retail": {
+            "type": "string"
+          },
+          "borough": {
+            "type": "string"
+          },
+          "town": {
+            "type": "string"
+          },
+          "township": {
+            "type": "string"
+          },
+          "village": {
+            "type": "string"
+          },
+          "hamlet": {
+            "type": "string"
+          },
+          "locality": {
+            "type": "string"
+          },
+          "isolated_dwelling": {
+            "type": "string"
+          },
+          "street": {
+            "type": "string"
+          },
+          "road": {
+            "type": "string"
+          },
+          "footway": {
+            "type": "string"
+          },
+          "pedestrian": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "housenumber": {
+            "type": "string"
+          },
+          "house_number": {
+            "type": "string"
+          },
+          "house_name": {
+            "type": "string"
+          },
+          "old_name": {
+            "type": "string"
+          },
+          "other": {
+            "type": "string"
+          },
+          "formatted": {
+            "type": "string"
+          },
+          "address_line1": {
+            "type": "string"
+          },
+          "address_line2": {
+            "type": "string"
+          },
+          "unlocode": {
+            "type": "string"
+          },
+          "iso3166_2": {
+            "type": "string"
+          },
+          "iso3166_2_sublevel": {
+            "type": "string"
+          },
+          "iso3166_sublevel": {
+            "type": "string"
+          },
+          "plus_code": {
+            "type": "string"
+          },
+          "plus_code_short": {
+            "type": "string"
+          },
+          "postcodes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "other_names": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "population": {
+            "type": "number"
+          },
+          "lon": {
+            "type": "number",
+            "minimum": -180,
+            "maximum": 180
+          },
+          "lat": {
+            "type": "number",
+            "minimum": -90,
+            "maximum": 90
+          },
+          "parent_as_place_id": {
+            "type": "boolean"
+          },
+          "timezone": {
+            "$ref": "#/components/schemas/TimezoneOutput"
+          },
+          "ref": {
+            "type": "string"
+          },
+          "distance": {
+            "type": "number",
+            "minimum": 0
+          },
+          "result_type": {
+            "type": "string",
+            "enum": [
+              "unknown",
+              "amenity_name",
+              "amenity",
+              "building",
+              "street",
+              "postcode",
+              "suburb",
+              "district",
+              "city",
+              "county",
+              "state",
+              "country"
+            ]
+          },
+          "datasource": {
+            "$ref": "#/components/schemas/PublicDatasource"
+          },
+          "place_id": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 2048
+          }
+        }
+      },
+      "PostcodeJsonResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "results"
+        ],
+        "properties": {
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PostcodeProperties"
+            }
+          }
+        }
+      },
+      "PointGeometry": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type",
+          "coordinates"
+        ],
+        "properties": {
+          "type": {
+            "const": "Point"
+          },
+          "coordinates": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 2,
+            "prefixItems": [
+              {
+                "type": "number",
+                "minimum": -180,
+                "maximum": 180,
+                "description": "Longitude."
+              },
+              {
+                "type": "number",
+                "minimum": -90,
+                "maximum": 90,
+                "description": "Latitude."
+              }
+            ]
+          }
+        }
+      },
+      "GeoJsonGeometry": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type",
+          "coordinates"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "Polygon",
+              "MultiPolygon"
+            ],
+            "description": "Postcode area geometry type."
+          },
+          "coordinates": {
+            "description": "GeoJSON coordinates.",
+            "type": "array"
+          }
+        }
+      },
+      "PostcodePointGeometryFeature": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type",
+          "properties",
+          "geometry"
+        ],
+        "properties": {
+          "type": {
+            "const": "Feature"
+          },
+          "properties": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "geometry": {
+            "$ref": "#/components/schemas/PointGeometry"
+          }
+        }
+      },
+      "GatewayError": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "statusCode",
+          "error",
+          "message"
+        ],
+        "properties": {
+          "statusCode": {
+            "type": "integer",
+            "description": "HTTP status code returned by the gateway."
+          },
+          "error": {
+            "type": "string",
+            "description": "Standard HTTP error name."
+          },
+          "message": {
+            "type": "string",
+            "description": "Human-readable explanation of the error."
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "ApiKeyInQuery": {
+        "type": "apiKey",
+        "in": "query",
+        "name": "apiKey",
+        "description": "Geoapify API key query parameter. Recommended authentication method for public APIs. API keys in URLs can be logged; use x-api-key for server-to-server clients."
+      },
+      "ApiKeyInHeader": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "x-api-key",
+        "description": "Geoapify API key header. Supported as an alternative authentication method for public APIs."
+      }
+    }
+  },
+  "security": [
+    {
+      "ApiKeyInQuery": []
+    },
+    {
+      "ApiKeyInHeader": []
+    }
+  ]
+}

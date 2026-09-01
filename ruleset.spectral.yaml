@@ -1,3 +1,6 @@
 extends: [[spectral:oas, all]]
 rules:
+  # OpenAPI 3.1 uses the full JSON Schema 2020-12 array vocabulary, including
+  # prefixItems tuples and intentionally unconstrained arrays.
+  array-items: off
   oas3-valid-media-example: off

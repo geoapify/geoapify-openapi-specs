@@ -1,50 +1,61 @@
-name: Deploy Swagger UI to GitHub Pages
+name: Deploy OpenAPI Explorer to GitHub Pages
 
 on:
   push:
     branches:
-      - master
       - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
 
 jobs:
   deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-    
-    permissions:
-      contents: write
-    
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # --- 1. Set up Node.js environment ---
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: "20"
+          cache: npm
 
       - name: Install dependencies
-        run: |
-          npm ci
+        run: npm ci
 
-      # --- 2. Lint OpenAPI specs (optional quality check) ---
-      - name: Lint OpenAPI specifications
-        run: |
-          npm run lint
-        continue-on-error: true
+      - name: Validate OpenAPI specifications
+        run: npm run lint
 
-      # --- 3. Prepare deployment directory ---
-      - name: Copy files to deployment directory
+      - name: Build Pages artifact
         run: |
           mkdir -p deploy
-          cp -r docs/* deploy/
-          cp -r api-specs deploy/
+          cp docs/index.html deploy/index.html
+          cp -R api-specs deploy/api-specs
+          sed -i 's#../api-specs/#./api-specs/#g' deploy/index.html
+          touch deploy/.nojekyll
+          test -f deploy/api-specs/index.json
+          ! grep -q '../api-specs/' deploy/index.html
 
-      # --- 4. Deploy to GitHub Pages ---
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          publish_dir: ./deploy
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          force_orphan: true
+          path: deploy
 
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5

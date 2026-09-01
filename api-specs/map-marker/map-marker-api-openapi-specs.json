@@ -1,0 +1,327 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Geoapify Map Marker API",
+    "version": "2.0.0",
+    "description": "Generate customizable PNG map marker images with a background shape, icon or text content, colors, and resolution scaling."
+  },
+  "servers": [
+    {
+      "url": "https://api.geoapify.com/v2",
+      "description": "Default API endpoint."
+    },
+    {
+      "url": "https://api-eu.geoapify.com/v2",
+      "description": "EU-focused endpoint. Geoapify service processing uses EU infrastructure."
+    }
+  ],
+  "tags": [
+    {
+      "name": "Map Marker",
+      "description": "Render customizable map marker images."
+    }
+  ],
+  "paths": {
+    "/icon": {
+      "get": {
+        "tags": [
+          "Map Marker"
+        ],
+        "operationId": "getMapMarker",
+        "summary": "Generate a PNG map marker",
+        "description": "Generates a customizable PNG marker.\n\n- Background: `type`\n- Content: `icon` + `iconType`, or `text`\n- Sizing: `contentSize` and `size`\n\n**Example:** `type=material`, `iconType=material`, `icon=favorite`, `contentSize=20`, `color=#ff5050`, `noWhiteCircle=true`, `noShadow=true`\n\n**Icons:** [Material Icons](https://fonts.google.com/icons) · [Font Awesome 6 Free](https://fontawesome.com/v6/search?m=free&o=r) · [Lucide](https://lucide.dev/icons/)\n\n**Docs:** [Marker Icon API documentation](https://apidocs.geoapify.com/docs/icon/)\n\n> Follow the selected icon library's license and attribution requirements.",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "required": false,
+            "description": "Marker background shape. `material` uses a Material-style pin, `awesome` uses a Font Awesome-style pin, `circle` uses a circular background, and `plain` renders only the icon or text without a background shape.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "material",
+                "awesome",
+                "circle",
+                "plain"
+              ],
+              "default": "material"
+            },
+            "example": "material"
+          },
+          {
+            "name": "iconType",
+            "in": "query",
+            "required": false,
+            "description": "Icon library used to resolve the `icon` name. When omitted, the default depends on the marker `type`: `material` for material and circle markers, and `awesome` for awesome markers.\n\n**Icons:** [Material Icons](https://fonts.google.com/icons) · [Font Awesome 6 Free](https://fontawesome.com/v6/search?m=free&o=r) · [Lucide](https://lucide.dev/icons/)",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "material",
+                "awesome",
+                "lucide"
+              ]
+            },
+            "example": "material"
+          },
+          {
+            "name": "icon",
+            "in": "query",
+            "required": false,
+            "description": "Icon name from the library selected by `iconType`. When `text` is also provided, text is rendered instead of the icon.\n\n**Icons:** [Material Icons](https://fonts.google.com/icons) · [Font Awesome 6 Free](https://fontawesome.com/v6/search?m=free&o=r) · [Lucide](https://lucide.dev/icons/)",
+            "schema": {
+              "type": "string",
+              "pattern": "^[\\w-]{1,100}$",
+              "minLength": 1,
+              "maxLength": 100
+            },
+            "example": "favorite"
+          },
+          {
+            "name": "text",
+            "in": "query",
+            "required": false,
+            "description": "Text rendered inside the marker instead of an icon. When both `text` and `icon` are provided, `text` takes precedence.",
+            "schema": {
+              "type": "string",
+              "maxLength": 100
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "description": "Intended marker image height in CSS pixels. Use `scaleFactor` to increase output resolution without changing the intended display size.",
+            "schema": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "example": 48
+          },
+          {
+            "name": "contentSize",
+            "in": "query",
+            "required": false,
+            "description": "Height of the icon or text content in CSS pixels. When omitted, the API chooses a size proportional to the marker size.",
+            "schema": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "example": 20
+          },
+          {
+            "name": "scaleFactor",
+            "in": "query",
+            "required": false,
+            "description": "Output pixel-density multiplier from 0.5 to 10. For example, use `2` for a double-resolution image and display it at its logical `size` for sharper rendering.",
+            "schema": {
+              "type": "number",
+              "minimum": 0.5,
+              "maximum": 10
+            },
+            "example": 2
+          },
+          {
+            "name": "color",
+            "in": "query",
+            "required": false,
+            "description": "Marker background color. Ignored when `type=plain`.",
+            "schema": {
+              "$ref": "#/components/schemas/ColorValue"
+            },
+            "example": "#ff5050"
+          },
+          {
+            "name": "strokeColor",
+            "in": "query",
+            "required": false,
+            "description": "Marker background-shape outline color. Ignored when `type=plain`.",
+            "schema": {
+              "$ref": "#/components/schemas/ColorValue"
+            },
+            "example": "#ffffff"
+          },
+          {
+            "name": "shadowColor",
+            "in": "query",
+            "required": false,
+            "description": "Marker shadow color. Ignored when `noShadow=true`.",
+            "schema": {
+              "$ref": "#/components/schemas/ColorValue"
+            },
+            "example": "#000000"
+          },
+          {
+            "name": "contentColor",
+            "in": "query",
+            "required": false,
+            "description": "Color of the icon or text rendered inside the marker.",
+            "schema": {
+              "$ref": "#/components/schemas/ColorValue"
+            },
+            "example": "#ffffff"
+          },
+          {
+            "name": "noWhiteCircle",
+            "in": "query",
+            "required": false,
+            "description": "Set to `true` to remove the white circle behind marker content.",
+            "schema": {
+              "type": "boolean",
+              "enum": [
+                true
+              ]
+            },
+            "example": true
+          },
+          {
+            "name": "noShadow",
+            "in": "query",
+            "required": false,
+            "description": "Set to `true` to remove the marker shadow.",
+            "schema": {
+              "type": "boolean",
+              "enum": [
+                true
+              ]
+            },
+            "example": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Binary PNG marker image ready for use in HTML, CSS, or a client-side map library.",
+            "content": {
+              "image/png": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid marker parameter.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GatewayError"
+                },
+                "example": {
+                  "statusCode": 400,
+                  "error": "Bad Request",
+                  "message": "size should be a positive number"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid Geoapify API key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GatewayError"
+                },
+                "example": {
+                  "statusCode": 401,
+                  "error": "Unauthorized",
+                  "message": "Invalid apiKey"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit or quota exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GatewayError"
+                },
+                "example": {
+                  "statusCode": 429,
+                  "error": "Too Many Requests",
+                  "message": "Quota exceeded"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal gateway error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GatewayError"
+                },
+                "example": {
+                  "statusCode": 500,
+                  "error": "Internal Server Error",
+                  "message": "Request failed, please try again later"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ColorValue": {
+        "type": "string",
+        "maxLength": 100,
+        "description": "CSS-like color value. Hex, named colors, `rgb()`, and `rgba()` are accepted. HTTP clients must URL-encode reserved characters such as `#`; OpenAPI clients such as Swagger UI do this automatically.",
+        "pattern": "^(#([0-9a-fA-F]{3}|[0-9a-fA-F]{4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})|[a-zA-Z]{3,32}|rgba?\\([^)]{1,64}\\))$",
+        "examples": [
+          "#ff5050",
+          "red",
+          "rgb(255,80,80)",
+          "rgba(255,80,80,0.8)"
+        ]
+      },
+      "GatewayError": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "statusCode",
+          "error",
+          "message"
+        ],
+        "properties": {
+          "statusCode": {
+            "type": "integer",
+            "description": "HTTP status code returned by the gateway."
+          },
+          "error": {
+            "type": "string",
+            "description": "Standard HTTP error name."
+          },
+          "message": {
+            "type": "string",
+            "description": "Human-readable explanation of the error."
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "ApiKeyInQuery": {
+        "type": "apiKey",
+        "in": "query",
+        "name": "apiKey",
+        "description": "Geoapify API key query parameter. Recommended authentication method for public APIs. API keys in URLs can be logged; use x-api-key for server-to-server clients."
+      },
+      "ApiKeyInHeader": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "x-api-key",
+        "description": "Geoapify API key header. Supported as an alternative authentication method for public APIs."
+      }
+    }
+  },
+  "security": [
+    {
+      "ApiKeyInQuery": []
+    },
+    {
+      "ApiKeyInHeader": []
+    }
+  ]
+}

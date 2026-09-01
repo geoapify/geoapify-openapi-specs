@@ -1,0 +1,1552 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Geoapify Place Details API",
+    "version": "2.0.0",
+    "description": "Retrieve detailed place information, geometry, building context, nearby areas, and walking or driving reachability features."
+  },
+  "servers": [
+    {
+      "url": "https://api.geoapify.com/v2",
+      "description": "Default API endpoint."
+    },
+    {
+      "url": "https://api-eu.geoapify.com/v2",
+      "description": "EU-focused endpoint. Geoapify service processing uses EU infrastructure."
+    }
+  ],
+  "tags": [
+    {
+      "name": "Place Details",
+      "description": "Retrieve details, geometry, surroundings, and reachability features for a place."
+    }
+  ],
+  "paths": {
+    "/place-details": {
+      "get": {
+        "tags": [
+          "Place Details"
+        ],
+        "operationId": "getPlaceDetails",
+        "summary": "Get details and related features for a place",
+        "description": "Retrieve information and geometry for one place. Use one lookup method: a Geoapify `id` (recommended), a `lat` and `lon` pair, or an `osm_id` and `osm_type` pair. Do not combine lookup methods. The `features` parameter controls whether the response contains the primary place details, building information, radius areas, or walking and driving isolines. When omitted, `features` defaults to `details`.\n\n**Example:** The preset `id` retrieves details and the original polygon geometry for Renton Stadium in Renton, Washington.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": false,
+            "description": "Geoapify place identifier returned by the Geocoding, Places, or related Geoapify APIs. This is the recommended lookup method; do not combine it with coordinates or OpenStreetMap identifiers.",
+            "schema": {
+              "type": "string",
+              "minLength": 3,
+              "maxLength": 2048
+            },
+            "example": "51bfa6ca4f698d5ec059a6ec4eab8dbe4740f00102f901a67918020000000092030e52656e746f6e205374616469756d"
+          },
+          {
+            "name": "lat",
+            "in": "query",
+            "required": false,
+            "description": "Latitude of the location to inspect. Alternative to `id`; provide it together with `lon` and leave it unset when using a place ID.",
+            "schema": {
+              "type": "number",
+              "minimum": -90,
+              "maximum": 90
+            }
+          },
+          {
+            "name": "lon",
+            "in": "query",
+            "required": false,
+            "description": "Longitude of the location to inspect. Alternative to `id`; provide it together with `lat` and leave it unset when using a place ID.",
+            "schema": {
+              "type": "number",
+              "minimum": -180,
+              "maximum": 180
+            }
+          },
+          {
+            "name": "osm_id",
+            "in": "query",
+            "required": false,
+            "description": "Numeric OpenStreetMap object identifier. Alternative to `id`; use together with `osm_type` and leave it unset when using a place ID.",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          {
+            "name": "osm_type",
+            "in": "query",
+            "required": false,
+            "description": "OpenStreetMap object type used with `osm_id`: `n` for node, `w` for way, or `r` for relation.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "r",
+                "w",
+                "n"
+              ]
+            }
+          },
+          {
+            "name": "features",
+            "in": "query",
+            "required": false,
+            "description": "Primary feature groups to return. Separate multiple values with `|`. `details` returns the place record and geometry, `building` returns the containing building, radius groups describe fixed-distance surroundings, and `walk_*` or `drive_*` groups return reachability isolines. Defaults to `details`. See the [feature reference](https://apidocs.geoapify.com/docs/place-details/#api).",
+            "style": "pipeDelimited",
+            "explode": false,
+            "schema": {
+              "type": "array",
+              "default": [
+                "details"
+              ],
+              "items": {
+                "$ref": "#/components/schemas/PlaceDetailsFeatureId"
+              }
+            },
+            "examples": {
+              "defaultDetails": {
+                "summary": "Details",
+                "value": [
+                  "details"
+                ]
+              },
+              "detailsAndRadius": {
+                "summary": "Details and nearby places",
+                "value": [
+                  "details",
+                  "radius_500"
+                ]
+              },
+              "commute": {
+                "summary": "Walking and driving areas",
+                "value": [
+                  "walk_10",
+                  "drive_15"
+                ]
+              }
+            }
+          },
+          {
+            "name": "lang",
+            "in": "query",
+            "required": false,
+            "description": "Language used for names and address fields.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "ab",
+                "aa",
+                "af",
+                "ak",
+                "sq",
+                "am",
+                "ar",
+                "an",
+                "hy",
+                "as",
+                "av",
+                "ae",
+                "ay",
+                "az",
+                "bm",
+                "ba",
+                "eu",
+                "be",
+                "bn",
+                "bh",
+                "bi",
+                "bs",
+                "br",
+                "bg",
+                "my",
+                "ca",
+                "ch",
+                "ce",
+                "ny",
+                "zh",
+                "cv",
+                "kw",
+                "co",
+                "cr",
+                "hr",
+                "cs",
+                "da",
+                "dv",
+                "nl",
+                "en",
+                "eo",
+                "et",
+                "ee",
+                "fo",
+                "fj",
+                "fi",
+                "fr",
+                "ff",
+                "gl",
+                "ka",
+                "de",
+                "el",
+                "gn",
+                "gu",
+                "ht",
+                "ha",
+                "he",
+                "hz",
+                "hi",
+                "ho",
+                "hu",
+                "ia",
+                "id",
+                "ie",
+                "ga",
+                "ig",
+                "ik",
+                "io",
+                "is",
+                "it",
+                "iu",
+                "ja",
+                "jv",
+                "kl",
+                "kn",
+                "kr",
+                "ks",
+                "kk",
+                "km",
+                "ki",
+                "rw",
+                "ky",
+                "kv",
+                "kg",
+                "ko",
+                "ku",
+                "kj",
+                "la",
+                "lb",
+                "lg",
+                "li",
+                "ln",
+                "lo",
+                "lt",
+                "lu",
+                "lv",
+                "gv",
+                "mk",
+                "mg",
+                "ms",
+                "ml",
+                "mt",
+                "mi",
+                "mr",
+                "mh",
+                "mn",
+                "na",
+                "nv",
+                "nb",
+                "nd",
+                "ne",
+                "ng",
+                "nn",
+                "no",
+                "ii",
+                "nr",
+                "oc",
+                "oj",
+                "cu",
+                "om",
+                "or",
+                "os",
+                "pa",
+                "pi",
+                "fa",
+                "pl",
+                "ps",
+                "pt",
+                "qu",
+                "rm",
+                "rn",
+                "ro",
+                "ru",
+                "sa",
+                "sc",
+                "sd",
+                "se",
+                "sm",
+                "sg",
+                "sr",
+                "gd",
+                "sn",
+                "si",
+                "sk",
+                "sl",
+                "so",
+                "st",
+                "es",
+                "su",
+                "sw",
+                "ss",
+                "sv",
+                "ta",
+                "te",
+                "tg",
+                "th",
+                "ti",
+                "bo",
+                "tk",
+                "tl",
+                "tn",
+                "to",
+                "tr",
+                "ts",
+                "tt",
+                "tw",
+                "ty",
+                "ug",
+                "uk",
+                "ur",
+                "uz",
+                "ve",
+                "vi",
+                "vo",
+                "wa",
+                "cy",
+                "wo",
+                "fy",
+                "xh",
+                "yi",
+                "yo",
+                "za"
+              ],
+              "default": "en"
+            },
+            "example": "en"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Requested details and related geographic features for the place.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlaceDetailsFeatureCollection"
+                },
+                "example": {
+                  "type": "FeatureCollection",
+                  "features": [
+                    {
+                      "type": "Feature",
+                      "properties": {
+                        "feature_type": "details",
+                        "name": "Renton Stadium",
+                        "ele": 9,
+                        "categories": [
+                          "sport",
+                          "sport.stadium"
+                        ],
+                        "datasource": {
+                          "sourcename": "openstreetmap",
+                          "attribution": "© OpenStreetMap contributors",
+                          "license": "Open Database License",
+                          "url": "https://www.openstreetmap.org/copyright",
+                          "raw": {
+                            "ele": 9,
+                            "name": "Renton Stadium",
+                            "osm_id": 35158438,
+                            "leisure": "stadium",
+                            "osm_type": "w"
+                          }
+                        },
+                        "street": "Cedar River Trail",
+                        "city": "Renton",
+                        "county": "King County",
+                        "state": "Washington",
+                        "state_code": "WA",
+                        "postcode": "98057",
+                        "country": "United States",
+                        "country_code": "us",
+                        "formatted": "Renton Stadium, Cedar River Trail, Renton, WA 98057, United States of America",
+                        "address_line1": "Renton Stadium",
+                        "address_line2": "Cedar River Trail, Renton, WA 98057, United States of America",
+                        "lat": 47.4886984,
+                        "lon": -122.2095527,
+                        "iso3166_2": "US-WA",
+                        "timezone": {
+                          "name": "America/Los_Angeles",
+                          "offset_STD": "-08:00",
+                          "offset_DST": "-07:00",
+                          "offset_STD_seconds": -28800,
+                          "offset_DST_seconds": -25200,
+                          "abbreviation_STD": "PST",
+                          "abbreviation_DST": "PDT"
+                        },
+                        "place_id": "51bfa6ca4f698d5ec059a6ec4eab8dbe4740f00102f901a67918020000000092030e52656e746f6e205374616469756d"
+                      },
+                      "geometry": {
+                        "type": "Polygon",
+                        "coordinates": [
+                          [
+                            [
+                              -122.2111578,
+                              47.4890793
+                            ],
+                            [
+                              -122.2108104,
+                              47.4882834
+                            ],
+                            [
+                              -122.2103791,
+                              47.4882941
+                            ],
+                            [
+                              -122.2103391,
+                              47.4882951
+                            ],
+                            [
+                              -122.2103243,
+                              47.4879906
+                            ],
+                            [
+                              -122.2088184,
+                              47.4880196
+                            ],
+                            [
+                              -122.2088238,
+                              47.4882616
+                            ],
+                            [
+                              -122.2088254,
+                              47.4883121
+                            ],
+                            [
+                              -122.2082787,
+                              47.4883175
+                            ],
+                            [
+                              -122.2078885,
+                              47.4892193
+                            ],
+                            [
+                              -122.2103639,
+                              47.4891881
+                            ],
+                            [
+                              -122.2106455,
+                              47.4890871
+                            ],
+                            [
+                              -122.2111578,
+                              47.4890793
+                            ]
+                          ]
+                        ]
+                      },
+                      "bbox": [
+                        -122.2111578,
+                        47.4879906,
+                        -122.2078885,
+                        47.4892193
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid lookup parameters, feature values, or place identifier.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GatewayError"
+                },
+                "example": {
+                  "statusCode": 400,
+                  "error": "Bad Request",
+                  "message": "Invalid Place ID"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid Geoapify API key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GatewayError"
+                },
+                "example": {
+                  "statusCode": 401,
+                  "error": "Unauthorized",
+                  "message": "Invalid apiKey"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit or quota exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GatewayError"
+                },
+                "example": {
+                  "statusCode": 429,
+                  "error": "Too Many Requests",
+                  "message": "Quota exceeded"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal gateway error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GatewayError"
+                },
+                "example": {
+                  "statusCode": 500,
+                  "error": "Internal Server Error",
+                  "message": "Request failed, please try again later"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "TimezoneOutput": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "offset_STD",
+          "offset_DST",
+          "offset_STD_seconds",
+          "offset_DST_seconds"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "name_alt": {
+            "type": "string"
+          },
+          "country_codes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "offset_STD": {
+            "type": "string"
+          },
+          "offset_DST": {
+            "type": "string"
+          },
+          "offset_STD_seconds": {
+            "type": "number"
+          },
+          "offset_DST_seconds": {
+            "type": "number"
+          },
+          "abbreviation_STD": {
+            "type": "string"
+          },
+          "abbreviation_DST": {
+            "type": "string"
+          }
+        }
+      },
+      "PublicDatasource": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "sourcename": {
+            "type": "string"
+          },
+          "attribution": {
+            "type": "string"
+          },
+          "license": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri"
+          }
+        }
+      },
+      "PlacesDatasource": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "raw"
+        ],
+        "properties": {
+          "sourcename": {
+            "type": "string"
+          },
+          "attribution": {
+            "type": "string"
+          },
+          "license": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "raw": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "PeliasPlaceDatasource": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "sourcename": {
+            "type": "string"
+          },
+          "attribution": {
+            "type": "string"
+          },
+          "license": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "pelias_gid": {
+            "type": "string"
+          },
+          "pelias_layer": {
+            "type": "string"
+          },
+          "osm_id": {
+            "type": "number"
+          },
+          "osm_type": {
+            "type": "string",
+            "enum": [
+              "N",
+              "W",
+              "R"
+            ]
+          },
+          "macrocounty": {
+            "type": "string"
+          },
+          "macrocounty_a": {
+            "type": "string"
+          },
+          "macroregion": {
+            "type": "string"
+          },
+          "macroregion_a": {
+            "type": "string"
+          },
+          "continent": {
+            "type": "string"
+          }
+        }
+      },
+      "GeocodingRank": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "confidence": {
+            "type": "number"
+          },
+          "confidence_city_level": {
+            "type": "number"
+          },
+          "confidence_street_level": {
+            "type": "number"
+          },
+          "confidence_building_level": {
+            "type": "number"
+          },
+          "match_type": {
+            "type": "string",
+            "enum": [
+              "full_match",
+              "inner_part",
+              "match_by_building",
+              "match_by_street",
+              "match_by_postcode",
+              "match_by_city_or_disrict",
+              "match_by_country_or_state"
+            ]
+          },
+          "importance": {
+            "type": "number"
+          },
+          "popularity": {
+            "type": "number"
+          }
+        }
+      },
+      "PlaceDetailValue": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "number"
+          },
+          {
+            "type": "boolean"
+          },
+          {
+            "type": "null"
+          },
+          {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PlaceDetailValue"
+            }
+          },
+          {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/PlaceDetailValue"
+            }
+          }
+        ]
+      },
+      "PlaceDetailGroup": {
+        "type": "object",
+        "additionalProperties": {
+          "$ref": "#/components/schemas/PlaceDetailValue"
+        }
+      },
+      "StringMap": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "string"
+        }
+      },
+      "BooleanMap": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "boolean"
+        }
+      },
+      "WikiPopulation": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "actual",
+          "by_years"
+        ],
+        "properties": {
+          "actual": {
+            "type": "string"
+          },
+          "by_years": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "PlaceDetailsFeatureId": {
+        "type": "string",
+        "description": "Primary Place Details feature group accepted by the `features` parameter.",
+        "enum": [
+          "details",
+          "building",
+          "radius_100",
+          "radius_500",
+          "radius_1000",
+          "walk_5",
+          "walk_10",
+          "walk_15",
+          "walk_30",
+          "drive_5",
+          "drive_10",
+          "drive_15"
+        ],
+        "example": "details"
+      },
+      "GatewayError": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "statusCode",
+          "error",
+          "message"
+        ],
+        "properties": {
+          "statusCode": {
+            "type": "integer",
+            "description": "HTTP status code returned by the gateway."
+          },
+          "error": {
+            "type": "string",
+            "description": "Standard HTTP error name."
+          },
+          "message": {
+            "type": "string",
+            "description": "Human-readable explanation of the error."
+          }
+        }
+      },
+      "PlaceDetailsFeatureCollection": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type",
+          "features"
+        ],
+        "properties": {
+          "type": {
+            "const": "FeatureCollection"
+          },
+          "features": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PlaceDetailsFeature"
+            }
+          }
+        }
+      },
+      "PlaceDetailsFeature": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type",
+          "properties",
+          "geometry"
+        ],
+        "properties": {
+          "type": {
+            "const": "Feature"
+          },
+          "properties": {
+            "$ref": "#/components/schemas/PlaceDetailsProperties"
+          },
+          "geometry": {
+            "$ref": "#/components/schemas/GeoJsonGeometry"
+          },
+          "bbox": {
+            "type": "array",
+            "minItems": 4,
+            "maxItems": 4,
+            "items": {
+              "type": "number"
+            }
+          }
+        }
+      },
+      "PlaceDetailsProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "continent": {
+            "type": "string"
+          },
+          "country": {
+            "type": "string"
+          },
+          "country_code": {
+            "type": "string"
+          },
+          "region": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          },
+          "state_code": {
+            "type": "string"
+          },
+          "state_COG": {
+            "type": "string"
+          },
+          "department_COG": {
+            "type": "string"
+          },
+          "state_district": {
+            "type": "string"
+          },
+          "province": {
+            "type": "string"
+          },
+          "department": {
+            "type": "string"
+          },
+          "arrondissement": {
+            "type": "string"
+          },
+          "county": {
+            "type": "string"
+          },
+          "county_code": {
+            "type": "string"
+          },
+          "county_district": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "city_district": {
+            "type": "string"
+          },
+          "postcode": {
+            "type": "string"
+          },
+          "postal_code": {
+            "type": "string"
+          },
+          "openGeoDB:postal_codes": {
+            "type": "string"
+          },
+          "district": {
+            "type": "string"
+          },
+          "suburb": {
+            "type": "string"
+          },
+          "municipality": {
+            "type": "string"
+          },
+          "commune": {
+            "type": "string"
+          },
+          "subdistrict": {
+            "type": "string"
+          },
+          "city_block": {
+            "type": "string"
+          },
+          "neighbourhood": {
+            "type": "string"
+          },
+          "quarter": {
+            "type": "string"
+          },
+          "section": {
+            "type": "string"
+          },
+          "sector": {
+            "type": "string"
+          },
+          "subdivision": {
+            "type": "string"
+          },
+          "croft": {
+            "type": "string"
+          },
+          "allotments": {
+            "type": "string"
+          },
+          "residental": {
+            "type": "string"
+          },
+          "farm": {
+            "type": "string"
+          },
+          "farmyard": {
+            "type": "string"
+          },
+          "industrial": {
+            "type": "string"
+          },
+          "commercial": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/PlaceDetailGroup"
+              }
+            ]
+          },
+          "retail": {
+            "type": "string"
+          },
+          "borough": {
+            "type": "string"
+          },
+          "town": {
+            "type": "string"
+          },
+          "township": {
+            "type": "string"
+          },
+          "village": {
+            "type": "string"
+          },
+          "hamlet": {
+            "type": "string"
+          },
+          "locality": {
+            "type": "string"
+          },
+          "isolated_dwelling": {
+            "type": "string"
+          },
+          "street": {
+            "type": "string"
+          },
+          "road": {
+            "type": "string"
+          },
+          "footway": {
+            "type": "string"
+          },
+          "pedestrian": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "housenumber": {
+            "type": "string"
+          },
+          "house_number": {
+            "type": "string"
+          },
+          "house_name": {
+            "type": "string"
+          },
+          "old_name": {
+            "type": "string"
+          },
+          "other": {
+            "type": "string"
+          },
+          "formatted": {
+            "type": "string"
+          },
+          "address_line1": {
+            "type": "string"
+          },
+          "address_line2": {
+            "type": "string"
+          },
+          "unlocode": {
+            "type": "string"
+          },
+          "iso3166_2": {
+            "type": "string"
+          },
+          "iso3166_2_sublevel": {
+            "type": "string"
+          },
+          "iso3166_sublevel": {
+            "type": "string"
+          },
+          "plus_code": {
+            "type": "string"
+          },
+          "plus_code_short": {
+            "type": "string"
+          },
+          "postcodes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "other_names": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "population": {
+            "oneOf": [
+              {
+                "type": "number"
+              },
+              {
+                "$ref": "#/components/schemas/WikiPopulation"
+              }
+            ]
+          },
+          "lon": {
+            "type": "number",
+            "minimum": -180,
+            "maximum": 180
+          },
+          "lat": {
+            "type": "number",
+            "minimum": -90,
+            "maximum": 90
+          },
+          "parent_as_place_id": {
+            "type": "boolean"
+          },
+          "timezone": {
+            "$ref": "#/components/schemas/TimezoneOutput"
+          },
+          "website": {
+            "type": "string"
+          },
+          "opening_hours": {
+            "type": "string"
+          },
+          "opening_hours_covid19": {
+            "type": "string"
+          },
+          "brand": {
+            "type": "string"
+          },
+          "operator": {
+            "type": "string"
+          },
+          "branch": {
+            "type": "string"
+          },
+          "network": {
+            "type": "string"
+          },
+          "owner": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "craft": {
+            "type": "string"
+          },
+          "ref": {
+            "type": "string"
+          },
+          "int_ref": {
+            "type": "string"
+          },
+          "ele": {
+            "oneOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "description": "Elevation when available."
+          },
+          "color": {
+            "type": "string"
+          },
+          "water_source": {
+            "type": "string"
+          },
+          "website_other": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "website_international": {
+            "$ref": "#/components/schemas/StringMap"
+          },
+          "description_international": {
+            "$ref": "#/components/schemas/StringMap"
+          },
+          "name_international": {
+            "$ref": "#/components/schemas/StringMap"
+          },
+          "cuisine_international": {
+            "$ref": "#/components/schemas/StringMap"
+          },
+          "ref_other": {
+            "$ref": "#/components/schemas/StringMap"
+          },
+          "disused": {
+            "type": "boolean"
+          },
+          "payment_options": {
+            "$ref": "#/components/schemas/BooleanMap"
+          },
+          "recycling_options": {
+            "$ref": "#/components/schemas/BooleanMap"
+          },
+          "fuel_options": {
+            "$ref": "#/components/schemas/BooleanMap"
+          },
+          "targeted_for": {
+            "$ref": "#/components/schemas/BooleanMap"
+          },
+          "socket_options": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/PlaceDetailGroup"
+            }
+          },
+          "brand_details": {
+            "$ref": "#/components/schemas/PlaceDetailGroup"
+          },
+          "operator_details": {
+            "$ref": "#/components/schemas/PlaceDetailGroup"
+          },
+          "network_details": {
+            "$ref": "#/components/schemas/PlaceDetailGroup"
+          },
+          "owner_details": {
+            "$ref": "#/components/schemas/PlaceDetailGroup"
+          },
+          "name_other": {
+            "$ref": "#/components/schemas/PlaceDetailGroup"
+          },
+          "contact": {
+            "$ref": "#/components/schemas/PlaceDetailGroup"
+          },
+          "facilities": {
+            "$ref": "#/components/schemas/PlaceDetailGroup"
+          },
+          "wiki_and_media": {
+            "$ref": "#/components/schemas/PlaceDetailGroup"
+          },
+          "historic": {
+            "$ref": "#/components/schemas/PlaceDetailGroup"
+          },
+          "heritage": {
+            "$ref": "#/components/schemas/PlaceDetailGroup"
+          },
+          "artwork": {
+            "$ref": "#/components/schemas/PlaceDetailGroup"
+          },
+          "accommodation": {
+            "$ref": "#/components/schemas/PlaceDetailGroup"
+          },
+          "catering": {
+            "$ref": "#/components/schemas/PlaceDetailGroup"
+          },
+          "parking": {
+            "$ref": "#/components/schemas/PlaceDetailGroup"
+          },
+          "airport": {
+            "$ref": "#/components/schemas/PlaceDetailGroup"
+          },
+          "power": {
+            "$ref": "#/components/schemas/PlaceDetailGroup"
+          },
+          "way": {
+            "$ref": "#/components/schemas/PlaceDetailGroup"
+          },
+          "building": {
+            "$ref": "#/components/schemas/PlaceDetailGroup"
+          },
+          "place_of_worship": {
+            "$ref": "#/components/schemas/PlaceDetailGroup"
+          },
+          "fire_hydrant": {
+            "$ref": "#/components/schemas/PlaceDetailGroup"
+          },
+          "defibrilator": {
+            "$ref": "#/components/schemas/PlaceDetailGroup"
+          },
+          "restrictions": {
+            "$ref": "#/components/schemas/PlaceDetailGroup"
+          },
+          "production": {
+            "$ref": "#/components/schemas/PlaceDetailGroup"
+          },
+          "distance": {
+            "type": "number"
+          },
+          "categories": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "details": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "datasource": {
+            "$ref": "#/components/schemas/Datasource"
+          },
+          "mappedTo": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "lon": {
+                "type": "number",
+                "minimum": -180,
+                "maximum": 180
+              },
+              "lat": {
+                "type": "number",
+                "minimum": -90,
+                "maximum": 90
+              }
+            }
+          },
+          "place_id": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 2048
+          },
+          "feature_type": {
+            "$ref": "#/components/schemas/PlaceDetailsFeatureId"
+          },
+          "area": {
+            "type": "number"
+          },
+          "type": {
+            "type": "string"
+          },
+          "range": {
+            "type": "number"
+          },
+          "access_details": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "wikidata": {
+            "type": "string"
+          }
+        }
+      },
+      "Datasource": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/PlacesDatasource"
+          },
+          {
+            "$ref": "#/components/schemas/PeliasPlaceDatasource"
+          }
+        ]
+      },
+      "GeoJsonGeometry": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/PointGeometry"
+          },
+          {
+            "$ref": "#/components/schemas/LineStringGeometry"
+          },
+          {
+            "$ref": "#/components/schemas/PolygonGeometry"
+          },
+          {
+            "$ref": "#/components/schemas/MultiPointGeometry"
+          },
+          {
+            "$ref": "#/components/schemas/MultiLineStringGeometry"
+          },
+          {
+            "$ref": "#/components/schemas/MultiPolygonGeometry"
+          },
+          {
+            "$ref": "#/components/schemas/GeometryCollection"
+          }
+        ]
+      },
+      "PointGeometry": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type",
+          "coordinates"
+        ],
+        "properties": {
+          "type": {
+            "const": "Point"
+          },
+          "coordinates": {
+            "$ref": "#/components/schemas/Position"
+          }
+        }
+      },
+      "LineStringGeometry": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type",
+          "coordinates"
+        ],
+        "properties": {
+          "type": {
+            "const": "LineString"
+          },
+          "coordinates": {
+            "type": "array",
+            "minItems": 2,
+            "items": {
+              "$ref": "#/components/schemas/Position"
+            }
+          }
+        }
+      },
+      "PolygonGeometry": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type",
+          "coordinates"
+        ],
+        "properties": {
+          "type": {
+            "const": "Polygon"
+          },
+          "coordinates": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "minItems": 4,
+              "items": {
+                "$ref": "#/components/schemas/Position"
+              }
+            }
+          }
+        }
+      },
+      "MultiPointGeometry": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type",
+          "coordinates"
+        ],
+        "properties": {
+          "type": {
+            "const": "MultiPoint"
+          },
+          "coordinates": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Position"
+            }
+          }
+        }
+      },
+      "MultiLineStringGeometry": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type",
+          "coordinates"
+        ],
+        "properties": {
+          "type": {
+            "const": "MultiLineString"
+          },
+          "coordinates": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "minItems": 2,
+              "items": {
+                "$ref": "#/components/schemas/Position"
+              }
+            }
+          }
+        }
+      },
+      "MultiPolygonGeometry": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type",
+          "coordinates"
+        ],
+        "properties": {
+          "type": {
+            "const": "MultiPolygon"
+          },
+          "coordinates": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "array",
+                "minItems": 4,
+                "items": {
+                  "$ref": "#/components/schemas/Position"
+                }
+              }
+            }
+          }
+        }
+      },
+      "GeometryCollection": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type",
+          "geometries"
+        ],
+        "properties": {
+          "type": {
+            "const": "GeometryCollection"
+          },
+          "geometries": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GeoJsonGeometry"
+            }
+          }
+        }
+      },
+      "Position": {
+        "type": "array",
+        "minItems": 2,
+        "maxItems": 3,
+        "prefixItems": [
+          {
+            "type": "number",
+            "minimum": -180,
+            "maximum": 180,
+            "description": "Longitude."
+          },
+          {
+            "type": "number",
+            "minimum": -90,
+            "maximum": 90,
+            "description": "Latitude."
+          },
+          {
+            "type": "number",
+            "description": "Optional altitude."
+          }
+        ],
+        "items": false
+      }
+    },
+    "securitySchemes": {
+      "ApiKeyInQuery": {
+        "type": "apiKey",
+        "in": "query",
+        "name": "apiKey",
+        "description": "Geoapify API key query parameter. Recommended authentication method for public APIs. API keys in URLs can be logged; use x-api-key for server-to-server clients."
+      },
+      "ApiKeyInHeader": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "x-api-key",
+        "description": "Geoapify API key header. Supported as an alternative authentication method for public APIs."
+      }
+    }
+  },
+  "security": [
+    {
+      "ApiKeyInQuery": []
+    },
+    {
+      "ApiKeyInHeader": []
+    }
+  ]
+}

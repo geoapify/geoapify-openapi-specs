@@ -1,0 +1,1567 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Geoapify Static Maps API",
+    "version": "1.0.0",
+    "description": "OpenAPI specification for rendering static map images."
+  },
+  "servers": [
+    {
+      "url": "https://maps.geoapify.com/v1",
+      "description": "Default Maps API endpoint."
+    },
+    {
+      "url": "https://api-eu.geoapify.com/v1",
+      "description": "EU-focused endpoint. Geoapify service processing uses EU infrastructure."
+    }
+  ],
+  "tags": [
+    {
+      "name": "Static Maps",
+      "description": "Render static map images with markers, geometries, and GeoJSON overlays."
+    }
+  ],
+  "paths": {
+    "/staticmap": {
+      "get": {
+        "tags": [
+          "Static Maps"
+        ],
+        "operationId": "getStaticMap",
+        "summary": "Render a static map with query parameters",
+        "description": "Render a static map image. At least one viewport or overlay parameter is required: area, center, marker, geometry, or geojson.",
+        "parameters": [
+          {
+            "name": "style",
+            "in": "query",
+            "required": false,
+            "description": "Geoapify map style used to render the image.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "osm-carto",
+                "carto",
+                "dark-matter",
+                "klokantech-basic",
+                "osm-bright",
+                "toner",
+                "toner-grey",
+                "osm-liberty",
+                "maptiler-3d",
+                "positron",
+                "dark-matter-brown",
+                "dark-matter-dark-grey",
+                "dark-matter-dark-purple",
+                "dark-matter-purple-roads",
+                "dark-matter-yellow-roads",
+                "osm-bright-grey",
+                "osm-bright-smooth",
+                "positron-blue",
+                "positron-red"
+              ],
+              "default": "osm-carto"
+            }
+          },
+          {
+            "name": "area",
+            "in": "query",
+            "required": false,
+            "description": "Map bounding box as rect:lon1,lat1,lon2,lat2. Alternative to center and zoom.",
+            "schema": {
+              "type": "string",
+              "pattern": "^rect:-?\\d+(\\.\\d+)?,-?\\d+(\\.\\d+)?,-?\\d+(\\.\\d+)?,-?\\d+(\\.\\d+)?$"
+            },
+            "example": "rect:13.0884,52.3383,13.7611,52.6755"
+          },
+          {
+            "name": "center",
+            "in": "query",
+            "required": false,
+            "description": "Map center as lonlat:lon,lat. Ignored when area is specified.",
+            "schema": {
+              "type": "string",
+              "pattern": "^lonlat:-?\\d+(\\.\\d+)?,-?\\d+(\\.\\d+)?$"
+            },
+            "example": "lonlat:13.405,52.52"
+          },
+          {
+            "name": "zoom",
+            "in": "query",
+            "required": false,
+            "description": "Map zoom level. Ignored when area is specified.",
+            "schema": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 20,
+              "default": 17
+            }
+          },
+          {
+            "name": "bearing",
+            "in": "query",
+            "required": false,
+            "description": "Map rotation in degrees.",
+            "schema": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 360,
+              "default": 0
+            }
+          },
+          {
+            "name": "pitch",
+            "in": "query",
+            "required": false,
+            "description": "Map pitch in degrees.",
+            "schema": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 60,
+              "default": 0
+            }
+          },
+          {
+            "name": "width",
+            "in": "query",
+            "required": false,
+            "description": "Base image width in pixels. At scale factor 2, the maximum width is 4096.",
+            "schema": {
+              "type": "integer",
+              "minimum": 10,
+              "maximum": 8192,
+              "default": 1024
+            }
+          },
+          {
+            "name": "height",
+            "in": "query",
+            "required": false,
+            "description": "Base image height in pixels. At scale factor 2, the maximum height is 4096.",
+            "schema": {
+              "type": "integer",
+              "minimum": 10,
+              "maximum": 8192,
+              "default": 768
+            }
+          },
+          {
+            "name": "scaleFactor",
+            "in": "query",
+            "required": false,
+            "description": "Output pixel-density multiplier. The final image dimensions are `width × scaleFactor` by `height × scaleFactor`. At scale factor 2, width and height must each be no greater than 4096.",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 2,
+              "default": 1
+            }
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "required": false,
+            "description": "Output image format. `jpeg` returns `image/jpeg`; `png` returns `image/png`.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "png",
+                "jpeg"
+              ],
+              "default": "jpeg"
+            }
+          },
+          {
+            "name": "marker",
+            "in": "query",
+            "required": false,
+            "description": "Marker definitions. Each marker starts with `lonlat:<longitude>,<latitude>` and can include semicolon-separated options: `color`, `type` (`material`, `awesome`, `circle`, or `plain`), `size` (`small` through `xx-large`, or 1–999), `icon`, `iconsize`, `icontype` (`material`, `awesome`, or `lucide`), `text`, `textsize`, `contentsize`, `whitecircle` (`yes` or `no`), `shadow` (`auto` or `no`), `shadowcolor`, `strokecolor`, and `contentcolor`. Separate multiple markers with `|` or repeat the parameter.",
+            "style": "pipeDelimited",
+            "explode": false,
+            "schema": {
+              "type": "array",
+              "maxItems": 100,
+              "items": {
+                "type": "string"
+              }
+            },
+            "example": [
+              "lonlat:13.405,52.52;color:#ff5050;size:60;whitecircle:no;shadow:no",
+              "lonlat:13.3777,52.5163;color:#2f80ed;size:42;whitecircle:no;shadow:no"
+            ]
+          },
+          {
+            "name": "geometry",
+            "in": "query",
+            "required": false,
+            "description": "Geometry overlays. Coordinate strings use longitude,latitude order. Supported values are `circle:<lon>,<lat>,<radius-in-meters>`, `rect:<lon1>,<lat1>,<lon2>,<lat2>`, `polyline:<lon1>,<lat1>,...`, encoded `polyline5:<value>` or `polyline6:<value>`, and `polygon:<lon1>,<lat1>,...`. Append semicolon-separated styling options: `linecolor`, `lineopacity`, `linewidth`, `linestyle`, `fillcolor`, and `fillopacity`. Separate multiple geometries with `|` or repeat the parameter.",
+            "style": "pipeDelimited",
+            "explode": false,
+            "schema": {
+              "type": "array",
+              "maxItems": 100,
+              "items": {
+                "type": "string"
+              }
+            },
+            "example": [
+              "circle:13.405,52.52,50;linecolor:#ff6600;fillcolor:#6600ff"
+            ]
+          },
+          {
+            "name": "geojson",
+            "in": "query",
+            "required": false,
+            "description": "GeoJSON object encoded as a JSON string.",
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1024
+            }
+          },
+          {
+            "name": "styleCustomization",
+            "in": "query",
+            "required": false,
+            "description": "Map-layer customization expressions. Use `<layer>:<color>`, `<layer>:<size>`, or `<layer>:<color>;<size>`. Separate multiple expressions with `|` or repeat the parameter.",
+            "style": "pipeDelimited",
+            "explode": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "example": [
+              "water:#7ec8e3",
+              "road:#ff6600;2"
+            ]
+          },
+          {
+            "name": "attribution",
+            "in": "query",
+            "required": false,
+            "description": "Controls attribution displayed on the map image. `default` includes Geoapify branding and required data-provider attribution; `mandatory` includes only required data-provider attribution; `none` is available for white-label use on eligible paid plans. When attribution is not displayed on the image, all required data-provider attribution must be provided in another visible place associated with the map.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "default",
+                "mandatory",
+                "none"
+              ],
+              "default": "default"
+            }
+          },
+          {
+            "name": "lang",
+            "in": "query",
+            "required": false,
+            "description": "Map label language.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "ab",
+                "aa",
+                "af",
+                "ak",
+                "sq",
+                "am",
+                "ar",
+                "an",
+                "hy",
+                "as",
+                "av",
+                "ae",
+                "ay",
+                "az",
+                "bm",
+                "ba",
+                "eu",
+                "be",
+                "bn",
+                "bh",
+                "bi",
+                "bs",
+                "br",
+                "bg",
+                "my",
+                "ca",
+                "ch",
+                "ce",
+                "ny",
+                "zh",
+                "cv",
+                "kw",
+                "co",
+                "cr",
+                "hr",
+                "cs",
+                "da",
+                "dv",
+                "nl",
+                "en",
+                "eo",
+                "et",
+                "ee",
+                "fo",
+                "fj",
+                "fi",
+                "fr",
+                "ff",
+                "gl",
+                "ka",
+                "de",
+                "el",
+                "gn",
+                "gu",
+                "ht",
+                "ha",
+                "he",
+                "hz",
+                "hi",
+                "ho",
+                "hu",
+                "ia",
+                "id",
+                "ie",
+                "ga",
+                "ig",
+                "ik",
+                "io",
+                "is",
+                "it",
+                "iu",
+                "ja",
+                "jv",
+                "kl",
+                "kn",
+                "kr",
+                "ks",
+                "kk",
+                "km",
+                "ki",
+                "rw",
+                "ky",
+                "kv",
+                "kg",
+                "ko",
+                "ku",
+                "kj",
+                "la",
+                "lb",
+                "lg",
+                "li",
+                "ln",
+                "lo",
+                "lt",
+                "lu",
+                "lv",
+                "gv",
+                "mk",
+                "mg",
+                "ms",
+                "ml",
+                "mt",
+                "mi",
+                "mr",
+                "mh",
+                "mn",
+                "na",
+                "nv",
+                "nb",
+                "nd",
+                "ne",
+                "ng",
+                "nn",
+                "no",
+                "ii",
+                "nr",
+                "oc",
+                "oj",
+                "cu",
+                "om",
+                "or",
+                "os",
+                "pa",
+                "pi",
+                "fa",
+                "pl",
+                "ps",
+                "pt",
+                "qu",
+                "rm",
+                "rn",
+                "ro",
+                "ru",
+                "sa",
+                "sc",
+                "sd",
+                "se",
+                "sm",
+                "sg",
+                "sr",
+                "gd",
+                "sn",
+                "si",
+                "sk",
+                "sl",
+                "so",
+                "st",
+                "es",
+                "su",
+                "sw",
+                "ss",
+                "sv",
+                "ta",
+                "te",
+                "tg",
+                "th",
+                "ti",
+                "bo",
+                "tk",
+                "tl",
+                "tn",
+                "to",
+                "tr",
+                "ts",
+                "tt",
+                "tw",
+                "ty",
+                "ug",
+                "uk",
+                "ur",
+                "uz",
+                "ve",
+                "vi",
+                "vo",
+                "wa",
+                "cy",
+                "wo",
+                "fy",
+                "xh",
+                "yi",
+                "yo",
+                "za"
+              ]
+            },
+            "example": "en"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Binary static map image. `format=jpeg` returns `image/jpeg`; `format=png` returns `image/png`.",
+            "content": {
+              "image/jpeg": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              },
+              "image/png": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request parameters or request body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GatewayError"
+                },
+                "example": {
+                  "statusCode": 400,
+                  "error": "Bad Request",
+                  "message": "\"scaleFactor\" must be less than or equal to 2"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid Geoapify API key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GatewayError"
+                },
+                "example": {
+                  "statusCode": 401,
+                  "error": "Unauthorized",
+                  "message": "Invalid apiKey"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit or quota exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GatewayError"
+                },
+                "example": {
+                  "statusCode": 429,
+                  "error": "Too Many Requests",
+                  "message": "Quota exceeded"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal gateway error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GatewayError"
+                },
+                "example": {
+                  "statusCode": 500,
+                  "error": "Internal Server Error",
+                  "message": "Request failed, please try again later"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Static Maps"
+        ],
+        "operationId": "postStaticMap",
+        "summary": "Render a static map with JSON body",
+        "description": "Render a static map image with structured marker, geometry, and GeoJSON parameters.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StaticMapRequest"
+              },
+              "example": {
+                "style": "osm-carto",
+                "area": {
+                  "type": "rect",
+                  "value": {
+                    "lat1": 52.3383,
+                    "lon1": 13.0884,
+                    "lat2": 52.6755,
+                    "lon2": 13.7611
+                  }
+                },
+                "width": 1024,
+                "height": 768,
+                "format": "jpeg",
+                "markers": [
+                  {
+                    "lat": 52.52,
+                    "lon": 13.405,
+                    "color": "#ff5050",
+                    "size": 60,
+                    "whitecircle": "no",
+                    "shadow": "no"
+                  },
+                  {
+                    "lat": 52.5163,
+                    "lon": 13.3777,
+                    "color": "#2f80ed",
+                    "size": 42,
+                    "whitecircle": "no",
+                    "shadow": "no"
+                  }
+                ],
+                "geometries": [
+                  {
+                    "type": "circle",
+                    "value": {
+                      "lat": 52.52,
+                      "lon": 13.405,
+                      "radius": 50
+                    },
+                    "linecolor": "#ff6600",
+                    "fillcolor": "#6600ff",
+                    "lineopacity": 0.8,
+                    "fillopacity": 0.3
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Binary static map image. `format=jpeg` returns `image/jpeg`; `format=png` returns `image/png`.",
+            "content": {
+              "image/jpeg": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              },
+              "image/png": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request parameters or request body.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GatewayError"
+                },
+                "example": {
+                  "statusCode": 400,
+                  "error": "Bad Request",
+                  "message": "\"scaleFactor\" must be less than or equal to 2"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid Geoapify API key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GatewayError"
+                },
+                "example": {
+                  "statusCode": 401,
+                  "error": "Unauthorized",
+                  "message": "Invalid apiKey"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit or quota exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GatewayError"
+                },
+                "example": {
+                  "statusCode": 429,
+                  "error": "Too Many Requests",
+                  "message": "Quota exceeded"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal gateway error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GatewayError"
+                },
+                "example": {
+                  "statusCode": 500,
+                  "error": "Internal Server Error",
+                  "message": "Request failed, please try again later"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "StaticMapRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "anyOf": [
+          {
+            "required": [
+              "area"
+            ]
+          },
+          {
+            "required": [
+              "center"
+            ]
+          },
+          {
+            "required": [
+              "markers"
+            ]
+          },
+          {
+            "required": [
+              "geometries"
+            ]
+          },
+          {
+            "required": [
+              "geojson"
+            ]
+          }
+        ],
+        "properties": {
+          "style": {
+            "type": "string",
+            "enum": [
+              "osm-carto",
+              "carto",
+              "dark-matter",
+              "klokantech-basic",
+              "osm-bright",
+              "toner",
+              "toner-grey",
+              "osm-liberty",
+              "maptiler-3d",
+              "positron",
+              "dark-matter-brown",
+              "dark-matter-dark-grey",
+              "dark-matter-dark-purple",
+              "dark-matter-purple-roads",
+              "dark-matter-yellow-roads",
+              "osm-bright-grey",
+              "osm-bright-smooth",
+              "positron-blue",
+              "positron-red"
+            ],
+            "default": "osm-carto",
+            "description": "Geoapify map style used to render the image."
+          },
+          "styleCustomization": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 1000,
+            "description": "Map-layer color and size customizations.",
+            "items": {
+              "$ref": "#/components/schemas/StyleCustomization"
+            }
+          },
+          "area": {
+            "$ref": "#/components/schemas/StaticMapArea",
+            "description": "Map bounding box. Alternative to center and zoom."
+          },
+          "center": {
+            "$ref": "#/components/schemas/LatLon",
+            "description": "Map center. Ignored when area is specified."
+          },
+          "zoom": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 20,
+            "default": 17,
+            "description": "Map zoom level. Ignored when area is specified."
+          },
+          "bearing": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 360,
+            "default": 0,
+            "description": "Clockwise map rotation in degrees."
+          },
+          "pitch": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 60,
+            "default": 0,
+            "description": "Map tilt in degrees."
+          },
+          "width": {
+            "type": "integer",
+            "minimum": 10,
+            "maximum": 8192,
+            "default": 1024,
+            "description": "Base image width in pixels. At scale factor 2, the maximum width is 4096."
+          },
+          "height": {
+            "type": "integer",
+            "minimum": 10,
+            "maximum": 8192,
+            "default": 768,
+            "description": "Base image height in pixels. At scale factor 2, the maximum height is 4096."
+          },
+          "scaleFactor": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 2,
+            "default": 1,
+            "description": "Output pixel-density multiplier. The final image dimensions are `width × scaleFactor` by `height × scaleFactor`."
+          },
+          "format": {
+            "type": "string",
+            "enum": [
+              "png",
+              "jpeg"
+            ],
+            "default": "jpeg",
+            "description": "Output image format. `jpeg` returns `image/jpeg`; `png` returns `image/png`."
+          },
+          "markers": {
+            "type": "array",
+            "minItems": 0,
+            "maxItems": 150,
+            "description": "Markers drawn over the map.",
+            "items": {
+              "$ref": "#/components/schemas/StaticMapMarker"
+            }
+          },
+          "geometries": {
+            "type": "array",
+            "minItems": 0,
+            "maxItems": 100,
+            "description": "Styled geometry overlays drawn over the map.",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/CircleGeometry"
+                },
+                {
+                  "$ref": "#/components/schemas/RectGeometry"
+                },
+                {
+                  "$ref": "#/components/schemas/PolylineGeometry"
+                },
+                {
+                  "$ref": "#/components/schemas/EncodedPolyline5Geometry"
+                },
+                {
+                  "$ref": "#/components/schemas/EncodedPolyline6Geometry"
+                },
+                {
+                  "$ref": "#/components/schemas/PolygonGeometry"
+                }
+              ]
+            }
+          },
+          "geojson": {
+            "type": "object",
+            "additionalProperties": true,
+            "description": "GeoJSON object."
+          },
+          "attribution": {
+            "type": "string",
+            "enum": [
+              "default",
+              "mandatory",
+              "none"
+            ],
+            "default": "default",
+            "description": "Controls attribution displayed on the map image. `default` includes Geoapify branding and required data-provider attribution; `mandatory` includes only required data-provider attribution; `none` is available for white-label use on eligible paid plans. When attribution is not displayed on the image, all required data-provider attribution must be provided in another visible place associated with the map."
+          },
+          "lang": {
+            "type": "string",
+            "enum": [
+              "ab",
+              "aa",
+              "af",
+              "ak",
+              "sq",
+              "am",
+              "ar",
+              "an",
+              "hy",
+              "as",
+              "av",
+              "ae",
+              "ay",
+              "az",
+              "bm",
+              "ba",
+              "eu",
+              "be",
+              "bn",
+              "bh",
+              "bi",
+              "bs",
+              "br",
+              "bg",
+              "my",
+              "ca",
+              "ch",
+              "ce",
+              "ny",
+              "zh",
+              "cv",
+              "kw",
+              "co",
+              "cr",
+              "hr",
+              "cs",
+              "da",
+              "dv",
+              "nl",
+              "en",
+              "eo",
+              "et",
+              "ee",
+              "fo",
+              "fj",
+              "fi",
+              "fr",
+              "ff",
+              "gl",
+              "ka",
+              "de",
+              "el",
+              "gn",
+              "gu",
+              "ht",
+              "ha",
+              "he",
+              "hz",
+              "hi",
+              "ho",
+              "hu",
+              "ia",
+              "id",
+              "ie",
+              "ga",
+              "ig",
+              "ik",
+              "io",
+              "is",
+              "it",
+              "iu",
+              "ja",
+              "jv",
+              "kl",
+              "kn",
+              "kr",
+              "ks",
+              "kk",
+              "km",
+              "ki",
+              "rw",
+              "ky",
+              "kv",
+              "kg",
+              "ko",
+              "ku",
+              "kj",
+              "la",
+              "lb",
+              "lg",
+              "li",
+              "ln",
+              "lo",
+              "lt",
+              "lu",
+              "lv",
+              "gv",
+              "mk",
+              "mg",
+              "ms",
+              "ml",
+              "mt",
+              "mi",
+              "mr",
+              "mh",
+              "mn",
+              "na",
+              "nv",
+              "nb",
+              "nd",
+              "ne",
+              "ng",
+              "nn",
+              "no",
+              "ii",
+              "nr",
+              "oc",
+              "oj",
+              "cu",
+              "om",
+              "or",
+              "os",
+              "pa",
+              "pi",
+              "fa",
+              "pl",
+              "ps",
+              "pt",
+              "qu",
+              "rm",
+              "rn",
+              "ro",
+              "ru",
+              "sa",
+              "sc",
+              "sd",
+              "se",
+              "sm",
+              "sg",
+              "sr",
+              "gd",
+              "sn",
+              "si",
+              "sk",
+              "sl",
+              "so",
+              "st",
+              "es",
+              "su",
+              "sw",
+              "ss",
+              "sv",
+              "ta",
+              "te",
+              "tg",
+              "th",
+              "ti",
+              "bo",
+              "tk",
+              "tl",
+              "tn",
+              "to",
+              "tr",
+              "ts",
+              "tt",
+              "tw",
+              "ty",
+              "ug",
+              "uk",
+              "ur",
+              "uz",
+              "ve",
+              "vi",
+              "vo",
+              "wa",
+              "cy",
+              "wo",
+              "fy",
+              "xh",
+              "yi",
+              "yo",
+              "za"
+            ],
+            "description": "Language used for map labels."
+          }
+        }
+      },
+      "StaticMapArea": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type",
+          "value"
+        ],
+        "properties": {
+          "type": {
+            "const": "rect"
+          },
+          "value": {
+            "$ref": "#/components/schemas/RectBounds"
+          }
+        }
+      },
+      "RectBounds": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "lat1",
+          "lon1",
+          "lat2",
+          "lon2"
+        ],
+        "properties": {
+          "lat1": {
+            "type": "number",
+            "minimum": -90,
+            "maximum": 90,
+            "description": "Latitude of the first bounding-box corner."
+          },
+          "lon1": {
+            "type": "number",
+            "minimum": -180,
+            "maximum": 180,
+            "description": "Longitude of the first bounding-box corner."
+          },
+          "lat2": {
+            "type": "number",
+            "minimum": -90,
+            "maximum": 90,
+            "description": "Latitude of the opposite bounding-box corner."
+          },
+          "lon2": {
+            "type": "number",
+            "minimum": -180,
+            "maximum": 180,
+            "description": "Longitude of the opposite bounding-box corner."
+          }
+        }
+      },
+      "LatLon": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "lat",
+          "lon"
+        ],
+        "properties": {
+          "lat": {
+            "type": "number",
+            "minimum": -90,
+            "maximum": 90,
+            "description": "Latitude in decimal degrees."
+          },
+          "lon": {
+            "type": "number",
+            "minimum": -180,
+            "maximum": 180,
+            "description": "Longitude in decimal degrees."
+          }
+        }
+      },
+      "StyleCustomization": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "layer"
+        ],
+        "properties": {
+          "layer": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255,
+            "description": "Map style layer ID to customize."
+          },
+          "color": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 10,
+            "description": "Replacement layer color as a CSS color name or hexadecimal value."
+          },
+          "size": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 999,
+            "description": "Replacement layer size."
+          }
+        }
+      },
+      "StaticMapMarker": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "lat",
+          "lon"
+        ],
+        "properties": {
+          "lat": {
+            "type": "number",
+            "minimum": -90,
+            "maximum": 90,
+            "description": "Marker latitude in decimal degrees."
+          },
+          "lon": {
+            "type": "number",
+            "minimum": -180,
+            "maximum": 180,
+            "description": "Marker longitude in decimal degrees."
+          },
+          "color": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 10,
+            "default": "#ff5050",
+            "description": "Primary marker color as a CSS color name or hexadecimal value."
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "material",
+              "awesome",
+              "circle",
+              "plain"
+            ],
+            "default": "material",
+            "description": "Marker design. This is separate from `icontype`, which selects the icon library."
+          },
+          "size": {
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "small",
+                  "medium",
+                  "large",
+                  "x-large",
+                  "xx-large"
+                ]
+              },
+              {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 1000
+              }
+            ],
+            "description": "Overall marker size as a named preset or pixel value."
+          },
+          "iconsize": {
+            "type": "string",
+            "enum": [
+              "small",
+              "medium",
+              "large"
+            ],
+            "default": "medium",
+            "description": "Named size of the icon inside the marker."
+          },
+          "contentsize": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 1000,
+            "description": "Icon or text content size in pixels."
+          },
+          "icontype": {
+            "type": "string",
+            "enum": [
+              "material",
+              "awesome",
+              "lucide"
+            ],
+            "default": "awesome",
+            "description": "Icon library used to resolve the `icon` name."
+          },
+          "icon": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "description": "Icon name from the library selected by `icontype`."
+          },
+          "text": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "description": "Text displayed inside the marker instead of an icon."
+          },
+          "textsize": {
+            "type": "string",
+            "enum": [
+              "small",
+              "medium",
+              "large"
+            ],
+            "default": "medium",
+            "description": "Named text size inside the marker."
+          },
+          "whitecircle": {
+            "type": "string",
+            "enum": [
+              "yes",
+              "no"
+            ],
+            "default": "yes",
+            "description": "Set to `no` to remove the white circle behind marker content."
+          },
+          "shadow": {
+            "type": "string",
+            "enum": [
+              "yes",
+              "no"
+            ],
+            "default": "yes",
+            "description": "Set to `no` to remove the marker shadow."
+          },
+          "shadowcolor": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 10,
+            "description": "Marker shadow color."
+          },
+          "contentcolor": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 10,
+            "description": "Icon or text color inside the marker."
+          },
+          "strokecolor": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 10,
+            "description": "Marker outline color."
+          }
+        }
+      },
+      "GeometryStyle": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "linecolor": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 10,
+            "default": "#000000",
+            "description": "Geometry outline color."
+          },
+          "lineopacity": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1,
+            "default": 1,
+            "description": "Geometry outline opacity from 0 (transparent) to 1 (opaque)."
+          },
+          "linewidth": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 20,
+            "default": 1,
+            "description": "Geometry outline width in pixels."
+          },
+          "linestyle": {
+            "type": "string",
+            "enum": [
+              "solid",
+              "dotted",
+              "dashed",
+              "longdash"
+            ],
+            "default": "solid",
+            "description": "Geometry outline pattern."
+          },
+          "fillcolor": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 10,
+            "default": "#000000",
+            "description": "Geometry fill color."
+          },
+          "fillopacity": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1,
+            "default": 1,
+            "description": "Geometry fill opacity from 0 (transparent) to 1 (opaque)."
+          }
+        }
+      },
+      "CircleGeometry": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/GeometryStyle"
+          },
+          {
+            "type": "object",
+            "required": [
+              "type",
+              "value"
+            ],
+            "properties": {
+              "type": {
+                "const": "circle",
+                "description": "Circle geometry."
+              },
+              "value": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "lat",
+                  "lon",
+                  "radius"
+                ],
+                "properties": {
+                  "lat": {
+                    "type": "number",
+                    "minimum": -90,
+                    "maximum": 90,
+                    "description": "Circle-center latitude in decimal degrees."
+                  },
+                  "lon": {
+                    "type": "number",
+                    "minimum": -180,
+                    "maximum": 180,
+                    "description": "Circle-center longitude in decimal degrees."
+                  },
+                  "radius": {
+                    "type": "number",
+                    "description": "Circle radius in meters."
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "RectGeometry": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/GeometryStyle"
+          },
+          {
+            "type": "object",
+            "required": [
+              "type",
+              "value"
+            ],
+            "properties": {
+              "type": {
+                "const": "rect",
+                "description": "Rectangular bounding-box geometry."
+              },
+              "value": {
+                "$ref": "#/components/schemas/RectBounds",
+                "description": "Rectangle corners."
+              }
+            }
+          }
+        ]
+      },
+      "PolylineGeometry": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/GeometryStyle"
+          },
+          {
+            "type": "object",
+            "required": [
+              "type",
+              "value"
+            ],
+            "properties": {
+              "type": {
+                "const": "polyline",
+                "description": "Polyline geometry defined by coordinate objects."
+              },
+              "value": {
+                "type": "array",
+                "maxItems": 1000,
+                "description": "Ordered polyline points. Each point uses explicit `lat` and `lon` properties.",
+                "items": {
+                  "$ref": "#/components/schemas/LatLon"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "EncodedPolyline5Geometry": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/GeometryStyle"
+          },
+          {
+            "type": "object",
+            "required": [
+              "type",
+              "value"
+            ],
+            "properties": {
+              "type": {
+                "const": "polyline5",
+                "description": "Polyline encoded with precision 5."
+              },
+              "value": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 10000,
+                "description": "Encoded polyline string with precision 5."
+              }
+            }
+          }
+        ]
+      },
+      "EncodedPolyline6Geometry": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/GeometryStyle"
+          },
+          {
+            "type": "object",
+            "required": [
+              "type",
+              "value"
+            ],
+            "properties": {
+              "type": {
+                "const": "polyline6",
+                "description": "Polyline encoded with precision 6."
+              },
+              "value": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 10000,
+                "description": "Encoded polyline string with precision 6."
+              }
+            }
+          }
+        ]
+      },
+      "PolygonGeometry": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/GeometryStyle"
+          },
+          {
+            "type": "object",
+            "required": [
+              "type",
+              "value"
+            ],
+            "properties": {
+              "type": {
+                "const": "polygon",
+                "description": "Polygon geometry defined by coordinate objects."
+              },
+              "value": {
+                "type": "array",
+                "maxItems": 1000,
+                "description": "Ordered polygon vertices. Each point uses explicit `lat` and `lon` properties. The renderer closes the polygon automatically.",
+                "items": {
+                  "$ref": "#/components/schemas/LatLon"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "GatewayError": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "statusCode",
+          "error",
+          "message"
+        ],
+        "properties": {
+          "statusCode": {
+            "type": "integer",
+            "description": "HTTP status code returned by the gateway."
+          },
+          "error": {
+            "type": "string",
+            "description": "Standard HTTP error name."
+          },
+          "message": {
+            "type": "string",
+            "description": "Human-readable explanation of the error."
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "ApiKeyInQuery": {
+        "type": "apiKey",
+        "in": "query",
+        "name": "apiKey",
+        "description": "Geoapify API key query parameter. Recommended authentication method for public APIs. API keys in URLs can be logged; use x-api-key for server-to-server clients."
+      },
+      "ApiKeyInHeader": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "x-api-key",
+        "description": "Geoapify API key header. Supported as an alternative authentication method for public APIs."
+      }
+    }
+  },
+  "security": [
+    {
+      "ApiKeyInQuery": []
+    },
+    {
+      "ApiKeyInHeader": []
+    }
+  ]
+}

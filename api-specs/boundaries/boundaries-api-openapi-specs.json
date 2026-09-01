@@ -1,0 +1,2548 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Geoapify Boundaries API",
+    "version": "1.0.0",
+    "description": "Find boundaries that contain a place or child boundaries contained by a place."
+  },
+  "servers": [
+    {
+      "url": "https://api.geoapify.com/v1",
+      "description": "Default API endpoint."
+    },
+    {
+      "url": "https://api-eu.geoapify.com/v1",
+      "description": "EU-focused endpoint. Geoapify service processing uses EU infrastructure."
+    }
+  ],
+  "tags": [
+    {
+      "name": "Boundaries",
+      "description": "Find containing and contained administrative, postal, political, and related boundaries."
+    }
+  ],
+  "paths": {
+    "/boundaries/part-of": {
+      "get": {
+        "tags": [
+          "Boundaries"
+        ],
+        "operationId": "getBoundariesPartOf",
+        "summary": "Find boundaries containing a place",
+        "description": "Find boundaries that contain one place. Use one lookup method: a Geoapify `id` (recommended), a `lat` and `lon` pair, or an `osm_id` and `osm_type` pair. Do not combine lookup methods. Use `boundaries` to restrict the returned boundary types and `geometry` to choose representative points or simplified boundary polygons.\n\n**Example:** The preset `id` represents South Carolina, United States, and `geometry=point` returns a representative point for each containing boundary.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": false,
+            "description": "Geoapify place identifier returned by the Geocoding, Places, or related Geoapify APIs. This is the recommended lookup method.",
+            "schema": {
+              "type": "string",
+              "minLength": 3,
+              "maxLength": 2048
+            },
+            "example": "513bfd69cccb2354c059ca8760aaf4cf4040f00101f901286b03000000000092030e536f757468204361726f6c696e61"
+          },
+          {
+            "name": "lat",
+            "in": "query",
+            "required": false,
+            "description": "Latitude of the place. Alternative to `id`; provide together with `lon` and leave unset when using a place ID.",
+            "schema": {
+              "type": "number",
+              "minimum": -90,
+              "maximum": 90
+            }
+          },
+          {
+            "name": "lon",
+            "in": "query",
+            "required": false,
+            "description": "Longitude of the place. Alternative to `id`; provide together with `lat` and leave unset when using a place ID.",
+            "schema": {
+              "type": "number",
+              "minimum": -180,
+              "maximum": 180
+            }
+          },
+          {
+            "name": "osm_id",
+            "in": "query",
+            "required": false,
+            "description": "Numeric OpenStreetMap object identifier. Alternative to `id`; use together with `osm_type` and leave unset when using a place ID.",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          {
+            "name": "osm_type",
+            "in": "query",
+            "required": false,
+            "description": "OpenStreetMap object type used with `osm_id`: `n` for node, `w` for way, or `r` for relation.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "r",
+                "w",
+                "n"
+              ]
+            }
+          },
+          {
+            "name": "boundaries",
+            "in": "query",
+            "required": false,
+            "description": "Boundary types to return. Multiple values are comma-separated.",
+            "schema": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 10,
+              "items": {
+                "type": "string",
+                "enum": [
+                  "administrative",
+                  "postal_code",
+                  "political",
+                  "low_emission_zone",
+                  "public_transport",
+                  "traditional",
+                  "timezone",
+                  "religious_administration",
+                  "religious",
+                  "place",
+                  "neighborhood",
+                  "region",
+                  "municipality",
+                  "barony",
+                  "town",
+                  "health",
+                  "historic",
+                  "historic:administrative"
+                ]
+              }
+            },
+            "style": "form",
+            "explode": false
+          },
+          {
+            "name": "geometry",
+            "in": "query",
+            "required": false,
+            "description": "Geometry representation for returned boundaries. `point` returns representative points and is the default. The `geometry_*` values return simplified Polygon or MultiPolygon geometry at the specified accuracy in meters.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "point",
+                "geometry_1000",
+                "geometry_5000",
+                "geometry_10000"
+              ],
+              "default": "point"
+            },
+            "example": "point"
+          },
+          {
+            "name": "lang",
+            "in": "query",
+            "required": false,
+            "description": "Language used for boundary names and address fields.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "ab",
+                "aa",
+                "af",
+                "ak",
+                "sq",
+                "am",
+                "ar",
+                "an",
+                "hy",
+                "as",
+                "av",
+                "ae",
+                "ay",
+                "az",
+                "bm",
+                "ba",
+                "eu",
+                "be",
+                "bn",
+                "bh",
+                "bi",
+                "bs",
+                "br",
+                "bg",
+                "my",
+                "ca",
+                "ch",
+                "ce",
+                "ny",
+                "zh",
+                "cv",
+                "kw",
+                "co",
+                "cr",
+                "hr",
+                "cs",
+                "da",
+                "dv",
+                "nl",
+                "en",
+                "eo",
+                "et",
+                "ee",
+                "fo",
+                "fj",
+                "fi",
+                "fr",
+                "ff",
+                "gl",
+                "ka",
+                "de",
+                "el",
+                "gn",
+                "gu",
+                "ht",
+                "ha",
+                "he",
+                "hz",
+                "hi",
+                "ho",
+                "hu",
+                "ia",
+                "id",
+                "ie",
+                "ga",
+                "ig",
+                "ik",
+                "io",
+                "is",
+                "it",
+                "iu",
+                "ja",
+                "jv",
+                "kl",
+                "kn",
+                "kr",
+                "ks",
+                "kk",
+                "km",
+                "ki",
+                "rw",
+                "ky",
+                "kv",
+                "kg",
+                "ko",
+                "ku",
+                "kj",
+                "la",
+                "lb",
+                "lg",
+                "li",
+                "ln",
+                "lo",
+                "lt",
+                "lu",
+                "lv",
+                "gv",
+                "mk",
+                "mg",
+                "ms",
+                "ml",
+                "mt",
+                "mi",
+                "mr",
+                "mh",
+                "mn",
+                "na",
+                "nv",
+                "nb",
+                "nd",
+                "ne",
+                "ng",
+                "nn",
+                "no",
+                "ii",
+                "nr",
+                "oc",
+                "oj",
+                "cu",
+                "om",
+                "or",
+                "os",
+                "pa",
+                "pi",
+                "fa",
+                "pl",
+                "ps",
+                "pt",
+                "qu",
+                "rm",
+                "rn",
+                "ro",
+                "ru",
+                "sa",
+                "sc",
+                "sd",
+                "se",
+                "sm",
+                "sg",
+                "sr",
+                "gd",
+                "sn",
+                "si",
+                "sk",
+                "sl",
+                "so",
+                "st",
+                "es",
+                "su",
+                "sw",
+                "ss",
+                "sv",
+                "ta",
+                "te",
+                "tg",
+                "th",
+                "ti",
+                "bo",
+                "tk",
+                "tl",
+                "tn",
+                "to",
+                "tr",
+                "ts",
+                "tt",
+                "tw",
+                "ty",
+                "ug",
+                "uk",
+                "ur",
+                "uz",
+                "ve",
+                "vi",
+                "vo",
+                "wa",
+                "cy",
+                "wo",
+                "fy",
+                "xh",
+                "yi",
+                "yo",
+                "za"
+              ],
+              "default": "en"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Boundaries containing the requested place.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BoundaryFeatureCollection"
+                },
+                "example": {
+                  "type": "FeatureCollection",
+                  "features": [
+                    {
+                      "type": "Feature",
+                      "properties": {
+                        "name": "United States",
+                        "old_name": "United States of North America",
+                        "country": "United States",
+                        "country_code": "us",
+                        "lon": -100.445882,
+                        "lat": 39.7837304,
+                        "formatted": "United States",
+                        "address_line1": "United States",
+                        "address_line2": "",
+                        "categories": [
+                          "administrative",
+                          "administrative.country_level"
+                        ],
+                        "website": "https://www.usa.gov",
+                        "name_other": {
+                          "official_name": "United States of America",
+                          "short_name": "U.S."
+                        },
+                        "name_international": {
+                          "ab": "Америка Еиду Аштатқәа",
+                          "af": "Verenigde State van Amerika",
+                          "am": "የተባበሩት የአሜሪካ ግዛቶች",
+                          "an": "Estatos Unitos d'America",
+                          "ar": "الولايات المتّحدة الأمريكيّة",
+                          "as": "মাৰ্কিন যুক্তৰাষ্ট্ৰ",
+                          "av": "Америкалъул Цолъарал Штатал",
+                          "ay": "Istadus Unidus",
+                          "az": "Amerika Birləşmiş Ştatları",
+                          "ba": "Америка Ҡушма Штаттары",
+                          "be": "Злучаныя Штаты Амерыкі",
+                          "bg": "Съединени американски щати",
+                          "bi": "Yunaeted Stet blong Amerika",
+                          "bm": "Ameriki",
+                          "bn": "মার্কিন যুক্তরাষ্ট্র",
+                          "bo": "ཨ་མེ་རི་ཀ་",
+                          "br": "Stadoù-Unanet Amerika",
+                          "bs": "Sjedinjene Američke Države",
+                          "ca": "Estats Units d'Amèrica",
+                          "ce": "Iамерка пачхьалк",
+                          "co": "Stati Uniti d'America",
+                          "cs": "Spojené státy americké",
+                          "cu": "Амєрика́ньскꙑ Ѥдьнѥнꙑ́ Дрьжа́вꙑ",
+                          "cv": "Америкӑри Пӗрлешӳллӗ Штатсем",
+                          "cy": "Yr Unol Daleithiau",
+                          "da": "Amerikas Forenede Stater",
+                          "de": "Vereinigte Staaten von Amerika",
+                          "dv": "އެމެރިކާ",
+                          "dz": "ཡུ་ཨེས་ཨེ",
+                          "ee": "USA nutome",
+                          "el": "Ηνωμένες Πολιτείες της Αμερικής",
+                          "en": "United States",
+                          "eo": "Usono",
+                          "es": "Estados Unidos de América",
+                          "et": "Ameerika Ühendriigid",
+                          "eu": "Ameriketako Estatu Batuak",
+                          "fa": "ایالات متحده آمریکا",
+                          "ff": "Dowlaaji Dentuɗi Amerik",
+                          "fi": "Yhdysvallat",
+                          "fo": "Sambandsríkið Amerika",
+                          "fr": "États-Unis d'Amérique",
+                          "fy": "Feriene Steaten fan Amearika",
+                          "ga": "Stáit Aontaithe Mheiriceá",
+                          "gd": "Na Stàitean Aonaichte",
+                          "gl": "Estados Unidos de América",
+                          "gn": "Tetã peteĩ reko Amérikagua",
+                          "gu": "સંયુક્ત રાજ્ય અમેરિકા",
+                          "gv": "Steatyn Unnaneysit America",
+                          "ha": "kunkiyar taraiyar Amurika",
+                          "he": "ארצות הברית",
+                          "hi": "संयुक्त राज्य अमेरिका",
+                          "hr": "Sjedinjene Američke Države",
+                          "ht": "Etazini",
+                          "hu": "Amerikai Egyesült Államok",
+                          "hy": "Ամերիկայի Միացյալ Նահանգներ",
+                          "ia": "Statos Unite de America",
+                          "id": "Amerika Serikat",
+                          "ie": "Unit States de America",
+                          "ig": "Njikota Obodo Amerika",
+                          "ik": "United States of America",
+                          "io": "Unionita Stati di Amerika",
+                          "is": "Bandaríki Norður-Ameríku",
+                          "it": "Stati Uniti d'America",
+                          "iu": "ᐊᒥᐊᓕᑲ",
+                          "ja": "アメリカ合衆国",
+                          "jv": "Amérika Sarékat",
+                          "ka": "ამერიკის შეერთებული შტატები",
+                          "ki": "Amerika",
+                          "kk": "Америка Құрама Штаттары",
+                          "kl": "Naalagaaffeqatigiit",
+                          "km": "សហរដ្ឋអាមេរិក",
+                          "kn": "ಅಮೇರಿಕ ಸಂಯುಕ್ತ ಸಂಸ್ಥಾನ",
+                          "ko": "미국",
+                          "ks": "ریاست ہائے متحدہ",
+                          "ku": "Dewletên Yekbûyî yên Amerîkayê",
+                          "kv": "Америкаса Ӧтувтӧм Штатъяс",
+                          "kw": "Statys Unys Amerika",
+                          "ky": "Америка Кошмо Штаттары",
+                          "la": "Civitates Foederatae Americae",
+                          "lb": "Vereenegt Staate vun Amerika",
+                          "lg": "Amerika",
+                          "li": "Vereinegde State van Amerika",
+                          "ln": "Lisangá lya Ameríka",
+                          "lo": "ສະຫະລັດ",
+                          "lt": "Jungtinės Amerikos Valstijos",
+                          "lv": "Amerikas Savienotās Valstis",
+                          "mg": "Etazonia",
+                          "mi": "Hononga-o-Amerika",
+                          "mk": "Соединети Американски Држави",
+                          "ml": "അമേരിക്കന്‍ ഐക്യനാടുകള്",
+                          "mn": "Америкийн Нэгдсэн Улс",
+                          "mo": "Стателе Уните але Америчий",
+                          "mr": "संयुक्त राज्ये /अमेरिका",
+                          "ms": "Amerika Syarikat",
+                          "mt": "Stati Uniti tal-Amerika",
+                          "my": "ယူနိုက်တက်စတိတ်",
+                          "na": "Eben Merika",
+                          "ne": "संयुक्त राज्य अमेरिका",
+                          "nl": "Verenigde Staten van Amerika",
+                          "nn": "USA",
+                          "no": "Amerikas forente stater",
+                          "nv": "Wááshindoon Bikéyah Ałhidadiidzooígíí",
+                          "oc": "Estats Units d'America",
+                          "om": "United States",
+                          "or": "ଯୁକ୍ତ ରାଷ୍ଟ୍ର ଆମେରିକା",
+                          "os": "АИШ",
+                          "pa": "ਸੰਯੁਕਤ ਰਾਜ ਅਮਰੀਕਾ",
+                          "pl": "Stany Zjednoczone",
+                          "ps": "د امریکا متحده آیالاتونه",
+                          "pt": "Estados Unidos da América",
+                          "qu": "Hukllachasqa Amirika Suyukuna",
+                          "rm": "Stadis Unids da l'America",
+                          "rn": "Leta Zunze Ubumwe za Amerika",
+                          "ro": "Statele Unite ale Americii",
+                          "ru": "Соединённые Штаты Америки",
+                          "rw": "Leta Zunze Ubumwe z’Amerika",
+                          "sa": "संयुक्तानि राज्यानि",
+                          "sc": "Istados Unidos de America",
+                          "sd": "آمريڪا",
+                          "se": "Amerihká ovttastuvvan stáhtat",
+                          "sg": "ÂLeaa-Ôko tî Amerika",
+                          "sh": "Sjedinjene Američke Države",
+                          "si": "අ'මෙරිකා‍වේ එක්සත් රාජ්‍යයන",
+                          "sk": "Spojené štáty americké",
+                          "sl": "Združene države Amerike",
+                          "sm": "Iunaite Sitete o Amerika",
+                          "sn": "Amerika",
+                          "so": "Maraykanka",
+                          "sq": "Shtetet e Bashkuara të Amerikës",
+                          "sr": "Сједињене Америчке Државе",
+                          "ss": "IMelika",
+                          "su": "Amérika Sarikat",
+                          "sv": "Förenta staterna",
+                          "sw": "Muungano wa Madola ya Amerika",
+                          "ta": "அமெரிக்க ஐக்கிய நாடு",
+                          "te": "అమెరికా సంయుక్త రాష్ట్రాలు",
+                          "tg": "Штатҳои Муттаҳидаи Америка",
+                          "th": "สหรัฐอเมริกา",
+                          "tk": "Amerikanyň Birleşen Ştatlary",
+                          "tl": "Estados Unidos ng Amerika",
+                          "tn": "USA",
+                          "to": "Puleʻanga Fakataha 'o 'Amelika",
+                          "tr": "Amerika Birleşik Devletleri",
+                          "ts": "United States",
+                          "tt": "Америка Кушма Штатлары",
+                          "tw": "USA",
+                          "ty": "Fenua Marite",
+                          "ug": "ئامېرىكا قوشما شتاتلىرى",
+                          "uk": "Сполучені Штати Америки",
+                          "ur": "ریاست ہائے متحدہ",
+                          "uz": "Amerika Qoʻshma Shtatlari",
+                          "vi": "Hoa Kỳ",
+                          "vo": "Lamerikän",
+                          "wa": "Estats Unis d' Amerike",
+                          "wo": "Diwaan-yu-Bennoo yu Aamerig",
+                          "xh": "IYunayithedi Steyitsi",
+                          "yi": "פאראייניקטע שטאטן פון אמעריקע",
+                          "yo": "Orílẹ́ède Orilẹede Amerika",
+                          "za": "Meijgoz",
+                          "zh": "美国;美國",
+                          "zu": "i-United States",
+                          "ak": "Amɛrika",
+                          "ii": "ꂰꇩ",
+                          "nb": "USA",
+                          "ti": "አሜሪካ"
+                        },
+                        "wiki_and_media": {
+                          "wikidata": "Q30",
+                          "wikipedia": "en:United States",
+                          "wikimedia_commons": "Category:United States"
+                        },
+                        "datasource": {
+                          "sourcename": "openstreetmap",
+                          "attribution": "© OpenStreetMap contributors",
+                          "license": "Open Database License",
+                          "url": "https://www.openstreetmap.org/copyright",
+                          "raw": {
+                            "flag": "https://upload.wikimedia.org/wikipedia/commons/a/a4/Flag_of_the_United_States.svg",
+                            "name": "United States",
+                            "sqkm": 9826675,
+                            "type": "boundary",
+                            "osm_id": 148838,
+                            "country": "US",
+                            "name:ab": "Америка Еиду Аштатқәа",
+                            "name:af": "Verenigde State van Amerika",
+                            "name:am": "የተባበሩት የአሜሪካ ግዛቶች",
+                            "name:an": "Estatos Unitos d'America",
+                            "name:ar": "الولايات المتّحدة الأمريكيّة",
+                            "name:as": "মাৰ্কিন যুক্তৰাষ্ট্ৰ",
+                            "name:av": "Америкалъул Цолъарал Штатал",
+                            "name:ay": "Istadus Unidus",
+                            "name:az": "Amerika Birləşmiş Ştatları",
+                            "name:ba": "Америка Ҡушма Штаттары",
+                            "name:be": "Злучаныя Штаты Амерыкі",
+                            "name:bg": "Съединени американски щати",
+                            "name:bi": "Yunaeted Stet blong Amerika",
+                            "name:bm": "Amerika ka Kelenyalen Jamanaw",
+                            "name:bn": "মার্কিন যুক্তরাষ্ট্র",
+                            "name:bo": "ཨ་མེ་རི་ཁ་རྒྱལ་ཕྲན་མཉམ་འབྲེལ་རྒྱལ་ཁབ།",
+                            "name:br": "Stadoù-Unanet Amerika",
+                            "name:bs": "Sjedinjene Američke Države",
+                            "name:ca": "Estats Units d'Amèrica",
+                            "name:ce": "Iамерка пачхьалк",
+                            "name:co": "Stati Uniti d'America",
+                            "name:cs": "Spojené státy americké",
+                            "name:cu": "Амєрика́ньскꙑ Ѥдьнѥнꙑ́ Дрьжа́вꙑ",
+                            "name:cv": "Америкăри Пĕрлешӳллĕ Штатсем",
+                            "name:cy": "Yr Unol Daleithiau",
+                            "name:da": "Amerikas Forenede Stater",
+                            "name:de": "Vereinigte Staaten von Amerika",
+                            "name:dv": "އެމެރިކާ",
+                            "name:dz": "ཡུ་ནའིཊེཊ་སི་ཊེས",
+                            "name:ee": "United States",
+                            "name:el": "Ηνωμένες Πολιτείες της Αμερικής",
+                            "name:en": "United States",
+                            "name:eo": "Usono",
+                            "name:es": "Estados Unidos de América",
+                            "name:et": "Ameerika Ühendriigid",
+                            "name:eu": "Ameriketako Estatu Batuak",
+                            "name:fa": "ایالات متحده آمریکا",
+                            "name:ff": "Dowlaaji Dentuɗi",
+                            "name:fi": "Amerikan yhdysvallat",
+                            "name:fo": "Sambandsríkið Amerika",
+                            "name:fr": "États-Unis d'Amérique",
+                            "name:fy": "Feriene Steaten fan Amearika",
+                            "name:ga": "Stáit Aontaithe Mheiriceá",
+                            "name:gd": "Na Stàitean Aonaichte",
+                            "name:gl": "Estados Unidos de América",
+                            "name:gn": "Tetã peteĩ reko Amérikagua",
+                            "name:gu": "સંયુક્ત રાજ્ય અમેરિકા",
+                            "name:gv": "Steatyn Unnaneysit America",
+                            "name:ha": "kunkiyar taraiyar Amurika",
+                            "name:he": "ארצות הברית",
+                            "name:hi": "संयुक्त राज्य अमेरिका",
+                            "name:hr": "Sjedinjene Američke Države",
+                            "name:ht": "Etazini",
+                            "name:hu": "Egyesült Államok",
+                            "name:hy": "Ամերիկայի Միացյալ Նահանգներ",
+                            "name:ia": "Statos Unite de America",
+                            "name:id": "Amerika Serikat",
+                            "name:ie": "Unit States de America",
+                            "name:ig": "Njikota Obodo Amerika",
+                            "name:ik": "United States of America",
+                            "name:io": "Unionita Stati di Amerika",
+                            "name:is": "Bandaríki Norður-Ameríku",
+                            "name:it": "Stati Uniti d'America",
+                            "name:iu": "ᐊᒥᐊᓕᑲ",
+                            "name:ja": "アメリカ合衆国",
+                            "name:jv": "Amérika Sarékat",
+                            "name:ka": "ამერიკის შეერთებული შტატები",
+                            "name:ki": "United States",
+                            "name:kk": "Америка Құрама Штаттары",
+                            "name:kl": "Naalagaaffeqatigiit",
+                            "name:km": "សហរដ្ឋអាមេរិក",
+                            "name:kn": "ಅಮೇರಿಕ ಸಂಯುಕ್ತ ಸಂಸ್ಥಾನ",
+                            "name:ko": "미국",
+                            "name:ks": "ریاست ہائے متحدہ",
+                            "name:ku": "Dewletên Yekbûyî yên Amerîkayê",
+                            "name:kv": "Америкаса Ӧтувтӧм Штатъяс",
+                            "name:kw": "Statys Unys Amerika",
+                            "name:ky": "Америка Кошмо Штаттары",
+                            "name:la": "Civitates Foederatae Americae",
+                            "name:lb": "Vereenegt Staate vun Amerika",
+                            "name:lg": "Amereka",
+                            "name:li": "Vereinegde State van Amerika",
+                            "name:ln": "Lisangá lya Ameríka",
+                            "name:lo": "ສະຫະລັດອາເມລິກາ",
+                            "name:lt": "Jungtinės Amerikos Valstijos",
+                            "name:lv": "Amerikas Savienotās Valstis",
+                            "name:mg": "Etazonia",
+                            "name:mi": "Amerika",
+                            "name:mk": "Соединети Американски Држави",
+                            "name:ml": "അമേരിക്കന് ഐക്യനാടുകള്",
+                            "name:mn": "Америкийн Нэгдсэн Улс",
+                            "name:mo": "Стателе Уните але Америчий",
+                            "name:mr": "अमेरिकेची संयुक्त संस्थाने",
+                            "name:ms": "Amerika Syarikat",
+                            "name:mt": "Stati Uniti tal-Amerika",
+                            "name:my": "အမေရိကန်ပြည်ထောင်စု",
+                            "name:na": "Eben Merika",
+                            "name:ne": "संयुक्त राज्य अमेरिका",
+                            "name:nl": "Verenigde Staten",
+                            "name:nn": "USA",
+                            "name:no": "Amerikas forente stater",
+                            "name:nv": "Wááshindoon Bikéyah Ałhidadiidzooígíí",
+                            "name:oc": "Estats Units d'America",
+                            "name:om": "USA",
+                            "name:or": "ଯୁକ୍ତରାଷ୍ଟ୍ର ଆମେରିକା",
+                            "name:os": "Америкæйы Иугонд Штаттæ",
+                            "name:pa": "ਸੰਯੁਕਤ ਰਾਜ ਅਮਰੀਕਾ",
+                            "name:pl": "Stany Zjednoczone",
+                            "name:ps": "د امریکا متحده آیالاتونه",
+                            "name:pt": "Estados Unidos da América",
+                            "name:qu": "Hukllachasqa Amirika Suyukuna",
+                            "name:rm": "Stadis Unids da l'America",
+                            "name:rn": "Leta Zunze Ubumwe za Amerika",
+                            "name:ro": "Statele Unite ale Americii",
+                            "name:ru": "Соединённые Штаты Америки",
+                            "name:rw": "Leta Zunze Ubumwe z’Amerika",
+                            "name:sa": "संयुक्तानि राज्यानि",
+                            "name:sc": "Istados Unidos de America",
+                            "name:sd": "آمريڪا",
+                            "name:se": "Amerihká ovttastuvvan stáhtat",
+                            "name:sg": "ÂKödörö-ôko tî Amerîka",
+                            "name:sh": "Sjedinjene Američke Države",
+                            "name:si": "අ'මෙරිකාවේ එක්සත් රාජ්යයන්",
+                            "name:sk": "Spojené štáty americké",
+                            "name:sl": "Združene države Amerike",
+                            "name:sm": "Iunaite Sitete o Amerika",
+                            "name:sn": "United States of America",
+                            "name:so": "Mareykanka",
+                            "name:sq": "Shtetet e Bashkuara të Amerikës",
+                            "name:sr": "Сједињене Америчке Државе",
+                            "name:ss": "IMelika",
+                            "name:su": "Amérika Sarikat",
+                            "name:sv": "USA",
+                            "name:sw": "Muungano wa Madola ya Amerika",
+                            "name:ta": "ஐக்கிய அமெரிக்கா",
+                            "name:te": "అమెరికా సంయుక్త రాష్ట్రాలు",
+                            "name:tg": "Иёлоти Муттаҳидаи Амрико",
+                            "name:th": "สหรัฐอเมริกา",
+                            "name:tk": "Amerikanyň Birleşen Ştatlary",
+                            "name:tl": "Estados Unidos",
+                            "name:tn": "USA",
+                            "name:to": "Puleʻanga Fakataha 'o 'Amelika",
+                            "name:tr": "Amerika Birleşik Devletleri",
+                            "name:ts": "United States",
+                            "name:tt": "Америка Кушма Штатлары",
+                            "name:tw": "USA",
+                            "name:ty": "Fenua Marite",
+                            "name:ug": "ئامېرىكا قوشما شتاتلىرى",
+                            "name:uk": "Сполучені Штати Америки",
+                            "name:ur": "ریاست ہائے متحدہ",
+                            "name:uz": "Amerika Qoʻshma Shtatlari",
+                            "name:vi": "Hoa Kỳ",
+                            "name:vo": "Lamerikän",
+                            "name:wa": "Estats Unis d' Amerike",
+                            "name:wo": "Diwaan-yu-Bennoo yu Aamerig",
+                            "name:xh": "IYunayithedi Steyitsi",
+                            "name:yi": "פאראייניקטע שטאטן פון אמעריקע",
+                            "name:yo": "Àwọn Ìpínlẹ̀ Aṣọ̀kan Amẹ́ríkà",
+                            "name:za": "Meijgoz",
+                            "name:zh": "美国;美國",
+                            "name:zu": "IMelika",
+                            "boundary": "administrative",
+                            "int_name": "United States of America",
+                            "name:ace": "Amirika Carékat",
+                            "name:als": "Vereinigte Schtaate vo Amerika",
+                            "name:anc": "Ἡνωμέναι Πολιτείαι τῆς Νεοικουμένης",
+                            "name:ang": "Geānlǣtan Rīcu American",
+                            "name:arc": "ܐܘܚܕܢܐ ܡܚܝܕܐ",
+                            "name:arz": "امريكا",
+                            "name:ast": "Estaos Xuníos d'América",
+                            "name:azb": "آمریکا بیرلشمیش ایالتلری",
+                            "name:bar": "Vaeinigtn Staatn vo Amerika",
+                            "name:bcl": "Estados Unidos",
+                            "name:bpy": "তিলপারাষ্ট্র",
+                            "name:bxr": "Американ Нэгэдэһэн Улас",
+                            "name:cdo": "Mī-lé-giĕng Hăk-cé̤ṳng-guók",
+                            "name:ceb": "Estados Unidos sa Amerika",
+                            "name:chr": "ᏌᏊ ᎢᏳᎾᎵᏍᏔᏅ ᏍᎦᏚᎩ",
+                            "name:chy": "United States",
+                            "name:ckb": "ویلایەتە یەکگرتووەکانی ئەمریکا",
+                            "name:cnr": "Śedinjene Američke Države",
+                            "name:crh": "Amerika Qoşma Ştatları",
+                            "name:csb": "Zjednóné Kraje Americzi",
+                            "name:din": "Amatnhom Pawut",
+                            "name:diq": "Dewletê Amerikayê Yewbiyayey",
+                            "name:dsb": "Zjadnośone staty Ameriki",
+                            "name:eml": "Stat Unî",
+                            "name:ext": "Estaus Uñíus d'América",
+                            "name:frp": "Ètats-Unis d’Amèrica",
+                            "name:frr": "Feriind Stoote foon Ameerika",
+                            "name:fur": "Stâts Unîts di Americhe",
+                            "name:gag": "Amerika Birleşik Devletläri",
+                            "name:gan": "美國",
+                            "name:glk": "امریکا",
+                            "name:grc": "Ἡνωμέναι Πολιτεῖαι τῆς Ἀμερικῆς",
+                            "name:hak": "Mî-li-kiên Ha̍p-chung-koet",
+                            "name:haw": "ʻAmelika Hui Pū ʻia",
+                            "name:hif": "United States",
+                            "name:hsb": "Zjednoćene staty Ameriki",
+                            "name:ilo": "stados Unidos iti Amerika",
+                            "name:jbo": ".iunaited.steits.",
+                            "name:kaa": "Amerika Qurama Shtatları",
+                            "name:kab": "Iwunak Yedduklen",
+                            "name:kbd": "Америкэ Штат Зэгуэт",
+                            "name:koi": "Америкаись Ӧтлаасьӧм Штаттэз",
+                            "name:krc": "Американы Бирлешген Штатлары",
+                            "name:ksh": "Vereenichde Staate van Amerika",
+                            "name:lad": "Estatos Unitos d'Amerika",
+                            "name:lbe": "Американал ЦачӀунхьу Штатру",
+                            "name:lez": "Америкадин Садхьанвай Штатар",
+                            "name:lij": "Stati Unïi d'America",
+                            "name:lmo": "Stat Ünì d'America",
+                            "name:ltg": "Amerikys Saškierstuos Vaļsteibys",
+                            "name:lzh": "美利堅合眾國",
+                            "name:mdf": "Америконь Аймакнень Соткссна",
+                            "name:mhr": "Америкысе Ушымо Штатвлак",
+                            "name:mia": "mihši-maalhsonki",
+                            "name:min": "Amerika Sarikat",
+                            "name:mrj": "Америкын Ушымы Штатвлӓжӹ",
+                            "name:mwl": "Stados Ounidos de la América",
+                            "name:myv": "Американь Вейтьсэндявкс Штаттнэ",
+                            "name:mzn": "متحده ایالات آمریکا",
+                            "name:nah": "Tlacetilīlli Tlahtohcāyōtl Ixachitlān",
+                            "name:nan": "America Ha̍p-chiòng-kok",
+                            "name:nap": "State Aunite d'Amereca",
+                            "name:nds": "Verenigten Staten vun Amerika",
+                            "name:new": "संयुक्त राज्य अमेरिका",
+                            "name:nov": "Unionati States de Amerika",
+                            "name:nrm": "Êtats Unnis d'Améthique",
+                            "name:nso": "United States of America",
+                            "name:pag": "Estados Unidos",
+                            "name:pam": "United States ning America",
+                            "name:pap": "Estadonan Uni di Merka",
+                            "name:pcd": "États-Unis Anmérikes",
+                            "name:pdc": "Vereinichde Schtaade vun Amerikaa",
+                            "name:pfl": "Verainischde Schdaade vun Ameriga",
+                            "name:pih": "Yunitid Staits",
+                            "name:pms": "Stat Unì d'América",
+                            "name:pnb": "امریکہ",
+                            "name:rue": "Споєны Штаты Америцькы",
+                            "name:sah": "Америка Холбоһуктаах Штаттара",
+                            "name:scn": "Stati Uniti",
+                            "name:sco": "Unitit States o Americae",
+                            "name:smn": "Amerik ovtâstum staatah",
+                            "name:sms": "Ameriikk õhttõõvvâmvääʹld",
+                            "name:srn": "Kondre Makandrameki",
+                            "name:stq": "Fereende Stoaten fon Amerikoa",
+                            "name:syc": "ܐܘܚܕܢܐ ܡܚܝܕܐ",
+                            "name:szl": "Zjednoczōne Sztaty Ameryki",
+                            "name:tet": "Estadu Naklibur Sira Amérika Nian",
+                            "name:tok": "ma Mewika",
+                            "name:tpi": "Yunaitet Stet bilong Amerika",
+                            "name:tzl": "Estats Viensiçeschti d'America",
+                            "name:udm": "Америкалэн Огазеяськем Штатъёсыз",
+                            "name:vec": "Stati Unìi de la Mèrica",
+                            "name:vep": "Amerikan Ühtenzoittud Valdkundad",
+                            "name:vls": "Verênigde Stoaten van Amerika",
+                            "name:vro": "Ameeriga Ütisriigiq",
+                            "name:war": "Estados Unidos",
+                            "name:wuu": "美国",
+                            "name:xal": "Америкин Ниицәтә Орн Нутгуд",
+                            "name:xmf": "ამერიკაშ აკოართაფილი შტატეფი",
+                            "name:yue": "美國",
+                            "name:zea": "Vereênigde Staeten",
+                            "osm_type": "r",
+                            "wikidata": "Q30",
+                            "ISO3166-1": "US",
+                            "wikipedia": "en:United States",
+                            "check_date": "2024-10-17",
+                            "population": 331449281,
+                            "short_name": "U.S.",
+                            "admin_level": 2,
+                            "alt_name:be": "Злучаныя Штаты;Штаты",
+                            "alt_name:br": "Stadoù-Unanet",
+                            "alt_name:en": "America",
+                            "alt_name:es": "Estados Unidos",
+                            "alt_name:fr": "États-Unis",
+                            "alt_name:hu": "Amerika",
+                            "alt_name:ja": "米国",
+                            "alt_name:ko": "아메리카",
+                            "alt_name:vi": "Hoa Kì;Mĩ;Hợp chúng quốc Hoa Kì",
+                            "border_type": "national",
+                            "int_name:ko": "아메리카합중국",
+                            "name:nds-nl": "Verienigde Staoten van Amerika",
+                            "old_name:ar": "الولايات المتحدة الأمريكية الشمالية",
+                            "old_name:de": "Vereinigte Staaten von Nordamerika",
+                            "old_name:en": "United States of North America",
+                            "old_name:eo": "Unuiĝintaj Ŝtatoj de Nordameriko",
+                            "old_name:es": "Estados Unidos de Norteamérica",
+                            "old_name:ko": "북아메리카합중국",
+                            "old_name:pl": "Stany Zjednoczone Ameryki Północnej",
+                            "old_name:ru": "Северо-Американские Соединённые Штаты",
+                            "old_name:vi": "Mỹ Lợi Kiên;Ma Ly Căn;Nhã Di Lý",
+                            "alt_name:pdc": "Yuneided Schtaets vun Amerika",
+                            "capital_city": "Washington DC",
+                            "country_code": "us",
+                            "driving_side": "right",
+                            "linked_place": "country",
+                            "name:az-Arab": "آمریکا بیرلشمیش ایالتلری",
+                            "name:bat-smg": "JAV",
+                            "name:cbk-zam": "Estados Unidos de America",
+                            "name:kk-Arab": "امەرىيكا قۇراما شتاتتارى",
+                            "name:map-bms": "Amerika Serikat",
+                            "name:sr-Latn": "Sjedinjene Američke Države",
+                            "name:zh-Hans": "美国",
+                            "name:zh-Hant": "美國",
+                            "name:cnr-Cyrl": "С́едињене Америчке Државе",
+                            "name:roa-tara": "Statère Aunìte d'Americhe",
+                            "official_name": "United States of America",
+                            "short_name:az": "ABŞ",
+                            "short_name:be": "ЗША",
+                            "short_name:bg": "САЩ",
+                            "short_name:br": "SUA",
+                            "short_name:cs": "Spojené státy",
+                            "short_name:cy": "UDA",
+                            "short_name:en": "U.S.",
+                            "short_name:es": "EE.UU.",
+                            "short_name:fr": "É.-U.",
+                            "short_name:hu": "AEÁ",
+                            "short_name:ko": "미국",
+                            "short_name:mo": "СУА",
+                            "short_name:nl": "VS",
+                            "short_name:pl": "USA",
+                            "short_name:ru": "США",
+                            "short_name:sr": "САД",
+                            "short_name:tr": "ABD",
+                            "short_name:uk": "США",
+                            "short_name:vi": "Mỹ",
+                            "short_name:zh": "美国;美國",
+                            "_place_name:ak": "Amɛrika",
+                            "_place_name:bm": "Ameriki",
+                            "_place_name:bo": "ཨ་མེ་རི་ཀ་",
+                            "_place_name:cv": "Америкӑри Пӗрлешӳллӗ Штатсем",
+                            "_place_name:dz": "ཡུ་ཨེས་ཨེ",
+                            "_place_name:ee": "USA nutome",
+                            "_place_name:ff": "Dowlaaji Dentuɗi Amerik",
+                            "_place_name:fi": "Yhdysvallat",
+                            "_place_name:hu": "Amerikai Egyesült Államok",
+                            "_place_name:ii": "ꂰꇩ",
+                            "_place_name:ki": "Amerika",
+                            "_place_name:lg": "Amerika",
+                            "_place_name:lo": "ສະຫະລັດ",
+                            "_place_name:mi": "Hononga-o-Amerika",
+                            "_place_name:ml": "അമേരിക്കന്‍ ഐക്യനാടുകള്",
+                            "_place_name:mr": "संयुक्त राज्ये /अमेरिका",
+                            "_place_name:my": "ယူနိုက်တက်စတိတ်",
+                            "_place_name:nb": "USA",
+                            "_place_name:nl": "Verenigde Staten van Amerika",
+                            "_place_name:om": "United States",
+                            "_place_name:or": "ଯୁକ୍ତ ରାଷ୍ଟ୍ର ଆମେରିକା",
+                            "_place_name:os": "АИШ",
+                            "_place_name:sg": "ÂLeaa-Ôko tî Amerika",
+                            "_place_name:si": "අ'මෙරිකා‍වේ එක්සත් රාජ්‍යයන",
+                            "_place_name:sn": "Amerika",
+                            "_place_name:so": "Maraykanka",
+                            "_place_name:sv": "Förenta staterna",
+                            "_place_name:ta": "அமெரிக்க ஐக்கிய நாடு",
+                            "_place_name:tg": "Штатҳои Муттаҳидаи Америка",
+                            "_place_name:ti": "አሜሪካ",
+                            "_place_name:tl": "Estados Unidos ng Amerika",
+                            "_place_name:yo": "Orílẹ́ède Orilẹede Amerika",
+                            "_place_name:zu": "i-United States",
+                            "name:be-tarask": "Злучаныя Штаты Амэрыкі",
+                            "short_name:chr": "ᎠᎹᏰᏟ",
+                            "short_name:cnr": "ŚAD",
+                            "_place_alt_name": "USA;US;The States;United States",
+                            "_place_name:haw": "‘Amelika Hui Pū ‘ia",
+                            "_place_name:jbo": "mergu'e",
+                            "_place_name:ksh": "de Vereineschte Schtaate vun Ammärrika",
+                            "_place_name:lfn": "Statos Unida de America",
+                            "_place_name:smn": "Amerik ovtâstumstaatah",
+                            "_place_name:wal": "Amerkkaa",
+                            "_place_name:wuu": "美利坚合众国",
+                            "contact:website": "https://www.usa.gov",
+                            "population:date": 2020,
+                            "ISO3166-1:alpha2": "US",
+                            "ISO3166-1:alpha3": "USA",
+                            "default_language": "en",
+                            "official_name:ar": "الوِلَايَات المُتَّحِدَة الأَمرِيكِيَّة",
+                            "official_name:cs": "Spojené státy americké",
+                            "official_name:cy": "Unol Daleithiau America",
+                            "official_name:de": "Vereinigte Staaten von Amerika",
+                            "official_name:en": "United States of America",
+                            "official_name:eo": "Unuiĝintaj Ŝtatoj de Ameriko",
+                            "official_name:es": "Estados Unidos de América",
+                            "official_name:hu": "Amerikai Egyesült Államok",
+                            "official_name:ko": "미합중국",
+                            "official_name:ks": "ریاست ہائے متحدہ",
+                            "official_name:nl": "Verenigde Staten van Amerika",
+                            "official_name:pl": "Stany Zjednoczone Ameryki",
+                            "official_name:ps": "د امریکا متحده آیالاتونه",
+                            "official_name:sv": "Amerikas Förenta Stater",
+                            "official_name:ug": "ئامېرىكا قوشما شىتاتلىرى",
+                            "official_name:ur": "ریاست ہائے متحدہ",
+                            "official_name:vi": "Hợp chúng quốc Hoa Kỳ;Hợp chúng quốc Hoa Kì;Hợp chủng quốc Hoa Kỳ;Hợp chủng quốc Hoa Kì",
+                            "official_name:zh": "美利坚合众国;美利堅合眾國",
+                            "ISO3166-1:numeric": 840,
+                            "_place_short_name": "USA",
+                            "alt_short_name:en": "US;USA",
+                            "alt_short_name:es": "EUA",
+                            "alt_short_name:pl": "St. Zj.",
+                            "country_code_fips": "US",
+                            "official_name:arc": "ܐܬܪܘܬܐ ܡܚܝܕܐ ܕܐܡܪܝܟܐ",
+                            "official_name:chr": "ᏌᏊᎢᏳᎾᎵᏍᏔᏅᏍᎦᏚᎩ ᎾᎿ ᎠᎺᏰᏟ",
+                            "official_name:din": "Pawuut Matiic ke Amerïka",
+                            "official_name:grc": "Ἡνωμέναι Πολιτεῖαι τῆς Ἀμερικῆς",
+                            "official_name:syc": "ܐܬܪܘܬܐ ܡܚܝܕܐ ܕܐܡܪܝܟܐ",
+                            "official_name:yue": "美利堅合眾國",
+                            "old_short_name:ru": "САСШ",
+                            "source:population": "census.gov",
+                            "wikimedia_commons": "Category:United States",
+                            "_place_alt_name:es": "Estados Unidos;EUA",
+                            "_place_alt_name:sr": "САД;Сједињене Државе",
+                            "short_name:sr-Latn": "SAD",
+                            "short_name:zh-Hans": "美国",
+                            "short_name:zh-Hant": "美國",
+                            "_place_alt_name:lfn": "SUA",
+                            "short_name:cnr-Cyrl": "С́АД",
+                            "short_official_name": "U.S.A.",
+                            "_place_short_name:en": "USA",
+                            "alt_official_name:en": "The United States of America",
+                            "not:official_name:vi": "Hợp chủng quốc Hoa Kỳ;Hợp chúng quốc Hoa Kì;Hợp chủng quốc Hoa Kỳ;Hợp chủng quốc Hoa Kì",
+                            "official_name:kk-Arab": "امەرىيكا قۇراما شتاتتارى",
+                            "official_name:zh-Hans": "美利坚合众国",
+                            "official_name:zh-Hant": "美利堅合眾國",
+                            "short_official_name:en": "U.S.A.",
+                            "_place_official_name:fr": "États-Unis d'Amérique",
+                            "_place_official_name:pt": "Estados Unidos da América",
+                            "_place_official_name:sv": "Amerikas förenta stater",
+                            "_place_official_name:vi": "Hợp chúng quốc Hoa Kỳ",
+                            "_place_official_name:vo": "Tats-Pebalöl Nolüda-Meropa",
+                            "_place_name:zh-Latn-pinyin": "Měiguó",
+                            "country_code_iso3166_1_alpha_2": "US"
+                          }
+                        },
+                        "place_id": "5181aa6b8cdd4f7040592a5222b4af684240f00101f9016645020000000000c0020b92030d556e6974656420537461746573"
+                      },
+                      "geometry": {
+                        "type": "Point",
+                        "coordinates": [
+                          260.991588994,
+                          36.81786205
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid lookup parameters, coordinates, boundary types, geometry mode, language, or place identifier.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GatewayError"
+                },
+                "examples": {
+                  "invalidPlaceId": {
+                    "summary": "Invalid Geoapify place ID",
+                    "value": {
+                      "statusCode": 400,
+                      "error": "Bad Request",
+                      "message": "Invalid Place ID not-a-valid-place-id"
+                    }
+                  },
+                  "invalidLatitude": {
+                    "summary": "Latitude is outside its valid range",
+                    "value": {
+                      "statusCode": 400,
+                      "error": "Bad Request",
+                      "message": "\"lat\" must be less than or equal to 90"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid Geoapify API key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GatewayError"
+                },
+                "example": {
+                  "statusCode": 401,
+                  "error": "Unauthorized",
+                  "message": "Invalid apiKey"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit or quota exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GatewayError"
+                },
+                "example": {
+                  "statusCode": 429,
+                  "error": "Too Many Requests",
+                  "message": "Quota exceeded"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal gateway error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GatewayError"
+                },
+                "example": {
+                  "statusCode": 500,
+                  "error": "Internal Server Error",
+                  "message": "Request failed, please try again later"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/boundaries/consists-of": {
+      "get": {
+        "tags": [
+          "Boundaries"
+        ],
+        "operationId": "getBoundariesConsistsOf",
+        "summary": "Find boundaries contained by a place",
+        "description": "Find child boundaries contained by the place identified by `id`. Use `boundary` to select the boundary type, `sublevel` to control the nested administrative depth, and `geometry` to choose representative points or simplified polygons.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "description": "Geoapify place identifier returned by the Geocoding, Places, or related Geoapify APIs. This is the recommended lookup method.",
+            "schema": {
+              "type": "string",
+              "minLength": 3,
+              "maxLength": 2048
+            },
+            "example": "513bfd69cccb2354c059ca8760aaf4cf4040f00101f901286b03000000000092030e536f757468204361726f6c696e61"
+          },
+          {
+            "name": "boundary",
+            "in": "query",
+            "required": false,
+            "description": "Boundary type to return.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "administrative",
+                "postal_code",
+                "political",
+                "low_emission_zone",
+                "public_transport",
+                "traditional",
+                "timezone",
+                "religious_administration",
+                "religious",
+                "place",
+                "neighborhood",
+                "region",
+                "municipality",
+                "barony",
+                "town",
+                "health",
+                "historic",
+                "historic:administrative"
+              ],
+              "default": "administrative"
+            }
+          },
+          {
+            "name": "sublevel",
+            "in": "query",
+            "required": false,
+            "description": "Nested boundary depth.",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 20,
+              "default": 1
+            }
+          },
+          {
+            "name": "geometry",
+            "in": "query",
+            "required": false,
+            "description": "Geometry representation for returned boundaries. `point` returns representative points and is the default. The `geometry_*` values return simplified Polygon or MultiPolygon geometry at the specified accuracy in meters.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "point",
+                "geometry_1000",
+                "geometry_5000",
+                "geometry_10000"
+              ],
+              "default": "point"
+            },
+            "example": "point"
+          },
+          {
+            "name": "lang",
+            "in": "query",
+            "required": false,
+            "description": "Language used for boundary names and address fields.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "ab",
+                "aa",
+                "af",
+                "ak",
+                "sq",
+                "am",
+                "ar",
+                "an",
+                "hy",
+                "as",
+                "av",
+                "ae",
+                "ay",
+                "az",
+                "bm",
+                "ba",
+                "eu",
+                "be",
+                "bn",
+                "bh",
+                "bi",
+                "bs",
+                "br",
+                "bg",
+                "my",
+                "ca",
+                "ch",
+                "ce",
+                "ny",
+                "zh",
+                "cv",
+                "kw",
+                "co",
+                "cr",
+                "hr",
+                "cs",
+                "da",
+                "dv",
+                "nl",
+                "en",
+                "eo",
+                "et",
+                "ee",
+                "fo",
+                "fj",
+                "fi",
+                "fr",
+                "ff",
+                "gl",
+                "ka",
+                "de",
+                "el",
+                "gn",
+                "gu",
+                "ht",
+                "ha",
+                "he",
+                "hz",
+                "hi",
+                "ho",
+                "hu",
+                "ia",
+                "id",
+                "ie",
+                "ga",
+                "ig",
+                "ik",
+                "io",
+                "is",
+                "it",
+                "iu",
+                "ja",
+                "jv",
+                "kl",
+                "kn",
+                "kr",
+                "ks",
+                "kk",
+                "km",
+                "ki",
+                "rw",
+                "ky",
+                "kv",
+                "kg",
+                "ko",
+                "ku",
+                "kj",
+                "la",
+                "lb",
+                "lg",
+                "li",
+                "ln",
+                "lo",
+                "lt",
+                "lu",
+                "lv",
+                "gv",
+                "mk",
+                "mg",
+                "ms",
+                "ml",
+                "mt",
+                "mi",
+                "mr",
+                "mh",
+                "mn",
+                "na",
+                "nv",
+                "nb",
+                "nd",
+                "ne",
+                "ng",
+                "nn",
+                "no",
+                "ii",
+                "nr",
+                "oc",
+                "oj",
+                "cu",
+                "om",
+                "or",
+                "os",
+                "pa",
+                "pi",
+                "fa",
+                "pl",
+                "ps",
+                "pt",
+                "qu",
+                "rm",
+                "rn",
+                "ro",
+                "ru",
+                "sa",
+                "sc",
+                "sd",
+                "se",
+                "sm",
+                "sg",
+                "sr",
+                "gd",
+                "sn",
+                "si",
+                "sk",
+                "sl",
+                "so",
+                "st",
+                "es",
+                "su",
+                "sw",
+                "ss",
+                "sv",
+                "ta",
+                "te",
+                "tg",
+                "th",
+                "ti",
+                "bo",
+                "tk",
+                "tl",
+                "tn",
+                "to",
+                "tr",
+                "ts",
+                "tt",
+                "tw",
+                "ty",
+                "ug",
+                "uk",
+                "ur",
+                "uz",
+                "ve",
+                "vi",
+                "vo",
+                "wa",
+                "cy",
+                "wo",
+                "fy",
+                "xh",
+                "yi",
+                "yo",
+                "za"
+              ],
+              "default": "en"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Boundaries contained by the requested place. The example is shortened to two features for readability; an actual response can contain additional matching boundaries.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BoundaryFeatureCollection"
+                },
+                "example": {
+                  "type": "FeatureCollection",
+                  "features": [
+                    {
+                      "type": "Feature",
+                      "properties": {
+                        "name": "Edgefield County",
+                        "country": "United States",
+                        "country_code": "us",
+                        "state": "South Carolina",
+                        "county": "Edgefield",
+                        "iso3166_2": "US-SC",
+                        "lon": -81.9759066,
+                        "lat": 33.7635851,
+                        "state_code": "SC",
+                        "formatted": "Edgefield, South Carolina, United States of America",
+                        "address_line1": "Edgefield, South Carolina",
+                        "address_line2": "United States of America",
+                        "categories": [
+                          "administrative",
+                          "administrative.county_level"
+                        ],
+                        "website": "https://edgefieldcounty.sc.gov/",
+                        "name_international": {
+                          "en": "Edgefield"
+                        },
+                        "wiki_and_media": {
+                          "wikidata": "Q495096",
+                          "wikipedia": "en:Edgefield County, South Carolina"
+                        },
+                        "datasource": {
+                          "sourcename": "openstreetmap",
+                          "attribution": "© OpenStreetMap contributors",
+                          "license": "Open Database License",
+                          "url": "https://www.openstreetmap.org/copyright",
+                          "raw": {
+                            "name": "Edgefield County",
+                            "type": "boundary",
+                            "osm_id": 2532505,
+                            "name:en": "Edgefield County",
+                            "website": "https://edgefieldcounty.sc.gov/",
+                            "boundary": "administrative",
+                            "osm_type": "r",
+                            "wikidata": "Q495096",
+                            "wikipedia": "en:Edgefield County, South Carolina",
+                            "population": 26514,
+                            "_place_name": "Edgefield",
+                            "admin_level": 6,
+                            "border_type": "county",
+                            "country_code": "us",
+                            "linked_place": "county",
+                            "_place_name:en": "Edgefield",
+                            "nist:fips_code": 45037,
+                            "nist:state_fips": 45
+                          }
+                        },
+                        "place_id": "51528a0ca1af7c54c059e0928b648fe04040f00101f90199a4260000000000c00209920310456467656669656c6420436f756e7479"
+                      },
+                      "geometry": {
+                        "type": "Point",
+                        "coordinates": [
+                          -81.948219549,
+                          33.754376
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Feature",
+                      "properties": {
+                        "name": "Chester County",
+                        "country": "United States",
+                        "country_code": "us",
+                        "state": "South Carolina",
+                        "county": "Chester",
+                        "iso3166_2": "US-SC",
+                        "lon": -81.1545073,
+                        "lat": 34.6859896,
+                        "state_code": "SC",
+                        "formatted": "Chester, South Carolina, United States of America",
+                        "address_line1": "Chester, South Carolina",
+                        "address_line2": "United States of America",
+                        "categories": [
+                          "administrative",
+                          "administrative.county_level"
+                        ],
+                        "website": "https://www.chestercountysc.gov/",
+                        "name_international": {
+                          "en": "Chester"
+                        },
+                        "wiki_and_media": {
+                          "wikidata": "Q497377",
+                          "wikipedia": "en:Chester County, South Carolina"
+                        },
+                        "datasource": {
+                          "sourcename": "openstreetmap",
+                          "attribution": "© OpenStreetMap contributors",
+                          "license": "Open Database License",
+                          "url": "https://www.openstreetmap.org/copyright",
+                          "raw": {
+                            "name": "Chester County",
+                            "type": "boundary",
+                            "osm_id": 2532500,
+                            "name:en": "Chester County",
+                            "website": "https://www.chestercountysc.gov/",
+                            "boundary": "administrative",
+                            "osm_type": "r",
+                            "wikidata": "Q497377",
+                            "wikipedia": "en:Chester County, South Carolina",
+                            "population": 32267,
+                            "_place_name": "Chester",
+                            "admin_level": 6,
+                            "border_type": "county",
+                            "country_code": "us",
+                            "linked_place": "county",
+                            "_place_name:en": "Chester",
+                            "nist:fips_code": 45023,
+                            "nist:state_fips": 45
+                          }
+                        },
+                        "place_id": "515dfc938e9b4a54c059b1db99594b574140f00101f90194a4260000000000c0020992030e4368657374657220436f756e7479"
+                      },
+                      "geometry": {
+                        "type": "Point",
+                        "coordinates": [
+                          -81.165744442,
+                          34.681987
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing or invalid place identifier, boundary type, sublevel, geometry mode, or language.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GatewayError"
+                },
+                "examples": {
+                  "missingPlaceId": {
+                    "summary": "Missing required place ID",
+                    "value": {
+                      "statusCode": 400,
+                      "error": "Bad Request",
+                      "message": "\"id\" is required"
+                    }
+                  },
+                  "invalidPlaceId": {
+                    "summary": "Invalid Geoapify place ID",
+                    "value": {
+                      "statusCode": 400,
+                      "error": "Bad Request",
+                      "message": "Invalid Place ID not-a-valid-place-id"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid Geoapify API key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GatewayError"
+                },
+                "example": {
+                  "statusCode": 401,
+                  "error": "Unauthorized",
+                  "message": "Invalid apiKey"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit or quota exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GatewayError"
+                },
+                "example": {
+                  "statusCode": 429,
+                  "error": "Too Many Requests",
+                  "message": "Quota exceeded"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal gateway error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GatewayError"
+                },
+                "example": {
+                  "statusCode": 500,
+                  "error": "Internal Server Error",
+                  "message": "Request failed, please try again later"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "TimezoneOutput": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "offset_STD",
+          "offset_DST",
+          "offset_STD_seconds",
+          "offset_DST_seconds"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "name_alt": {
+            "type": "string"
+          },
+          "country_codes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "offset_STD": {
+            "type": "string"
+          },
+          "offset_DST": {
+            "type": "string"
+          },
+          "offset_STD_seconds": {
+            "type": "number"
+          },
+          "offset_DST_seconds": {
+            "type": "number"
+          },
+          "abbreviation_STD": {
+            "type": "string"
+          },
+          "abbreviation_DST": {
+            "type": "string"
+          }
+        }
+      },
+      "PublicDatasource": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "sourcename": {
+            "type": "string"
+          },
+          "attribution": {
+            "type": "string"
+          },
+          "license": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri"
+          }
+        }
+      },
+      "PlacesDatasource": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "raw"
+        ],
+        "properties": {
+          "sourcename": {
+            "type": "string"
+          },
+          "attribution": {
+            "type": "string"
+          },
+          "license": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "raw": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "PeliasPlaceDatasource": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "sourcename": {
+            "type": "string"
+          },
+          "attribution": {
+            "type": "string"
+          },
+          "license": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "pelias_gid": {
+            "type": "string"
+          },
+          "pelias_layer": {
+            "type": "string"
+          },
+          "osm_id": {
+            "type": "number"
+          },
+          "osm_type": {
+            "type": "string",
+            "enum": [
+              "N",
+              "W",
+              "R"
+            ]
+          },
+          "macrocounty": {
+            "type": "string"
+          },
+          "macrocounty_a": {
+            "type": "string"
+          },
+          "macroregion": {
+            "type": "string"
+          },
+          "macroregion_a": {
+            "type": "string"
+          },
+          "continent": {
+            "type": "string"
+          }
+        }
+      },
+      "GeocodingRank": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "confidence": {
+            "type": "number"
+          },
+          "confidence_city_level": {
+            "type": "number"
+          },
+          "confidence_street_level": {
+            "type": "number"
+          },
+          "confidence_building_level": {
+            "type": "number"
+          },
+          "match_type": {
+            "type": "string",
+            "enum": [
+              "full_match",
+              "inner_part",
+              "match_by_building",
+              "match_by_street",
+              "match_by_postcode",
+              "match_by_city_or_disrict",
+              "match_by_country_or_state"
+            ]
+          },
+          "importance": {
+            "type": "number"
+          },
+          "popularity": {
+            "type": "number"
+          }
+        }
+      },
+      "PlaceDetailValue": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "number"
+          },
+          {
+            "type": "boolean"
+          },
+          {
+            "type": "null"
+          },
+          {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PlaceDetailValue"
+            }
+          },
+          {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/PlaceDetailValue"
+            }
+          }
+        ]
+      },
+      "PlaceDetailGroup": {
+        "type": "object",
+        "additionalProperties": {
+          "$ref": "#/components/schemas/PlaceDetailValue"
+        }
+      },
+      "StringMap": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "string"
+        }
+      },
+      "BooleanMap": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "boolean"
+        }
+      },
+      "WikiPopulation": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "actual",
+          "by_years"
+        ],
+        "properties": {
+          "actual": {
+            "type": "string"
+          },
+          "by_years": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "GatewayError": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "statusCode",
+          "error",
+          "message"
+        ],
+        "properties": {
+          "statusCode": {
+            "type": "integer",
+            "description": "HTTP status code returned by the API gateway."
+          },
+          "error": {
+            "type": "string",
+            "description": "Standard HTTP error name."
+          },
+          "message": {
+            "type": "string",
+            "description": "Human-readable explanation of the error."
+          }
+        }
+      },
+      "BoundaryFeatureCollection": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type",
+          "features"
+        ],
+        "properties": {
+          "type": {
+            "const": "FeatureCollection"
+          },
+          "features": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BoundaryFeature"
+            }
+          }
+        }
+      },
+      "BoundaryFeature": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type",
+          "properties",
+          "geometry"
+        ],
+        "properties": {
+          "type": {
+            "const": "Feature"
+          },
+          "properties": {
+            "$ref": "#/components/schemas/BoundaryProperties"
+          },
+          "geometry": {
+            "$ref": "#/components/schemas/GeoJsonGeometry"
+          },
+          "bbox": {
+            "type": "array",
+            "minItems": 4,
+            "maxItems": 4,
+            "items": {
+              "type": "number"
+            }
+          }
+        }
+      },
+      "BoundaryProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "continent": {
+            "type": "string"
+          },
+          "country": {
+            "type": "string"
+          },
+          "country_code": {
+            "type": "string"
+          },
+          "region": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          },
+          "state_code": {
+            "type": "string"
+          },
+          "state_COG": {
+            "type": "string"
+          },
+          "department_COG": {
+            "type": "string"
+          },
+          "state_district": {
+            "type": "string"
+          },
+          "province": {
+            "type": "string"
+          },
+          "department": {
+            "type": "string"
+          },
+          "arrondissement": {
+            "type": "string"
+          },
+          "county": {
+            "type": "string"
+          },
+          "county_code": {
+            "type": "string"
+          },
+          "county_district": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "city_district": {
+            "type": "string"
+          },
+          "postcode": {
+            "type": "string"
+          },
+          "postal_code": {
+            "type": "string"
+          },
+          "openGeoDB:postal_codes": {
+            "type": "string"
+          },
+          "district": {
+            "type": "string"
+          },
+          "suburb": {
+            "type": "string"
+          },
+          "municipality": {
+            "type": "string"
+          },
+          "commune": {
+            "type": "string"
+          },
+          "subdistrict": {
+            "type": "string"
+          },
+          "city_block": {
+            "type": "string"
+          },
+          "neighbourhood": {
+            "type": "string"
+          },
+          "quarter": {
+            "type": "string"
+          },
+          "section": {
+            "type": "string"
+          },
+          "sector": {
+            "type": "string"
+          },
+          "subdivision": {
+            "type": "string"
+          },
+          "croft": {
+            "type": "string"
+          },
+          "allotments": {
+            "type": "string"
+          },
+          "residental": {
+            "type": "string"
+          },
+          "farm": {
+            "type": "string"
+          },
+          "farmyard": {
+            "type": "string"
+          },
+          "industrial": {
+            "type": "string"
+          },
+          "commercial": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/PlaceDetailGroup"
+              }
+            ]
+          },
+          "retail": {
+            "type": "string"
+          },
+          "borough": {
+            "type": "string"
+          },
+          "town": {
+            "type": "string"
+          },
+          "township": {
+            "type": "string"
+          },
+          "village": {
+            "type": "string"
+          },
+          "hamlet": {
+            "type": "string"
+          },
+          "locality": {
+            "type": "string"
+          },
+          "isolated_dwelling": {
+            "type": "string"
+          },
+          "street": {
+            "type": "string"
+          },
+          "road": {
+            "type": "string"
+          },
+          "footway": {
+            "type": "string"
+          },
+          "pedestrian": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "housenumber": {
+            "type": "string"
+          },
+          "house_number": {
+            "type": "string"
+          },
+          "house_name": {
+            "type": "string"
+          },
+          "old_name": {
+            "type": "string"
+          },
+          "other": {
+            "type": "string"
+          },
+          "formatted": {
+            "type": "string"
+          },
+          "address_line1": {
+            "type": "string"
+          },
+          "address_line2": {
+            "type": "string"
+          },
+          "unlocode": {
+            "type": "string"
+          },
+          "iso3166_2": {
+            "type": "string"
+          },
+          "iso3166_2_sublevel": {
+            "type": "string"
+          },
+          "iso3166_sublevel": {
+            "type": "string"
+          },
+          "plus_code": {
+            "type": "string"
+          },
+          "plus_code_short": {
+            "type": "string"
+          },
+          "postcodes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "other_names": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "population": {
+            "oneOf": [
+              {
+                "type": "number"
+              },
+              {
+                "$ref": "#/components/schemas/WikiPopulation"
+              }
+            ]
+          },
+          "lon": {
+            "type": "number",
+            "minimum": -180,
+            "maximum": 180
+          },
+          "lat": {
+            "type": "number",
+            "minimum": -90,
+            "maximum": 90
+          },
+          "parent_as_place_id": {
+            "type": "boolean"
+          },
+          "timezone": {
+            "$ref": "#/components/schemas/TimezoneOutput"
+          },
+          "website": {
+            "type": "string"
+          },
+          "opening_hours": {
+            "type": "string"
+          },
+          "opening_hours_covid19": {
+            "type": "string"
+          },
+          "brand": {
+            "type": "string"
+          },
+          "operator": {
+            "type": "string"
+          },
+          "branch": {
+            "type": "string"
+          },
+          "network": {
+            "type": "string"
+          },
+          "owner": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "craft": {
+            "type": "string"
+          },
+          "ref": {
+            "type": "string"
+          },
+          "int_ref": {
+            "type": "string"
+          },
+          "ele": {
+            "type": "string"
+          },
+          "color": {
+            "type": "string"
+          },
+          "water_source": {
+            "type": "string"
+          },
+          "website_other": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "website_international": {
+            "$ref": "#/components/schemas/StringMap"
+          },
+          "description_international": {
+            "$ref": "#/components/schemas/StringMap"
+          },
+          "name_international": {
+            "$ref": "#/components/schemas/StringMap"
+          },
+          "cuisine_international": {
+            "$ref": "#/components/schemas/StringMap"
+          },
+          "ref_other": {
+            "$ref": "#/components/schemas/StringMap"
+          },
+          "disused": {
+            "type": "boolean"
+          },
+          "payment_options": {
+            "$ref": "#/components/schemas/BooleanMap"
+          },
+          "recycling_options": {
+            "$ref": "#/components/schemas/BooleanMap"
+          },
+          "fuel_options": {
+            "$ref": "#/components/schemas/BooleanMap"
+          },
+          "targeted_for": {
+            "$ref": "#/components/schemas/BooleanMap"
+          },
+          "socket_options": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/PlaceDetailGroup"
+            }
+          },
+          "brand_details": {
+            "$ref": "#/components/schemas/PlaceDetailGroup"
+          },
+          "operator_details": {
+            "$ref": "#/components/schemas/PlaceDetailGroup"
+          },
+          "network_details": {
+            "$ref": "#/components/schemas/PlaceDetailGroup"
+          },
+          "owner_details": {
+            "$ref": "#/components/schemas/PlaceDetailGroup"
+          },
+          "name_other": {
+            "$ref": "#/components/schemas/PlaceDetailGroup"
+          },
+          "contact": {
+            "$ref": "#/components/schemas/PlaceDetailGroup"
+          },
+          "facilities": {
+            "$ref": "#/components/schemas/PlaceDetailGroup"
+          },
+          "wiki_and_media": {
+            "$ref": "#/components/schemas/PlaceDetailGroup"
+          },
+          "historic": {
+            "$ref": "#/components/schemas/PlaceDetailGroup"
+          },
+          "heritage": {
+            "$ref": "#/components/schemas/PlaceDetailGroup"
+          },
+          "artwork": {
+            "$ref": "#/components/schemas/PlaceDetailGroup"
+          },
+          "accommodation": {
+            "$ref": "#/components/schemas/PlaceDetailGroup"
+          },
+          "catering": {
+            "$ref": "#/components/schemas/PlaceDetailGroup"
+          },
+          "parking": {
+            "$ref": "#/components/schemas/PlaceDetailGroup"
+          },
+          "airport": {
+            "$ref": "#/components/schemas/PlaceDetailGroup"
+          },
+          "power": {
+            "$ref": "#/components/schemas/PlaceDetailGroup"
+          },
+          "way": {
+            "$ref": "#/components/schemas/PlaceDetailGroup"
+          },
+          "building": {
+            "$ref": "#/components/schemas/PlaceDetailGroup"
+          },
+          "place_of_worship": {
+            "$ref": "#/components/schemas/PlaceDetailGroup"
+          },
+          "fire_hydrant": {
+            "$ref": "#/components/schemas/PlaceDetailGroup"
+          },
+          "defibrilator": {
+            "$ref": "#/components/schemas/PlaceDetailGroup"
+          },
+          "restrictions": {
+            "$ref": "#/components/schemas/PlaceDetailGroup"
+          },
+          "production": {
+            "$ref": "#/components/schemas/PlaceDetailGroup"
+          },
+          "distance": {
+            "type": "number"
+          },
+          "categories": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "details": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "datasource": {
+            "$ref": "#/components/schemas/PlacesDatasource"
+          },
+          "mappedTo": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "lon": {
+                "type": "number",
+                "minimum": -180,
+                "maximum": 180
+              },
+              "lat": {
+                "type": "number",
+                "minimum": -90,
+                "maximum": 90
+              }
+            }
+          },
+          "place_id": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 2048
+          }
+        }
+      },
+      "GeoJsonGeometry": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/PointGeometry"
+          },
+          {
+            "$ref": "#/components/schemas/LineStringGeometry"
+          },
+          {
+            "$ref": "#/components/schemas/PolygonGeometry"
+          },
+          {
+            "$ref": "#/components/schemas/MultiPointGeometry"
+          },
+          {
+            "$ref": "#/components/schemas/MultiLineStringGeometry"
+          },
+          {
+            "$ref": "#/components/schemas/MultiPolygonGeometry"
+          },
+          {
+            "$ref": "#/components/schemas/GeometryCollection"
+          }
+        ]
+      },
+      "PointGeometry": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type",
+          "coordinates"
+        ],
+        "properties": {
+          "type": {
+            "const": "Point"
+          },
+          "coordinates": {
+            "$ref": "#/components/schemas/Position"
+          }
+        }
+      },
+      "LineStringGeometry": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type",
+          "coordinates"
+        ],
+        "properties": {
+          "type": {
+            "const": "LineString"
+          },
+          "coordinates": {
+            "type": "array",
+            "minItems": 2,
+            "items": {
+              "$ref": "#/components/schemas/Position"
+            }
+          }
+        }
+      },
+      "PolygonGeometry": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type",
+          "coordinates"
+        ],
+        "properties": {
+          "type": {
+            "const": "Polygon"
+          },
+          "coordinates": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "minItems": 4,
+              "items": {
+                "$ref": "#/components/schemas/Position"
+              }
+            }
+          }
+        }
+      },
+      "MultiPointGeometry": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type",
+          "coordinates"
+        ],
+        "properties": {
+          "type": {
+            "const": "MultiPoint"
+          },
+          "coordinates": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Position"
+            }
+          }
+        }
+      },
+      "MultiLineStringGeometry": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type",
+          "coordinates"
+        ],
+        "properties": {
+          "type": {
+            "const": "MultiLineString"
+          },
+          "coordinates": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "minItems": 2,
+              "items": {
+                "$ref": "#/components/schemas/Position"
+              }
+            }
+          }
+        }
+      },
+      "MultiPolygonGeometry": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type",
+          "coordinates"
+        ],
+        "properties": {
+          "type": {
+            "const": "MultiPolygon"
+          },
+          "coordinates": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "array",
+                "minItems": 4,
+                "items": {
+                  "$ref": "#/components/schemas/Position"
+                }
+              }
+            }
+          }
+        }
+      },
+      "GeometryCollection": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type",
+          "geometries"
+        ],
+        "properties": {
+          "type": {
+            "const": "GeometryCollection"
+          },
+          "geometries": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GeoJsonGeometry"
+            }
+          }
+        }
+      },
+      "Position": {
+        "type": "array",
+        "minItems": 2,
+        "maxItems": 3,
+        "prefixItems": [
+          {
+            "type": "number",
+            "minimum": -180,
+            "maximum": 180
+          },
+          {
+            "type": "number",
+            "minimum": -90,
+            "maximum": 90
+          },
+          {
+            "type": "number"
+          }
+        ],
+        "items": false
+      }
+    },
+    "securitySchemes": {
+      "ApiKeyInQuery": {
+        "type": "apiKey",
+        "in": "query",
+        "name": "apiKey",
+        "description": "Geoapify API key query parameter. Recommended authentication method for public APIs. API keys in URLs can be logged; use x-api-key for server-to-server clients."
+      },
+      "ApiKeyInHeader": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "x-api-key",
+        "description": "Geoapify API key header. Supported as an alternative authentication method for public APIs."
+      }
+    }
+  },
+  "security": [
+    {
+      "ApiKeyInQuery": []
+    },
+    {
+      "ApiKeyInHeader": []
+    }
+  ]
+}

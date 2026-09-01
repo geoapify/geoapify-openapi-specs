@@ -1,0 +1,621 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Geoapify IP Geolocation API",
+    "version": "1.0.0",
+    "description": "Resolve an IP address to an approximate geographic location."
+  },
+  "servers": [
+    {
+      "url": "https://api.geoapify.com/v1",
+      "description": "Default API endpoint."
+    },
+    {
+      "url": "https://api-eu.geoapify.com/v1",
+      "description": "EU-focused endpoint. Geoapify service processing uses EU infrastructure."
+    }
+  ],
+  "tags": [
+    {
+      "name": "IP Geolocation"
+    }
+  ],
+  "paths": {
+    "/ipinfo": {
+      "get": {
+        "tags": [
+          "IP Geolocation"
+        ],
+        "operationId": "getIpGeolocation",
+        "summary": "Get IP geolocation",
+        "description": "Returns an approximate geographic location and regional metadata for an IP address.\n\n- Provide `ip` to look up a specific IPv4 or IPv6 address.\n- Omit `ip` to use the client address detected by the API.\n- Use `lang` to select the preferred result language.",
+        "parameters": [
+          {
+            "name": "ip",
+            "in": "query",
+            "required": false,
+            "description": "IPv4 or IPv6 address. The client address is used when omitted.",
+            "schema": {
+              "type": "string",
+              "oneOf": [
+                {
+                  "format": "ipv4"
+                },
+                {
+                  "format": "ipv6"
+                }
+              ]
+            }
+          },
+          {
+            "name": "lang",
+            "in": "query",
+            "required": false,
+            "description": "Result language.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "ab",
+                "aa",
+                "af",
+                "ak",
+                "sq",
+                "am",
+                "ar",
+                "an",
+                "hy",
+                "as",
+                "av",
+                "ae",
+                "ay",
+                "az",
+                "bm",
+                "ba",
+                "eu",
+                "be",
+                "bn",
+                "bh",
+                "bi",
+                "bs",
+                "br",
+                "bg",
+                "my",
+                "ca",
+                "ch",
+                "ce",
+                "ny",
+                "zh",
+                "cv",
+                "kw",
+                "co",
+                "cr",
+                "hr",
+                "cs",
+                "da",
+                "dv",
+                "nl",
+                "en",
+                "eo",
+                "et",
+                "ee",
+                "fo",
+                "fj",
+                "fi",
+                "fr",
+                "ff",
+                "gl",
+                "ka",
+                "de",
+                "el",
+                "gn",
+                "gu",
+                "ht",
+                "ha",
+                "he",
+                "hz",
+                "hi",
+                "ho",
+                "hu",
+                "ia",
+                "id",
+                "ie",
+                "ga",
+                "ig",
+                "ik",
+                "io",
+                "is",
+                "it",
+                "iu",
+                "ja",
+                "jv",
+                "kl",
+                "kn",
+                "kr",
+                "ks",
+                "kk",
+                "km",
+                "ki",
+                "rw",
+                "ky",
+                "kv",
+                "kg",
+                "ko",
+                "ku",
+                "kj",
+                "la",
+                "lb",
+                "lg",
+                "li",
+                "ln",
+                "lo",
+                "lt",
+                "lu",
+                "lv",
+                "gv",
+                "mk",
+                "mg",
+                "ms",
+                "ml",
+                "mt",
+                "mi",
+                "mr",
+                "mh",
+                "mn",
+                "na",
+                "nv",
+                "nb",
+                "nd",
+                "ne",
+                "ng",
+                "nn",
+                "no",
+                "ii",
+                "nr",
+                "oc",
+                "oj",
+                "cu",
+                "om",
+                "or",
+                "os",
+                "pa",
+                "pi",
+                "fa",
+                "pl",
+                "ps",
+                "pt",
+                "qu",
+                "rm",
+                "rn",
+                "ro",
+                "ru",
+                "sa",
+                "sc",
+                "sd",
+                "se",
+                "sm",
+                "sg",
+                "sr",
+                "gd",
+                "sn",
+                "si",
+                "sk",
+                "sl",
+                "so",
+                "st",
+                "es",
+                "su",
+                "sw",
+                "ss",
+                "sv",
+                "ta",
+                "te",
+                "tg",
+                "th",
+                "ti",
+                "bo",
+                "tk",
+                "tl",
+                "tn",
+                "to",
+                "tr",
+                "ts",
+                "tt",
+                "tw",
+                "ty",
+                "ug",
+                "uk",
+                "ur",
+                "uz",
+                "ve",
+                "vi",
+                "vo",
+                "wa",
+                "cy",
+                "wo",
+                "fy",
+                "xh",
+                "yi",
+                "yo",
+                "za"
+              ],
+              "default": "en"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "IP geolocation result.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IpGeolocationResponse"
+                },
+                "example": {
+                  "city": {
+                    "name": "New York",
+                    "names": {
+                      "en": "New York",
+                      "de": "New York City",
+                      "es": "Nueva York",
+                      "fa": "نیویورک",
+                      "fr": "New York",
+                      "ja": "マンハッタン",
+                      "ko": "뉴욕",
+                      "pt-BR": "Nova Iorque",
+                      "ru": "Нью-Йорк",
+                      "zh-CN": "紐約"
+                    }
+                  },
+                  "country": {
+                    "name": "United States",
+                    "iso_code": "US",
+                    "names": {
+                      "en": "United States",
+                      "de": "Vereinigte Staaten von Amerika",
+                      "es": "Estados Unidos de América (los)",
+                      "fa": "ایالات متحدهٔ امریکا",
+                      "fr": "États-Unis",
+                      "ja": "アメリカ合衆国",
+                      "ko": "미국",
+                      "pt-BR": "Estados Unidos",
+                      "ru": "США",
+                      "zh-CN": "美国"
+                    },
+                    "geoname_id": 6252001,
+                    "name_native": "United States",
+                    "phone_code": "1",
+                    "capital": "Washington D.C.",
+                    "currency": "USD,USN,USS",
+                    "flag": "🇺🇸",
+                    "languages": [
+                      {
+                        "iso_code": "en",
+                        "name": "English",
+                        "name_native": "English"
+                      }
+                    ]
+                  },
+                  "state": {
+                    "name": "New York"
+                  },
+                  "location": {
+                    "latitude": 40.7128,
+                    "longitude": -74.006
+                  },
+                  "continent": {
+                    "code": "NA",
+                    "name": "North America",
+                    "names": {
+                      "de": "Nordamerika",
+                      "en": "North America",
+                      "es": "Norteamérica",
+                      "fa": "آمریکای شمالی",
+                      "fr": "Amérique du Nord",
+                      "ja": "北アメリカ",
+                      "ko": "북아메리카",
+                      "pt-BR": "América do Norte",
+                      "ru": "Северная Америка",
+                      "zh-CN": "北美洲"
+                    },
+                    "geoname_id": 6255149
+                  },
+                  "subdivisions": [
+                    {
+                      "names": {
+                        "en": "New York",
+                        "de": "New York",
+                        "es": "Nueva York",
+                        "fa": "نیویورک",
+                        "fr": "New York",
+                        "ja": "ニューヨーク州",
+                        "ko": "뉴욕주",
+                        "pt-BR": "Nova Iorque",
+                        "ru": "Нью-Йорк",
+                        "zh-CN": "纽约州"
+                      }
+                    }
+                  ],
+                  "postal": {
+                    "code": "10123"
+                  },
+                  "ip": "134.64.222.45"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing or invalid IP geolocation parameters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GatewayError"
+                },
+                "example": {
+                  "statusCode": 400,
+                  "error": "Bad Request",
+                  "message": "\"ip\" must be a valid ip address with a optional CIDR"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid Geoapify API key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GatewayError"
+                },
+                "example": {
+                  "statusCode": 401,
+                  "error": "Unauthorized",
+                  "message": "Invalid apiKey"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit or quota exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GatewayError"
+                },
+                "example": {
+                  "statusCode": 429,
+                  "error": "Too Many Requests",
+                  "message": "Quota exceeded"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal gateway error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GatewayError"
+                },
+                "example": {
+                  "statusCode": 500,
+                  "error": "Internal Server Error",
+                  "message": "Request failed, please try again later"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "IpGeolocationResponse": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "ip": {
+            "type": "string",
+            "oneOf": [
+              {
+                "format": "ipv4"
+              },
+              {
+                "format": "ipv6"
+              }
+            ]
+          },
+          "city": {
+            "$ref": "#/components/schemas/IpGeolocationNamedEntity"
+          },
+          "state": {
+            "$ref": "#/components/schemas/IpGeolocationNamedEntity"
+          },
+          "country": {
+            "$ref": "#/components/schemas/IpGeolocationCountry"
+          },
+          "continent": {
+            "$ref": "#/components/schemas/IpGeolocationContinent"
+          },
+          "location": {
+            "$ref": "#/components/schemas/IpGeolocationLocation"
+          },
+          "subdivisions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IpGeolocationNamedEntity"
+            }
+          },
+          "postal": {
+            "$ref": "#/components/schemas/IpGeolocationPostal"
+          }
+        }
+      },
+      "LocalizedNames": {
+        "type": "object",
+        "description": "Names keyed by language code.",
+        "additionalProperties": {
+          "type": "string"
+        }
+      },
+      "IpGeolocationNamedEntity": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "names": {
+            "$ref": "#/components/schemas/LocalizedNames"
+          }
+        }
+      },
+      "IpGeolocationCountry": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "iso_code": {
+            "type": "string",
+            "pattern": "^[A-Z]{2}$"
+          },
+          "names": {
+            "$ref": "#/components/schemas/LocalizedNames"
+          },
+          "geoname_id": {
+            "type": "integer"
+          },
+          "name_native": {
+            "type": "string"
+          },
+          "phone_code": {
+            "type": "string"
+          },
+          "capital": {
+            "type": "string"
+          },
+          "currency": {
+            "type": "string"
+          },
+          "flag": {
+            "type": "string"
+          },
+          "languages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IpGeolocationLanguage"
+            }
+          }
+        }
+      },
+      "IpGeolocationLanguage": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "iso_code": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "name_native": {
+            "type": "string"
+          }
+        }
+      },
+      "IpGeolocationContinent": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "names": {
+            "$ref": "#/components/schemas/LocalizedNames"
+          },
+          "geoname_id": {
+            "type": "integer"
+          }
+        }
+      },
+      "IpGeolocationLocation": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "latitude",
+          "longitude"
+        ],
+        "properties": {
+          "latitude": {
+            "type": "number",
+            "minimum": -90,
+            "maximum": 90
+          },
+          "longitude": {
+            "type": "number",
+            "minimum": -180,
+            "maximum": 180
+          }
+        }
+      },
+      "IpGeolocationPostal": {
+        "type": "object",
+        "additionalProperties": true,
+        "properties": {
+          "code": {
+            "type": "string"
+          }
+        }
+      },
+      "GatewayError": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "statusCode",
+          "error",
+          "message"
+        ],
+        "properties": {
+          "statusCode": {
+            "type": "integer",
+            "description": "HTTP status code returned by the gateway."
+          },
+          "error": {
+            "type": "string",
+            "description": "Standard HTTP error name."
+          },
+          "message": {
+            "type": "string",
+            "description": "Human-readable explanation of the error."
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "ApiKeyInQuery": {
+        "type": "apiKey",
+        "in": "query",
+        "name": "apiKey",
+        "description": "Geoapify API key query parameter. Recommended authentication method for public APIs. API keys in URLs can be logged; use x-api-key for server-to-server clients."
+      },
+      "ApiKeyInHeader": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "x-api-key",
+        "description": "Geoapify API key header. Supported as an alternative authentication method for public APIs."
+      }
+    }
+  },
+  "security": [
+    {
+      "ApiKeyInQuery": []
+    },
+    {
+      "ApiKeyInHeader": []
+    }
+  ]
+}

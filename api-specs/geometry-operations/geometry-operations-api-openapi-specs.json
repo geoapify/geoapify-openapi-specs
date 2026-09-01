@@ -1,0 +1,1268 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Geoapify Geometry Operations API",
+    "version": "1.0.0",
+    "description": "Run 42 server-side GeoJSON operations for set calculations, predicates, measurements, line queries, transformations, clustering, grids, and geometry generation."
+  },
+  "servers": [
+    {
+      "url": "https://api.geoapify.com/v1",
+      "description": "Default API endpoint."
+    },
+    {
+      "url": "https://api-eu.geoapify.com/v1",
+      "description": "EU-focused endpoint. Geoapify service processing uses EU infrastructure."
+    }
+  ],
+  "tags": [
+    {
+      "name": "Geometry Operations",
+      "description": "Analyze, measure, combine, transform, cluster, and generate GeoJSON geometries."
+    }
+  ],
+  "paths": {
+    "/geometry/operation": {
+      "post": {
+        "tags": [
+          "Geometry Operations"
+        ],
+        "operationId": "performGeometryOperation",
+        "summary": "Analyze or transform GeoJSON geometries",
+        "description": "Runs one of 42 spatial operations on GeoJSON geometries and returns a consistent `{type, data}` result.\n\n- Set `operation` and provide its named input fields, such as `polygons`, `points`, `geometry`, `point`, `line`, or `bbox`.\n- Do not send the legacy `inputs` array. The operation examples show the required field combination for common tasks.\n- GeoJSON coordinates use `[longitude, latitude]` order.\n- Put operation-specific options in `params`, including units, tolerance, clustering settings, or transformation options.\n- Set operations accept 2–100 polygons; point operations accept up to 1,000 points; multi-geometry operations accept up to 100 geometries.\n- The response `type` is `geojson`, `number`, `boolean`, or `empty`; `data` contains the corresponding result or `null`.\n\n**Examples:** choose a request example to calculate an intersection, predicate, measurement, buffer, bounding box, center, simplification, or point-on-line result.",
+        "requestBody": {
+          "required": true,
+          "description": "Operation name, named GeoJSON inputs, and optional operation-specific parameters.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GeometryOperationRequest"
+              },
+              "examples": {
+                "intersection": {
+                  "summary": "Intersect two overlapping polygons",
+                  "value": {
+                    "operation": "intersection",
+                    "polygons": [
+                      {
+                        "type": "Polygon",
+                        "coordinates": [
+                          [
+                            [
+                              13.38,
+                              52.5
+                            ],
+                            [
+                              13.42,
+                              52.5
+                            ],
+                            [
+                              13.42,
+                              52.54
+                            ],
+                            [
+                              13.38,
+                              52.54
+                            ],
+                            [
+                              13.38,
+                              52.5
+                            ]
+                          ]
+                        ]
+                      },
+                      {
+                        "type": "Polygon",
+                        "coordinates": [
+                          [
+                            [
+                              13.4,
+                              52.51
+                            ],
+                            [
+                              13.44,
+                              52.51
+                            ],
+                            [
+                              13.44,
+                              52.55
+                            ],
+                            [
+                              13.4,
+                              52.55
+                            ],
+                            [
+                              13.4,
+                              52.51
+                            ]
+                          ]
+                        ]
+                      }
+                    ]
+                  }
+                },
+                "difference": {
+                  "summary": "Subtract one polygon from another",
+                  "description": "Every polygon after the first is subtracted from the first polygon.",
+                  "value": {
+                    "operation": "difference",
+                    "polygons": [
+                      {
+                        "type": "Polygon",
+                        "coordinates": [
+                          [
+                            [
+                              13.38,
+                              52.5
+                            ],
+                            [
+                              13.42,
+                              52.5
+                            ],
+                            [
+                              13.42,
+                              52.54
+                            ],
+                            [
+                              13.38,
+                              52.54
+                            ],
+                            [
+                              13.38,
+                              52.5
+                            ]
+                          ]
+                        ]
+                      },
+                      {
+                        "type": "Polygon",
+                        "coordinates": [
+                          [
+                            [
+                              13.4,
+                              52.51
+                            ],
+                            [
+                              13.44,
+                              52.51
+                            ],
+                            [
+                              13.44,
+                              52.55
+                            ],
+                            [
+                              13.4,
+                              52.55
+                            ],
+                            [
+                              13.4,
+                              52.51
+                            ]
+                          ]
+                        ]
+                      }
+                    ]
+                  }
+                },
+                "union": {
+                  "summary": "Merge two polygons",
+                  "value": {
+                    "operation": "union",
+                    "polygons": [
+                      {
+                        "type": "Polygon",
+                        "coordinates": [
+                          [
+                            [
+                              13.38,
+                              52.5
+                            ],
+                            [
+                              13.42,
+                              52.5
+                            ],
+                            [
+                              13.42,
+                              52.54
+                            ],
+                            [
+                              13.38,
+                              52.54
+                            ],
+                            [
+                              13.38,
+                              52.5
+                            ]
+                          ]
+                        ]
+                      },
+                      {
+                        "type": "Polygon",
+                        "coordinates": [
+                          [
+                            [
+                              13.4,
+                              52.51
+                            ],
+                            [
+                              13.44,
+                              52.51
+                            ],
+                            [
+                              13.44,
+                              52.55
+                            ],
+                            [
+                              13.4,
+                              52.55
+                            ],
+                            [
+                              13.4,
+                              52.51
+                            ]
+                          ]
+                        ]
+                      }
+                    ]
+                  }
+                },
+                "contains": {
+                  "summary": "Check whether a polygon contains a point",
+                  "value": {
+                    "operation": "contains",
+                    "geometry1": {
+                      "type": "Polygon",
+                      "coordinates": [
+                        [
+                          [
+                            13.38,
+                            52.5
+                          ],
+                          [
+                            13.42,
+                            52.5
+                          ],
+                          [
+                            13.42,
+                            52.54
+                          ],
+                          [
+                            13.38,
+                            52.54
+                          ],
+                          [
+                            13.38,
+                            52.5
+                          ]
+                        ]
+                      ]
+                    },
+                    "geometry2": {
+                      "type": "Point",
+                      "coordinates": [
+                        13.405,
+                        52.52
+                      ]
+                    }
+                  }
+                },
+                "intersects": {
+                  "summary": "Check whether two polygons intersect",
+                  "value": {
+                    "operation": "intersects",
+                    "geometry1": {
+                      "type": "Polygon",
+                      "coordinates": [
+                        [
+                          [
+                            13.38,
+                            52.5
+                          ],
+                          [
+                            13.42,
+                            52.5
+                          ],
+                          [
+                            13.42,
+                            52.54
+                          ],
+                          [
+                            13.38,
+                            52.54
+                          ],
+                          [
+                            13.38,
+                            52.5
+                          ]
+                        ]
+                      ]
+                    },
+                    "geometry2": {
+                      "type": "Polygon",
+                      "coordinates": [
+                        [
+                          [
+                            13.4,
+                            52.51
+                          ],
+                          [
+                            13.44,
+                            52.51
+                          ],
+                          [
+                            13.44,
+                            52.55
+                          ],
+                          [
+                            13.4,
+                            52.55
+                          ],
+                          [
+                            13.4,
+                            52.51
+                          ]
+                        ]
+                      ]
+                    }
+                  }
+                },
+                "area": {
+                  "summary": "Calculate polygon area in square meters",
+                  "value": {
+                    "operation": "area",
+                    "polygon": {
+                      "type": "Polygon",
+                      "coordinates": [
+                        [
+                          [
+                            13.38,
+                            52.5
+                          ],
+                          [
+                            13.42,
+                            52.5
+                          ],
+                          [
+                            13.42,
+                            52.54
+                          ],
+                          [
+                            13.38,
+                            52.54
+                          ],
+                          [
+                            13.38,
+                            52.5
+                          ]
+                        ]
+                      ]
+                    }
+                  }
+                },
+                "distance": {
+                  "summary": "Measure the distance between two points",
+                  "value": {
+                    "operation": "distance",
+                    "point1": {
+                      "type": "Point",
+                      "coordinates": [
+                        13.405,
+                        52.52
+                      ]
+                    },
+                    "point2": {
+                      "type": "Point",
+                      "coordinates": [
+                        13.39,
+                        52.51
+                      ]
+                    },
+                    "params": {
+                      "units": "meters"
+                    }
+                  }
+                },
+                "lengthLineString": {
+                  "summary": "Measure a LineString in meters",
+                  "value": {
+                    "operation": "length",
+                    "line": {
+                      "type": "LineString",
+                      "coordinates": [
+                        [
+                          13.38,
+                          52.5
+                        ],
+                        [
+                          13.44,
+                          52.54
+                        ]
+                      ]
+                    },
+                    "params": {
+                      "units": "meters"
+                    }
+                  }
+                },
+                "lengthMultiLineString": {
+                  "summary": "Measure a MultiLineString in the default kilometers",
+                  "description": "Omitting `params.units` uses `kilometers`.",
+                  "value": {
+                    "operation": "length",
+                    "line": {
+                      "type": "MultiLineString",
+                      "coordinates": [
+                        [
+                          [
+                            13.38,
+                            52.5
+                          ],
+                          [
+                            13.41,
+                            52.52
+                          ]
+                        ],
+                        [
+                          [
+                            13.41,
+                            52.52
+                          ],
+                          [
+                            13.44,
+                            52.54
+                          ]
+                        ]
+                      ]
+                    }
+                  }
+                },
+                "buffer": {
+                  "summary": "Create a 500-meter buffer around a point",
+                  "value": {
+                    "operation": "buffer",
+                    "geometry": {
+                      "type": "Point",
+                      "coordinates": [
+                        13.405,
+                        52.52
+                      ]
+                    },
+                    "distance": 500,
+                    "params": {
+                      "units": "meters",
+                      "steps": 16
+                    }
+                  }
+                },
+                "bbox": {
+                  "summary": "Calculate a polygon bounding box",
+                  "value": {
+                    "operation": "bbox",
+                    "geometry": {
+                      "type": "Polygon",
+                      "coordinates": [
+                        [
+                          [
+                            13.38,
+                            52.5
+                          ],
+                          [
+                            13.42,
+                            52.5
+                          ],
+                          [
+                            13.42,
+                            52.54
+                          ],
+                          [
+                            13.38,
+                            52.54
+                          ],
+                          [
+                            13.38,
+                            52.5
+                          ]
+                        ]
+                      ]
+                    },
+                    "params": {
+                      "recompute": true
+                    }
+                  }
+                },
+                "centerOfMass": {
+                  "summary": "Calculate a polygon center of mass",
+                  "value": {
+                    "operation": "centerOfMass",
+                    "geometry": {
+                      "type": "Polygon",
+                      "coordinates": [
+                        [
+                          [
+                            13.38,
+                            52.5
+                          ],
+                          [
+                            13.42,
+                            52.5
+                          ],
+                          [
+                            13.42,
+                            52.54
+                          ],
+                          [
+                            13.38,
+                            52.54
+                          ],
+                          [
+                            13.38,
+                            52.5
+                          ]
+                        ]
+                      ]
+                    }
+                  }
+                },
+                "simplify": {
+                  "summary": "Simplify a line geometry",
+                  "value": {
+                    "operation": "simplify",
+                    "geometry": {
+                      "type": "LineString",
+                      "coordinates": [
+                        [
+                          13.38,
+                          52.5
+                        ],
+                        [
+                          13.41,
+                          52.53
+                        ],
+                        [
+                          13.44,
+                          52.54
+                        ]
+                      ]
+                    },
+                    "params": {
+                      "tolerance": 0.001,
+                      "highQuality": true
+                    }
+                  }
+                },
+                "nearestPointOnLine": {
+                  "summary": "Find the nearest position on a line",
+                  "value": {
+                    "operation": "nearestPointOnLine",
+                    "point": {
+                      "type": "Point",
+                      "coordinates": [
+                        13.405,
+                        52.52
+                      ]
+                    },
+                    "line": {
+                      "type": "LineString",
+                      "coordinates": [
+                        [
+                          13.38,
+                          52.5
+                        ],
+                        [
+                          13.41,
+                          52.53
+                        ],
+                        [
+                          13.44,
+                          52.54
+                        ]
+                      ]
+                    },
+                    "params": {
+                      "units": "meters"
+                    }
+                  }
+                },
+                "pointsWithinPolygon": {
+                  "summary": "Select points located inside a polygon",
+                  "value": {
+                    "operation": "pointsWithinPolygon",
+                    "points": [
+                      {
+                        "type": "Point",
+                        "coordinates": [
+                          13.405,
+                          52.52
+                        ]
+                      },
+                      {
+                        "type": "Point",
+                        "coordinates": [
+                          13.41,
+                          52.53
+                        ]
+                      },
+                      {
+                        "type": "Point",
+                        "coordinates": [
+                          13.45,
+                          52.56
+                        ]
+                      }
+                    ],
+                    "polygon": {
+                      "type": "Polygon",
+                      "coordinates": [
+                        [
+                          [
+                            13.38,
+                            52.5
+                          ],
+                          [
+                            13.42,
+                            52.5
+                          ],
+                          [
+                            13.42,
+                            52.54
+                          ],
+                          [
+                            13.38,
+                            52.54
+                          ],
+                          [
+                            13.38,
+                            52.5
+                          ]
+                        ]
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Unified operation result. `type` identifies whether `data` contains GeoJSON, a number, a boolean, or `null`. This example shows a numeric length result in meters.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GeometryOperationResponse"
+                },
+                "example": {
+                  "type": "number",
+                  "data": 6021.921081493014
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing or unsupported operation, missing operation-specific fields, invalid GeoJSON, invalid parameters, or input collections outside their limits.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GatewayError"
+                },
+                "examples": {
+                  "missingOperation": {
+                    "summary": "Missing operation name",
+                    "value": {
+                      "statusCode": 400,
+                      "error": "Bad Request",
+                      "message": "\"operation\" is required"
+                    }
+                  },
+                  "missingOperationInput": {
+                    "summary": "Missing input required by the operation",
+                    "description": "The `union` operation requires a `polygons` array.",
+                    "value": {
+                      "statusCode": 400,
+                      "error": "Bad Request",
+                      "message": "\"polygons\" is required"
+                    }
+                  },
+                  "missingOperationParameter": {
+                    "summary": "Missing parameter required by the operation",
+                    "description": "The `buffer` operation requires a top-level `distance` value.",
+                    "value": {
+                      "statusCode": 400,
+                      "error": "Bad Request",
+                      "message": "\"distance\" is required"
+                    }
+                  },
+                  "unsupportedLegacyInputs": {
+                    "summary": "Legacy inputs array is not supported",
+                    "value": {
+                      "statusCode": 400,
+                      "error": "Bad Request",
+                      "message": "inputs is not supported for POST; use named fields like polygons/points/point/line/geometry"
+                    }
+                  },
+                  "tooManyPolygons": {
+                    "summary": "Polygon input limit exceeded",
+                    "value": {
+                      "statusCode": 400,
+                      "error": "Bad Request",
+                      "message": "\"polygons\" must contain less than or equal to 100 items"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid Geoapify API key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GatewayError"
+                },
+                "example": {
+                  "statusCode": 401,
+                  "error": "Unauthorized",
+                  "message": "Invalid apiKey"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit or quota exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GatewayError"
+                },
+                "example": {
+                  "statusCode": 429,
+                  "error": "Too Many Requests",
+                  "message": "Quota exceeded"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal gateway error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GatewayError"
+                },
+                "example": {
+                  "statusCode": 500,
+                  "error": "Internal Server Error",
+                  "message": "Request failed, please try again later"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "GeometryOperationRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "operation"
+        ],
+        "allOf": [
+          {
+            "if": {
+              "required": [
+                "operation"
+              ],
+              "properties": {
+                "operation": {
+                  "const": "length"
+                }
+              }
+            },
+            "then": {
+              "$ref": "#/components/schemas/LengthOperationRequest"
+            }
+          }
+        ],
+        "properties": {
+          "operation": {
+            "type": "string",
+            "enum": [
+              "intersection",
+              "difference",
+              "union",
+              "voronoi",
+              "contains",
+              "crosses",
+              "disjoint",
+              "intersects",
+              "pointOnLine",
+              "valid",
+              "within",
+              "along",
+              "area",
+              "bbox",
+              "buffer",
+              "center",
+              "centerMean",
+              "centerMedian",
+              "centerOfMass",
+              "clustersDbscan",
+              "clustersKmeans",
+              "concave",
+              "convex",
+              "distance",
+              "length",
+              "envelope",
+              "greatCircle",
+              "grid",
+              "randomPoint",
+              "randomLineString",
+              "randomPolygon",
+              "lineIntersect",
+              "nearestPointOnLine",
+              "pointsWithinPolygon",
+              "pointToLineDistance",
+              "pointToPolygonDistance",
+              "tin",
+              "tesselate",
+              "simplify",
+              "transformRotate",
+              "transformScale",
+              "transformTranslate"
+            ],
+            "description": "Geometry operation to perform. Use `length` to measure a LineString or MultiLineString."
+          },
+          "params": {
+            "type": "object",
+            "additionalProperties": true,
+            "properties": {
+              "units": {
+                "$ref": "#/components/schemas/GeometryLengthUnit"
+              },
+              "steps": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "minPoints": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "numberOfClusters": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "tolerance": {
+                "type": "number",
+                "minimum": 0
+              },
+              "highQuality": {
+                "type": "boolean"
+              },
+              "mutate": {
+                "type": "boolean"
+              },
+              "origin": {
+                "oneOf": [
+                  {
+                    "type": "string",
+                    "enum": [
+                      "center",
+                      "centroid",
+                      "sw",
+                      "se",
+                      "nw",
+                      "ne"
+                    ]
+                  },
+                  {
+                    "$ref": "#/components/schemas/Position"
+                  }
+                ]
+              }
+            }
+          },
+          "polygons": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 100,
+            "items": {
+              "$ref": "#/components/schemas/AnyGeometry"
+            }
+          },
+          "points": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 1000,
+            "items": {
+              "$ref": "#/components/schemas/PointGeometry"
+            }
+          },
+          "geometry": {
+            "$ref": "#/components/schemas/AnyGeometry"
+          },
+          "geometry1": {
+            "$ref": "#/components/schemas/AnyGeometry"
+          },
+          "geometry2": {
+            "$ref": "#/components/schemas/AnyGeometry"
+          },
+          "geometries": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 100,
+            "items": {
+              "$ref": "#/components/schemas/AnyGeometry"
+            }
+          },
+          "point": {
+            "$ref": "#/components/schemas/PointGeometry"
+          },
+          "point1": {
+            "$ref": "#/components/schemas/PointGeometry"
+          },
+          "point2": {
+            "$ref": "#/components/schemas/PointGeometry"
+          },
+          "line": {
+            "description": "LineString or MultiLineString used by line operations, including `length`.",
+            "$ref": "#/components/schemas/LineGeometry"
+          },
+          "line1": {
+            "$ref": "#/components/schemas/AnyGeometry"
+          },
+          "line2": {
+            "$ref": "#/components/schemas/AnyGeometry"
+          },
+          "polygon": {
+            "$ref": "#/components/schemas/AnyGeometry"
+          },
+          "bbox": {
+            "oneOf": [
+              {
+                "type": "array",
+                "minItems": 4,
+                "maxItems": 4,
+                "items": {
+                  "type": "number"
+                }
+              },
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "lon1",
+                  "lat1",
+                  "lon2",
+                  "lat2"
+                ],
+                "properties": {
+                  "lon1": {
+                    "type": "number",
+                    "minimum": -180,
+                    "maximum": 180
+                  },
+                  "lat1": {
+                    "type": "number",
+                    "minimum": -90,
+                    "maximum": 90
+                  },
+                  "lon2": {
+                    "type": "number",
+                    "minimum": -180,
+                    "maximum": 180
+                  },
+                  "lat2": {
+                    "type": "number",
+                    "minimum": -90,
+                    "maximum": 90
+                  }
+                }
+              }
+            ]
+          },
+          "distance": {
+            "type": "number"
+          },
+          "maxDistance": {
+            "type": "number",
+            "minimum": 0
+          },
+          "angle": {
+            "type": "number"
+          },
+          "factor": {
+            "type": "number"
+          },
+          "direction": {
+            "type": "number"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "hex",
+              "point",
+              "square",
+              "triangle"
+            ]
+          },
+          "cellSide": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "count": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      },
+      "Position": {
+        "type": "array",
+        "minItems": 2,
+        "maxItems": 3,
+        "prefixItems": [
+          {
+            "type": "number",
+            "minimum": -180,
+            "maximum": 180
+          },
+          {
+            "type": "number",
+            "minimum": -90,
+            "maximum": 90
+          },
+          {
+            "type": "number"
+          }
+        ],
+        "items": false
+      },
+      "GeometryLengthUnit": {
+        "type": "string",
+        "enum": [
+          "meters",
+          "metres",
+          "millimeters",
+          "millimetres",
+          "centimeters",
+          "centimetres",
+          "kilometers",
+          "kilometres",
+          "miles",
+          "nauticalmiles",
+          "inches",
+          "yards",
+          "feet",
+          "radians",
+          "degrees"
+        ],
+        "default": "kilometers",
+        "description": "Length unit. Defaults to `kilometers`. `degrees` and `radians` return angular length rather than physical length."
+      },
+      "LengthOperationParameters": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "units": {
+            "$ref": "#/components/schemas/GeometryLengthUnit"
+          }
+        }
+      },
+      "LengthOperationRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "operation",
+          "line"
+        ],
+        "properties": {
+          "operation": {
+            "const": "length"
+          },
+          "line": {
+            "$ref": "#/components/schemas/LineGeometry"
+          },
+          "params": {
+            "$ref": "#/components/schemas/LengthOperationParameters"
+          }
+        }
+      },
+      "PointGeometry": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "type",
+          "coordinates"
+        ],
+        "properties": {
+          "type": {
+            "const": "Point"
+          },
+          "coordinates": {
+            "$ref": "#/components/schemas/Position"
+          }
+        }
+      },
+      "LineStringGeometry": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type",
+          "coordinates"
+        ],
+        "properties": {
+          "type": {
+            "const": "LineString"
+          },
+          "coordinates": {
+            "type": "array",
+            "minItems": 2,
+            "items": {
+              "$ref": "#/components/schemas/Position"
+            }
+          }
+        }
+      },
+      "MultiLineStringGeometry": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type",
+          "coordinates"
+        ],
+        "properties": {
+          "type": {
+            "const": "MultiLineString"
+          },
+          "coordinates": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "array",
+              "minItems": 2,
+              "items": {
+                "$ref": "#/components/schemas/Position"
+              }
+            }
+          }
+        }
+      },
+      "LineGeometry": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/LineStringGeometry"
+          },
+          {
+            "$ref": "#/components/schemas/MultiLineStringGeometry"
+          }
+        ]
+      },
+      "AnyGeometry": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "type",
+          "coordinates"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "Point",
+              "LineString",
+              "Polygon",
+              "MultiPoint",
+              "MultiLineString",
+              "MultiPolygon"
+            ]
+          },
+          "coordinates": {
+            "type": "array"
+          }
+        }
+      },
+      "GeometryOperationResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type",
+          "data"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "geojson",
+              "number",
+              "boolean",
+              "empty"
+            ]
+          },
+          "data": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/AnyGeometry"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      },
+      "GatewayError": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "statusCode",
+          "error",
+          "message"
+        ],
+        "properties": {
+          "statusCode": {
+            "type": "integer",
+            "description": "HTTP status code returned by the API gateway."
+          },
+          "error": {
+            "type": "string",
+            "description": "Standard HTTP error name."
+          },
+          "message": {
+            "type": "string",
+            "description": "Human-readable explanation of the error."
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "ApiKeyInQuery": {
+        "type": "apiKey",
+        "in": "query",
+        "name": "apiKey",
+        "description": "Geoapify API key query parameter. Recommended authentication method for public APIs. API keys in URLs can be logged; use x-api-key for server-to-server clients."
+      },
+      "ApiKeyInHeader": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "x-api-key",
+        "description": "Geoapify API key header. Supported as an alternative authentication method for public APIs."
+      }
+    }
+  },
+  "security": [
+    {
+      "ApiKeyInQuery": []
+    },
+    {
+      "ApiKeyInHeader": []
+    }
+  ]
+}

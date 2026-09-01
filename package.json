@@ -20,7 +20,7 @@
   "scripts": {
     "start": "concurrently \"http-server -c-1 --cors\" \"sleep 2 && open http://localhost:8080/docs/index.html\"",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "spectral lint --ruleset=ruleset.spectral.yaml api-specs/**/*.{json,yml,yaml}"
+    "lint": "spectral lint --ruleset=ruleset.spectral.yaml \"api-specs/**/*openapi-spec*.json\""
   },
   "repository": {
     "type": "git",
@@ -38,8 +38,8 @@
   "license": "MIT",
   "dependencies": {
     "@stoplight/spectral-cli": "6.13.1",
-    "http-server": "14.1.1",
     "concurrently": "9.0.1",
+    "http-server": "14.1.1",
     "open": "10.1.0"
   }
 }

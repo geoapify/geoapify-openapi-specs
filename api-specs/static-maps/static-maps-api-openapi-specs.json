@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Geoapify Static Maps API",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "description": "OpenAPI specification for rendering static map images."
   },
   "servers": [
@@ -676,7 +676,6 @@
     "schemas": {
       "StaticMapRequest": {
         "type": "object",
-        "additionalProperties": false,
         "anyOf": [
           {
             "required": [
@@ -1519,7 +1518,6 @@
       },
       "GatewayError": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "statusCode",
           "error",

@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Geoapify Map Tiles API",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "description": "Raster and vector map tiles plus MapLibre-compatible style resources."
   },
   "servers": [
@@ -5462,7 +5462,6 @@
       },
       "GatewayError": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "statusCode",
           "error",

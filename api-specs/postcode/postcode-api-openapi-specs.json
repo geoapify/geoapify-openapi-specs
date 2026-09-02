@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Geoapify Postcode API",
-    "version": "1.0.0",
+    "version": "1.1.1",
     "description": "OpenAPI specification for Geoapify postcode search and autocomplete endpoints."
   },
   "servers": [
@@ -1651,7 +1651,6 @@
     "schemas": {
       "TimezoneOutput": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "name",
           "offset_STD",
@@ -1694,7 +1693,6 @@
       },
       "PublicDatasource": {
         "type": "object",
-        "additionalProperties": false,
         "properties": {
           "sourcename": {
             "type": "string"
@@ -1713,7 +1711,6 @@
       },
       "PlacesDatasource": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "raw"
         ],
@@ -1737,60 +1734,8 @@
           }
         }
       },
-      "PeliasPlaceDatasource": {
-        "type": "object",
-        "additionalProperties": true,
-        "properties": {
-          "sourcename": {
-            "type": "string"
-          },
-          "attribution": {
-            "type": "string"
-          },
-          "license": {
-            "type": "string"
-          },
-          "url": {
-            "type": "string",
-            "format": "uri"
-          },
-          "pelias_gid": {
-            "type": "string"
-          },
-          "pelias_layer": {
-            "type": "string"
-          },
-          "osm_id": {
-            "type": "number"
-          },
-          "osm_type": {
-            "type": "string",
-            "enum": [
-              "N",
-              "W",
-              "R"
-            ]
-          },
-          "macrocounty": {
-            "type": "string"
-          },
-          "macrocounty_a": {
-            "type": "string"
-          },
-          "macroregion": {
-            "type": "string"
-          },
-          "macroregion_a": {
-            "type": "string"
-          },
-          "continent": {
-            "type": "string"
-          }
-        }
-      },
       "GeocodingRank": {
         "type": "object",
-        "additionalProperties": false,
         "properties": {
           "confidence": {
             "type": "number"
@@ -1872,7 +1817,6 @@
       },
       "WikiPopulation": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "actual",
           "by_years"
@@ -1891,7 +1835,6 @@
       },
       "PostcodeFeatureCollection": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "type",
           "features"
@@ -1918,7 +1861,6 @@
       },
       "PostcodeFeature": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "type",
           "properties",
@@ -1956,7 +1898,6 @@
       },
       "PostcodeProperties": {
         "type": "object",
-        "additionalProperties": false,
         "properties": {
           "name": {
             "type": "string"
@@ -2223,7 +2164,6 @@
       },
       "PostcodeJsonResponse": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "results"
         ],
@@ -2238,7 +2178,6 @@
       },
       "PointGeometry": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "type",
           "coordinates"
@@ -2270,7 +2209,6 @@
       },
       "GeoJsonGeometry": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "type",
           "coordinates"
@@ -2292,7 +2230,6 @@
       },
       "PostcodePointGeometryFeature": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "type",
           "properties",
@@ -2313,7 +2250,6 @@
       },
       "GatewayError": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "statusCode",
           "error",

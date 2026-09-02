@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Geoapify Route Planner API",
-    "version": "1.0.1",
+    "version": "1.1.0",
     "description": "Assign jobs and pickup-delivery shipments to agents and optimize their routes and schedules."
   },
   "servers": [
@@ -1224,7 +1224,6 @@
       },
       "LocationData": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "lat",
           "lon"
@@ -1247,7 +1246,6 @@
       },
       "Avoid": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "type"
         ],
@@ -1299,7 +1297,6 @@
       },
       "MultiLineStringGeometry": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "type",
           "coordinates"
@@ -1322,7 +1319,6 @@
       },
       "PolygonGeometry": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "type",
           "coordinates"
@@ -1345,7 +1341,6 @@
       },
       "MultiPolygonGeometry": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "type",
           "coordinates"
@@ -1381,7 +1376,6 @@
       },
       "RouteInstruction": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "text"
         ],
@@ -1435,7 +1429,6 @@
       },
       "RouteStep": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "from_index",
           "to_index",
@@ -1534,7 +1527,6 @@
       },
       "RouteLeg": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "time",
           "distance",
@@ -1607,7 +1599,6 @@
       },
       "SnappedRouteWaypoint": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "location"
         ],
@@ -1622,7 +1613,6 @@
       },
       "InputRouteWaypoint": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "lat",
           "lon"
@@ -1655,7 +1645,6 @@
       },
       "RoutingResponseOptions": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "mode",
           "units",
@@ -1734,7 +1723,6 @@
       },
       "RouteAdminArea": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "country_code"
         ],
@@ -1755,7 +1743,6 @@
       },
       "RouteAdminAreaCrossing": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "from_admin_index",
           "to_admin_index",
@@ -1779,7 +1766,6 @@
       },
       "RoutingFeatureProperties": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "mode",
           "units",
@@ -1907,7 +1893,6 @@
       },
       "RoutingFeature": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "type",
           "geometry",
@@ -1945,7 +1930,6 @@
       },
       "RoutingFeatureCollection": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "type",
           "features",
@@ -1976,7 +1960,6 @@
       },
       "RoutingJsonPoint": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "lon",
           "lat"
@@ -1996,7 +1979,6 @@
       },
       "RoutingJsonResult": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "mode",
           "units",
@@ -2134,7 +2116,6 @@
       },
       "RoutingJsonResponse": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "results",
           "properties"
@@ -2161,7 +2142,6 @@
       },
       "MapMatchingStepAddress": {
         "type": "object",
-        "additionalProperties": false,
         "required": [],
         "properties": {
           "street": {
@@ -2192,7 +2172,6 @@
       },
       "MapMatchingStepOverlap": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "osm_way_id",
           "osmtags",
@@ -2215,7 +2194,6 @@
       },
       "MapMatchingStep": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "from_index",
           "to_index",
@@ -2336,7 +2314,6 @@
       },
       "MapMatchingLeg": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "time",
           "distance",
@@ -2359,7 +2336,6 @@
       },
       "MapMatchingWaypoint": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "original_index",
           "location",
@@ -2408,7 +2384,6 @@
       },
       "MapMatchingFeatureProperties": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "distance",
           "time",
@@ -2468,7 +2443,6 @@
       },
       "MapMatchingFeature": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "type",
           "geometry",
@@ -2506,7 +2480,6 @@
       },
       "MapMatchingFeatureCollection": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "type",
           "features"
@@ -2543,7 +2516,6 @@
       },
       "RouteMatrixLocation": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "original_location"
         ],
@@ -2558,7 +2530,6 @@
       },
       "RouteMatrixCell": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "distance",
           "time",
@@ -2588,7 +2559,6 @@
       },
       "RouteMatrixResponse": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "sources",
           "targets",
@@ -2689,7 +2659,6 @@
         "properties": {
           "population": {
             "type": "object",
-            "additionalProperties": false,
             "required": [],
             "properties": {
               "attribution": {
@@ -2704,7 +2673,6 @@
       },
       "IsolineFeatureProperties": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "id",
           "lat",
@@ -2797,7 +2765,6 @@
       },
       "IsolineCollectionProperties": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "id"
         ],
@@ -2809,7 +2776,6 @@
       },
       "IsolineFeature": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "type",
           "geometry",
@@ -2847,7 +2813,6 @@
       },
       "IsolineFeatureCollection": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "type",
           "features",
@@ -2878,7 +2843,6 @@
       },
       "RoutePlannerParamLocation": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "location"
         ],
@@ -2893,7 +2857,6 @@
       },
       "RoutePlannerParamStop": {
         "type": "object",
-        "additionalProperties": false,
         "properties": {
           "location_index": {
             "type": "integer"
@@ -2937,7 +2900,6 @@
       },
       "RoutePlannerParamShipment": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "pickup",
           "delivery"
@@ -2968,7 +2930,6 @@
       },
       "RoutePlannerParamJob": {
         "type": "object",
-        "additionalProperties": false,
         "required": [],
         "properties": {
           "id": {
@@ -3019,7 +2980,6 @@
       },
       "RoutePlannerParamAgent": {
         "type": "object",
-        "additionalProperties": false,
         "required": [],
         "properties": {
           "id": {
@@ -3073,7 +3033,6 @@
       },
       "RoutePlannerParams": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "agents",
           "mode"
@@ -3160,7 +3119,6 @@
       },
       "RoutePlannerAction": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "index",
           "type",
@@ -3213,7 +3171,6 @@
       },
       "RoutePlannerWaypoint": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "original_location",
           "location",
@@ -3256,7 +3213,6 @@
       },
       "RoutePlannerStep": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "from_index",
           "to_index",
@@ -3286,7 +3242,6 @@
       },
       "RoutePlannerLeg": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "time",
           "distance",
@@ -3323,7 +3278,6 @@
       },
       "RoutePlannerFeatureProperties": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "agent_index",
           "time",
@@ -3398,7 +3352,6 @@
       },
       "RoutePlannerIssues": {
         "type": "object",
-        "additionalProperties": false,
         "required": [],
         "properties": {
           "unassigned_shipments": {
@@ -3423,7 +3376,6 @@
       },
       "RoutePlannerCollectionProperties": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "mode",
           "params"
@@ -3461,7 +3413,6 @@
       },
       "RoutePlannerFeature": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "type",
           "geometry",
@@ -3499,7 +3450,6 @@
       },
       "RoutePlannerFeatureCollection": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "type",
           "features",
@@ -3530,7 +3480,6 @@
       },
       "RoutePlannerDataError": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "error",
           "message"
@@ -3556,7 +3505,6 @@
       },
       "GatewayError": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "statusCode",
           "error",

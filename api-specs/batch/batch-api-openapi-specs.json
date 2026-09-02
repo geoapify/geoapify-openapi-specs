@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Geoapify Batch API",
-    "version": "1.0.0",
+    "version": "1.1.1",
     "description": "Use the Batch API to process multiple requests in one job or run supported Geoapify tasks asynchronously.\n\n- Submit 1 to 1000 inputs for the same supported API endpoint.\n- Poll the returned batch job ID until processing is complete.\n- Choose a processing priority between `0.5` and `1` to balance credit cost and processing speed."
   },
   "servers": [
@@ -1171,7 +1171,6 @@
       },
       "LocationData": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "lat",
           "lon"
@@ -1194,7 +1193,6 @@
       },
       "Avoid": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "type"
         ],
@@ -1246,7 +1244,6 @@
       },
       "MultiLineStringGeometry": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "type",
           "coordinates"
@@ -1269,7 +1266,6 @@
       },
       "PolygonGeometry": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "type",
           "coordinates"
@@ -1292,7 +1288,6 @@
       },
       "MultiPolygonGeometry": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "type",
           "coordinates"
@@ -1328,7 +1323,6 @@
       },
       "RouteInstruction": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "text"
         ],
@@ -1382,7 +1376,6 @@
       },
       "RouteStep": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "from_index",
           "to_index",
@@ -1481,7 +1474,6 @@
       },
       "RouteLeg": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "time",
           "distance",
@@ -1554,7 +1546,6 @@
       },
       "SnappedRouteWaypoint": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "location"
         ],
@@ -1569,7 +1560,6 @@
       },
       "InputRouteWaypoint": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "lat",
           "lon"
@@ -1602,7 +1592,6 @@
       },
       "RoutingResponseOptions": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "mode",
           "units",
@@ -1681,7 +1670,6 @@
       },
       "RouteAdminArea": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "country_code"
         ],
@@ -1702,7 +1690,6 @@
       },
       "RouteAdminAreaCrossing": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "from_admin_index",
           "to_admin_index",
@@ -1726,7 +1713,6 @@
       },
       "RoutingFeatureProperties": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "mode",
           "units",
@@ -1854,7 +1840,6 @@
       },
       "RoutingFeature": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "type",
           "geometry",
@@ -1892,7 +1877,6 @@
       },
       "RoutingFeatureCollection": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "type",
           "features",
@@ -1923,7 +1907,6 @@
       },
       "RoutingJsonPoint": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "lon",
           "lat"
@@ -1943,7 +1926,6 @@
       },
       "RoutingJsonResult": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "mode",
           "units",
@@ -2081,7 +2063,6 @@
       },
       "RoutingJsonResponse": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "results",
           "properties"
@@ -2108,7 +2089,6 @@
       },
       "MapMatchingStepAddress": {
         "type": "object",
-        "additionalProperties": false,
         "required": [],
         "properties": {
           "street": {
@@ -2139,7 +2119,6 @@
       },
       "MapMatchingStepOverlap": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "osm_way_id",
           "osmtags",
@@ -2162,7 +2141,6 @@
       },
       "MapMatchingStep": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "from_index",
           "to_index",
@@ -2283,7 +2261,6 @@
       },
       "MapMatchingLeg": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "time",
           "distance",
@@ -2306,7 +2283,6 @@
       },
       "MapMatchingWaypoint": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "original_index",
           "location",
@@ -2355,7 +2331,6 @@
       },
       "MapMatchingFeatureProperties": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "distance",
           "time",
@@ -2415,7 +2390,6 @@
       },
       "MapMatchingFeature": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "type",
           "geometry",
@@ -2453,7 +2427,6 @@
       },
       "MapMatchingFeatureCollection": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "type",
           "features"
@@ -2490,7 +2463,6 @@
       },
       "RouteMatrixLocation": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "original_location"
         ],
@@ -2505,7 +2477,6 @@
       },
       "RouteMatrixCell": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "distance",
           "time",
@@ -2535,7 +2506,6 @@
       },
       "RouteMatrixResponse": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "sources",
           "targets",
@@ -2636,7 +2606,6 @@
         "properties": {
           "population": {
             "type": "object",
-            "additionalProperties": false,
             "required": [],
             "properties": {
               "attribution": {
@@ -2651,7 +2620,6 @@
       },
       "IsolineFeatureProperties": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "id",
           "lat",
@@ -2744,7 +2712,6 @@
       },
       "IsolineCollectionProperties": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "id"
         ],
@@ -2756,7 +2723,6 @@
       },
       "IsolineFeature": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "type",
           "geometry",
@@ -2794,7 +2760,6 @@
       },
       "IsolineFeatureCollection": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "type",
           "features",
@@ -2825,7 +2790,6 @@
       },
       "RoutePlannerParamLocation": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "id",
           "location"
@@ -2841,7 +2805,6 @@
       },
       "RoutePlannerParamStop": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "location_index",
           "location",
@@ -2879,7 +2842,6 @@
       },
       "RoutePlannerParamShipment": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "id",
           "pickup",
@@ -2914,7 +2876,6 @@
       },
       "RoutePlannerParamJob": {
         "type": "object",
-        "additionalProperties": false,
         "required": [],
         "properties": {
           "id": {
@@ -2965,7 +2926,6 @@
       },
       "RoutePlannerParamAgent": {
         "type": "object",
-        "additionalProperties": false,
         "required": [],
         "properties": {
           "id": {
@@ -3019,7 +2979,6 @@
       },
       "RoutePlannerParams": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "locations",
           "agents",
@@ -3107,7 +3066,6 @@
       },
       "RoutePlannerAction": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "index",
           "type",
@@ -3160,7 +3118,6 @@
       },
       "RoutePlannerWaypoint": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "original_location",
           "location",
@@ -3203,7 +3160,6 @@
       },
       "RoutePlannerStep": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "from_index",
           "to_index",
@@ -3233,7 +3189,6 @@
       },
       "RoutePlannerLeg": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "time",
           "distance",
@@ -3270,7 +3225,6 @@
       },
       "RoutePlannerFeatureProperties": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "agent_index",
           "time",
@@ -3345,7 +3299,6 @@
       },
       "RoutePlannerIssues": {
         "type": "object",
-        "additionalProperties": false,
         "required": [],
         "properties": {
           "unassigned_shipments": {
@@ -3370,7 +3323,6 @@
       },
       "RoutePlannerCollectionProperties": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "mode",
           "params"
@@ -3408,7 +3360,6 @@
       },
       "RoutePlannerFeature": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "type",
           "geometry",
@@ -3446,7 +3397,6 @@
       },
       "RoutePlannerFeatureCollection": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "type",
           "features",
@@ -3477,7 +3427,6 @@
       },
       "RoutePlannerDataError": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "error",
           "message"
@@ -3560,7 +3509,6 @@
       },
       "GeocodingPointGeometry": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "type",
           "coordinates"
@@ -3599,7 +3547,6 @@
       },
       "GeocodingGeometryCollection": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "type",
           "geometries"
@@ -3649,7 +3596,6 @@
       },
       "GeocodingTimezoneOutput": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "name",
           "offset_STD",
@@ -3692,7 +3638,6 @@
       },
       "GeocodingPublicDatasource": {
         "type": "object",
-        "additionalProperties": false,
         "properties": {
           "sourcename": {
             "type": "string"
@@ -3711,7 +3656,6 @@
       },
       "GeocodingPlacesDatasource": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "raw"
         ],
@@ -3735,60 +3679,8 @@
           }
         }
       },
-      "GeocodingPeliasPlaceDatasource": {
-        "type": "object",
-        "additionalProperties": true,
-        "properties": {
-          "sourcename": {
-            "type": "string"
-          },
-          "attribution": {
-            "type": "string"
-          },
-          "license": {
-            "type": "string"
-          },
-          "url": {
-            "type": "string",
-            "format": "uri"
-          },
-          "pelias_gid": {
-            "type": "string"
-          },
-          "pelias_layer": {
-            "type": "string"
-          },
-          "osm_id": {
-            "type": "number"
-          },
-          "osm_type": {
-            "type": "string",
-            "enum": [
-              "N",
-              "W",
-              "R"
-            ]
-          },
-          "macrocounty": {
-            "type": "string"
-          },
-          "macrocounty_a": {
-            "type": "string"
-          },
-          "macroregion": {
-            "type": "string"
-          },
-          "macroregion_a": {
-            "type": "string"
-          },
-          "continent": {
-            "type": "string"
-          }
-        }
-      },
       "GeocodingGeocodingRank": {
         "type": "object",
-        "additionalProperties": false,
         "properties": {
           "confidence": {
             "type": "number"
@@ -3822,55 +3714,8 @@
           }
         }
       },
-      "GeocodingPlaceDetailValue": {
-        "oneOf": [
-          {
-            "type": "string"
-          },
-          {
-            "type": "number"
-          },
-          {
-            "type": "boolean"
-          },
-          {
-            "type": "null"
-          },
-          {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/GeocodingPlaceDetailValue"
-            }
-          },
-          {
-            "type": "object",
-            "additionalProperties": {
-              "$ref": "#/components/schemas/GeocodingPlaceDetailValue"
-            }
-          }
-        ]
-      },
-      "GeocodingPlaceDetailGroup": {
-        "type": "object",
-        "additionalProperties": {
-          "$ref": "#/components/schemas/GeocodingPlaceDetailValue"
-        }
-      },
-      "GeocodingStringMap": {
-        "type": "object",
-        "additionalProperties": {
-          "type": "string"
-        }
-      },
-      "GeocodingBooleanMap": {
-        "type": "object",
-        "additionalProperties": {
-          "type": "boolean"
-        }
-      },
       "GeocodingWikiPopulation": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "actual",
           "by_years"
@@ -3889,7 +3734,6 @@
       },
       "GeocodingParsedAddress": {
         "type": "object",
-        "additionalProperties": false,
         "properties": {
           "po_box": {
             "type": "string"
@@ -3951,7 +3795,6 @@
       },
       "GeocodingTextGeocoderQuery": {
         "type": "object",
-        "additionalProperties": false,
         "properties": {
           "lat": {
             "type": "number",
@@ -3994,7 +3837,6 @@
             "type": "array",
             "items": {
               "type": "object",
-              "additionalProperties": false,
               "required": [
                 "keys",
                 "label"
@@ -4016,7 +3858,6 @@
       },
       "GeocodingReverseGeocoderQuery": {
         "type": "object",
-        "additionalProperties": false,
         "properties": {
           "lat": {
             "type": "number",
@@ -4050,7 +3891,6 @@
       },
       "GeocodingGeocodingProperties": {
         "type": "object",
-        "additionalProperties": false,
         "properties": {
           "name": {
             "type": "string"
@@ -4326,7 +4166,6 @@
           },
           "bbox": {
             "type": "object",
-            "additionalProperties": false,
             "required": [
               "lon1",
               "lat1",
@@ -4393,7 +4232,6 @@
       },
       "GeocodingGeocodingJsonResponse": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "results"
         ],
@@ -4405,7 +4243,7 @@
             }
           },
           "query": {
-            "oneOf": [
+            "anyOf": [
               {
                 "$ref": "#/components/schemas/GeocodingTextGeocoderQuery"
               },
@@ -4418,7 +4256,6 @@
       },
       "GeocodingForwardGeocodingXmlResponse": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "results"
         ],
@@ -4449,7 +4286,6 @@
       },
       "GeocodingReverseGeocodingXmlResponse": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "results"
         ],
@@ -4480,7 +4316,6 @@
       },
       "GeocodingAddressAutocompleteXmlResponse": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "results"
         ],
@@ -4511,7 +4346,6 @@
       },
       "GeocodingGatewayError": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "statusCode",
           "error",
@@ -4591,7 +4425,6 @@
       },
       "PlacesPointGeometry": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "type",
           "coordinates"
@@ -4630,7 +4463,6 @@
       },
       "PlacesGeometryCollection": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "type",
           "geometries"
@@ -4680,7 +4512,6 @@
       },
       "PlacesTimezoneOutput": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "name",
           "offset_STD",
@@ -4723,7 +4554,6 @@
       },
       "PlacesPublicDatasource": {
         "type": "object",
-        "additionalProperties": false,
         "properties": {
           "sourcename": {
             "type": "string"
@@ -4742,7 +4572,6 @@
       },
       "PlacesPlacesDatasource": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "raw"
         ],
@@ -4766,60 +4595,8 @@
           }
         }
       },
-      "PlacesPeliasPlaceDatasource": {
-        "type": "object",
-        "additionalProperties": true,
-        "properties": {
-          "sourcename": {
-            "type": "string"
-          },
-          "attribution": {
-            "type": "string"
-          },
-          "license": {
-            "type": "string"
-          },
-          "url": {
-            "type": "string",
-            "format": "uri"
-          },
-          "pelias_gid": {
-            "type": "string"
-          },
-          "pelias_layer": {
-            "type": "string"
-          },
-          "osm_id": {
-            "type": "number"
-          },
-          "osm_type": {
-            "type": "string",
-            "enum": [
-              "N",
-              "W",
-              "R"
-            ]
-          },
-          "macrocounty": {
-            "type": "string"
-          },
-          "macrocounty_a": {
-            "type": "string"
-          },
-          "macroregion": {
-            "type": "string"
-          },
-          "macroregion_a": {
-            "type": "string"
-          },
-          "continent": {
-            "type": "string"
-          }
-        }
-      },
       "PlacesGeocodingRank": {
         "type": "object",
-        "additionalProperties": false,
         "properties": {
           "confidence": {
             "type": "number"
@@ -4901,7 +4678,6 @@
       },
       "PlacesWikiPopulation": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "actual",
           "by_years"
@@ -5805,7 +5581,6 @@
       },
       "PlacesGatewayError": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "statusCode",
           "error",
@@ -5828,7 +5603,8 @@
       },
       "PlacesPlaceProperties": {
         "type": "object",
-        "additionalProperties": false,
+        "description": "Common properties and known place-detail fields returned by the Places API. Additional category-specific properties may appear when available.",
+        "additionalProperties": true,
         "properties": {
           "name": {
             "type": "string"
@@ -5944,16 +5720,6 @@
           "industrial": {
             "type": "string"
           },
-          "commercial": {
-            "oneOf": [
-              {
-                "type": "string"
-              },
-              {
-                "$ref": "#/components/schemas/PlacesPlaceDetailGroup"
-              }
-            ]
-          },
           "retail": {
             "type": "string"
           },
@@ -6047,16 +5813,6 @@
               "type": "string"
             }
           },
-          "population": {
-            "oneOf": [
-              {
-                "type": "number"
-              },
-              {
-                "$ref": "#/components/schemas/PlacesWikiPopulation"
-              }
-            ]
-          },
           "lon": {
             "type": "number",
             "minimum": -180,
@@ -6072,6 +5828,54 @@
           },
           "timezone": {
             "$ref": "#/components/schemas/PlacesTimezoneOutput"
+          },
+          "population": {
+            "oneOf": [
+              {
+                "type": "number"
+              },
+              {
+                "$ref": "#/components/schemas/PlacesWikiPopulation"
+              }
+            ]
+          },
+          "distance": {
+            "type": "number"
+          },
+          "categories": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "details": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "datasource": {
+            "$ref": "#/components/schemas/PlacesPlacesDatasource"
+          },
+          "mappedTo": {
+            "type": "object",
+            "properties": {
+              "lon": {
+                "type": "number",
+                "minimum": -180,
+                "maximum": 180
+              },
+              "lat": {
+                "type": "number",
+                "minimum": -90,
+                "maximum": 90
+              }
+            }
+          },
+          "place_id": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 2048
           },
           "website": {
             "type": "string"
@@ -6141,6 +5945,16 @@
           },
           "disused": {
             "type": "boolean"
+          },
+          "commercial": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/PlacesPlaceDetailGroup"
+              }
+            ]
           },
           "payment_options": {
             "$ref": "#/components/schemas/PlacesBooleanMap"
@@ -6228,45 +6042,6 @@
           },
           "production": {
             "$ref": "#/components/schemas/PlacesPlaceDetailGroup"
-          },
-          "distance": {
-            "type": "number"
-          },
-          "categories": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "details": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "datasource": {
-            "$ref": "#/components/schemas/PlacesPlacesDatasource"
-          },
-          "mappedTo": {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-              "lon": {
-                "type": "number",
-                "minimum": -180,
-                "maximum": 180
-              },
-              "lat": {
-                "type": "number",
-                "minimum": -90,
-                "maximum": 90
-              }
-            }
-          },
-          "place_id": {
-            "type": "string",
-            "minLength": 3,
-            "maxLength": 2048
           }
         }
       },
@@ -6276,7 +6051,7 @@
         "properties": {
           "ip": {
             "type": "string",
-            "oneOf": [
+            "anyOf": [
               {
                 "format": "ipv4"
               },
@@ -6434,7 +6209,6 @@
       },
       "IpGatewayError": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "statusCode",
           "error",
@@ -6514,7 +6288,6 @@
       },
       "PlaceInfoPointGeometry": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "type",
           "coordinates"
@@ -6553,7 +6326,6 @@
       },
       "PlaceInfoGeometryCollection": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "type",
           "geometries"
@@ -6603,7 +6375,6 @@
       },
       "PlaceInfoTimezoneOutput": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "name",
           "offset_STD",
@@ -6646,7 +6417,6 @@
       },
       "PlaceInfoPublicDatasource": {
         "type": "object",
-        "additionalProperties": false,
         "properties": {
           "sourcename": {
             "type": "string"
@@ -6665,7 +6435,6 @@
       },
       "PlaceInfoPlacesDatasource": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "raw"
         ],
@@ -6689,60 +6458,8 @@
           }
         }
       },
-      "PlaceInfoPeliasPlaceDatasource": {
-        "type": "object",
-        "additionalProperties": true,
-        "properties": {
-          "sourcename": {
-            "type": "string"
-          },
-          "attribution": {
-            "type": "string"
-          },
-          "license": {
-            "type": "string"
-          },
-          "url": {
-            "type": "string",
-            "format": "uri"
-          },
-          "pelias_gid": {
-            "type": "string"
-          },
-          "pelias_layer": {
-            "type": "string"
-          },
-          "osm_id": {
-            "type": "number"
-          },
-          "osm_type": {
-            "type": "string",
-            "enum": [
-              "N",
-              "W",
-              "R"
-            ]
-          },
-          "macrocounty": {
-            "type": "string"
-          },
-          "macrocounty_a": {
-            "type": "string"
-          },
-          "macroregion": {
-            "type": "string"
-          },
-          "macroregion_a": {
-            "type": "string"
-          },
-          "continent": {
-            "type": "string"
-          }
-        }
-      },
       "PlaceInfoGeocodingRank": {
         "type": "object",
-        "additionalProperties": false,
         "properties": {
           "confidence": {
             "type": "number"
@@ -6824,7 +6541,6 @@
       },
       "PlaceInfoWikiPopulation": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "actual",
           "by_years"
@@ -6843,7 +6559,6 @@
       },
       "PlaceInfoPlaceInfoProperties": {
         "type": "object",
-        "additionalProperties": false,
         "properties": {
           "name": {
             "type": "string"
@@ -6959,16 +6674,6 @@
           "industrial": {
             "type": "string"
           },
-          "commercial": {
-            "oneOf": [
-              {
-                "type": "string"
-              },
-              {
-                "$ref": "#/components/schemas/PlaceInfoPlaceDetailGroup"
-              }
-            ]
-          },
           "retail": {
             "type": "string"
           },
@@ -7062,16 +6767,6 @@
               "type": "string"
             }
           },
-          "population": {
-            "oneOf": [
-              {
-                "type": "number"
-              },
-              {
-                "$ref": "#/components/schemas/PlaceInfoWikiPopulation"
-              }
-            ]
-          },
           "lon": {
             "type": "number",
             "minimum": -180,
@@ -7087,6 +6782,54 @@
           },
           "timezone": {
             "$ref": "#/components/schemas/PlaceInfoTimezoneOutput"
+          },
+          "population": {
+            "oneOf": [
+              {
+                "type": "number"
+              },
+              {
+                "$ref": "#/components/schemas/PlaceInfoWikiPopulation"
+              }
+            ]
+          },
+          "distance": {
+            "type": "number"
+          },
+          "categories": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "details": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "datasource": {
+            "$ref": "#/components/schemas/PlaceInfoPlacesDatasource"
+          },
+          "mappedTo": {
+            "type": "object",
+            "properties": {
+              "lon": {
+                "type": "number",
+                "minimum": -180,
+                "maximum": 180
+              },
+              "lat": {
+                "type": "number",
+                "minimum": -90,
+                "maximum": 90
+              }
+            }
+          },
+          "place_id": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 2048
           },
           "website": {
             "type": "string"
@@ -7156,6 +6899,16 @@
           },
           "disused": {
             "type": "boolean"
+          },
+          "commercial": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/PlaceInfoPlaceDetailGroup"
+              }
+            ]
           },
           "payment_options": {
             "$ref": "#/components/schemas/PlaceInfoBooleanMap"
@@ -7243,51 +6996,11 @@
           },
           "production": {
             "$ref": "#/components/schemas/PlaceInfoPlaceDetailGroup"
-          },
-          "distance": {
-            "type": "number"
-          },
-          "categories": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "details": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "datasource": {
-            "$ref": "#/components/schemas/PlaceInfoPlacesDatasource"
-          },
-          "mappedTo": {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-              "lon": {
-                "type": "number",
-                "minimum": -180,
-                "maximum": 180
-              },
-              "lat": {
-                "type": "number",
-                "minimum": -90,
-                "maximum": 90
-              }
-            }
-          },
-          "place_id": {
-            "type": "string",
-            "minLength": 3,
-            "maxLength": 2048
           }
         }
       },
       "PlaceDetailsTimezoneOutput": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "name",
           "offset_STD",
@@ -7330,7 +7043,6 @@
       },
       "PlaceDetailsPublicDatasource": {
         "type": "object",
-        "additionalProperties": false,
         "properties": {
           "sourcename": {
             "type": "string"
@@ -7349,7 +7061,6 @@
       },
       "PlaceDetailsPlacesDatasource": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "raw"
         ],
@@ -7373,60 +7084,8 @@
           }
         }
       },
-      "PlaceDetailsPeliasPlaceDatasource": {
-        "type": "object",
-        "additionalProperties": true,
-        "properties": {
-          "sourcename": {
-            "type": "string"
-          },
-          "attribution": {
-            "type": "string"
-          },
-          "license": {
-            "type": "string"
-          },
-          "url": {
-            "type": "string",
-            "format": "uri"
-          },
-          "pelias_gid": {
-            "type": "string"
-          },
-          "pelias_layer": {
-            "type": "string"
-          },
-          "osm_id": {
-            "type": "number"
-          },
-          "osm_type": {
-            "type": "string",
-            "enum": [
-              "N",
-              "W",
-              "R"
-            ]
-          },
-          "macrocounty": {
-            "type": "string"
-          },
-          "macrocounty_a": {
-            "type": "string"
-          },
-          "macroregion": {
-            "type": "string"
-          },
-          "macroregion_a": {
-            "type": "string"
-          },
-          "continent": {
-            "type": "string"
-          }
-        }
-      },
       "PlaceDetailsGeocodingRank": {
         "type": "object",
-        "additionalProperties": false,
         "properties": {
           "confidence": {
             "type": "number"
@@ -7508,7 +7167,6 @@
       },
       "PlaceDetailsWikiPopulation": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "actual",
           "by_years"
@@ -7546,7 +7204,6 @@
       },
       "PlaceDetailsGatewayError": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "statusCode",
           "error",
@@ -7569,7 +7226,6 @@
       },
       "PlaceDetailsPlaceDetailsFeatureCollection": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "type",
           "features"
@@ -7588,7 +7244,6 @@
       },
       "PlaceDetailsPlaceDetailsFeature": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "type",
           "properties",
@@ -7616,7 +7271,8 @@
       },
       "PlaceDetailsPlaceDetailsProperties": {
         "type": "object",
-        "additionalProperties": false,
+        "description": "Common properties and known place-detail fields returned by the Place Details API. Additional category-specific properties may appear when available.",
+        "additionalProperties": true,
         "properties": {
           "name": {
             "type": "string"
@@ -7732,16 +7388,6 @@
           "industrial": {
             "type": "string"
           },
-          "commercial": {
-            "oneOf": [
-              {
-                "type": "string"
-              },
-              {
-                "$ref": "#/components/schemas/PlaceDetailsPlaceDetailGroup"
-              }
-            ]
-          },
           "retail": {
             "type": "string"
           },
@@ -7835,16 +7481,6 @@
               "type": "string"
             }
           },
-          "population": {
-            "oneOf": [
-              {
-                "type": "number"
-              },
-              {
-                "$ref": "#/components/schemas/PlaceDetailsWikiPopulation"
-              }
-            ]
-          },
           "lon": {
             "type": "number",
             "minimum": -180,
@@ -7860,6 +7496,54 @@
           },
           "timezone": {
             "$ref": "#/components/schemas/PlaceDetailsTimezoneOutput"
+          },
+          "population": {
+            "oneOf": [
+              {
+                "type": "number"
+              },
+              {
+                "$ref": "#/components/schemas/PlaceDetailsWikiPopulation"
+              }
+            ]
+          },
+          "distance": {
+            "type": "number"
+          },
+          "categories": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "details": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "datasource": {
+            "$ref": "#/components/schemas/PlaceDetailsPublicDatasource"
+          },
+          "mappedTo": {
+            "type": "object",
+            "properties": {
+              "lon": {
+                "type": "number",
+                "minimum": -180,
+                "maximum": 180
+              },
+              "lat": {
+                "type": "number",
+                "minimum": -90,
+                "maximum": 90
+              }
+            }
+          },
+          "place_id": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 2048
           },
           "website": {
             "type": "string"
@@ -7937,6 +7621,16 @@
           },
           "disused": {
             "type": "boolean"
+          },
+          "commercial": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/PlaceDetailsPlaceDetailGroup"
+              }
+            ]
           },
           "payment_options": {
             "$ref": "#/components/schemas/PlaceDetailsBooleanMap"
@@ -8025,45 +7719,6 @@
           "production": {
             "$ref": "#/components/schemas/PlaceDetailsPlaceDetailGroup"
           },
-          "distance": {
-            "type": "number"
-          },
-          "categories": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "details": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "datasource": {
-            "$ref": "#/components/schemas/PlaceDetailsDatasource"
-          },
-          "mappedTo": {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-              "lon": {
-                "type": "number",
-                "minimum": -180,
-                "maximum": 180
-              },
-              "lat": {
-                "type": "number",
-                "minimum": -90,
-                "maximum": 90
-              }
-            }
-          },
-          "place_id": {
-            "type": "string",
-            "minLength": 3,
-            "maxLength": 2048
-          },
           "feature_type": {
             "$ref": "#/components/schemas/PlaceDetailsPlaceDetailsFeatureId"
           },
@@ -8084,16 +7739,6 @@
             "type": "string"
           }
         }
-      },
-      "PlaceDetailsDatasource": {
-        "oneOf": [
-          {
-            "$ref": "#/components/schemas/PlaceDetailsPlacesDatasource"
-          },
-          {
-            "$ref": "#/components/schemas/PlaceDetailsPeliasPlaceDatasource"
-          }
-        ]
       },
       "PlaceDetailsGeoJsonGeometry": {
         "oneOf": [
@@ -8122,7 +7767,6 @@
       },
       "PlaceDetailsPointGeometry": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "type",
           "coordinates"
@@ -8138,7 +7782,6 @@
       },
       "PlaceDetailsLineStringGeometry": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "type",
           "coordinates"
@@ -8158,7 +7801,6 @@
       },
       "PlaceDetailsPolygonGeometry": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "type",
           "coordinates"
@@ -8181,7 +7823,6 @@
       },
       "PlaceDetailsMultiPointGeometry": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "type",
           "coordinates"
@@ -8200,7 +7841,6 @@
       },
       "PlaceDetailsMultiLineStringGeometry": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "type",
           "coordinates"
@@ -8223,7 +7863,6 @@
       },
       "PlaceDetailsMultiPolygonGeometry": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "type",
           "coordinates"
@@ -8249,7 +7888,6 @@
       },
       "PlaceDetailsGeometryCollection": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "type",
           "geometries"
@@ -8292,7 +7930,6 @@
       },
       "BoundariesTimezoneOutput": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "name",
           "offset_STD",
@@ -8335,7 +7972,6 @@
       },
       "BoundariesPublicDatasource": {
         "type": "object",
-        "additionalProperties": false,
         "properties": {
           "sourcename": {
             "type": "string"
@@ -8354,7 +7990,6 @@
       },
       "BoundariesPlacesDatasource": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "raw"
         ],
@@ -8378,60 +8013,8 @@
           }
         }
       },
-      "BoundariesPeliasPlaceDatasource": {
-        "type": "object",
-        "additionalProperties": true,
-        "properties": {
-          "sourcename": {
-            "type": "string"
-          },
-          "attribution": {
-            "type": "string"
-          },
-          "license": {
-            "type": "string"
-          },
-          "url": {
-            "type": "string",
-            "format": "uri"
-          },
-          "pelias_gid": {
-            "type": "string"
-          },
-          "pelias_layer": {
-            "type": "string"
-          },
-          "osm_id": {
-            "type": "number"
-          },
-          "osm_type": {
-            "type": "string",
-            "enum": [
-              "N",
-              "W",
-              "R"
-            ]
-          },
-          "macrocounty": {
-            "type": "string"
-          },
-          "macrocounty_a": {
-            "type": "string"
-          },
-          "macroregion": {
-            "type": "string"
-          },
-          "macroregion_a": {
-            "type": "string"
-          },
-          "continent": {
-            "type": "string"
-          }
-        }
-      },
       "BoundariesGeocodingRank": {
         "type": "object",
-        "additionalProperties": false,
         "properties": {
           "confidence": {
             "type": "number"
@@ -8513,7 +8096,6 @@
       },
       "BoundariesWikiPopulation": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "actual",
           "by_years"
@@ -8532,7 +8114,6 @@
       },
       "BoundariesGatewayError": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "statusCode",
           "error",
@@ -8555,7 +8136,6 @@
       },
       "BoundariesBoundaryFeatureCollection": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "type",
           "features"
@@ -8574,7 +8154,6 @@
       },
       "BoundariesBoundaryFeature": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "type",
           "properties",
@@ -8602,7 +8181,6 @@
       },
       "BoundariesBoundaryProperties": {
         "type": "object",
-        "additionalProperties": false,
         "properties": {
           "name": {
             "type": "string"
@@ -8718,16 +8296,6 @@
           "industrial": {
             "type": "string"
           },
-          "commercial": {
-            "oneOf": [
-              {
-                "type": "string"
-              },
-              {
-                "$ref": "#/components/schemas/BoundariesPlaceDetailGroup"
-              }
-            ]
-          },
           "retail": {
             "type": "string"
           },
@@ -8821,16 +8389,6 @@
               "type": "string"
             }
           },
-          "population": {
-            "oneOf": [
-              {
-                "type": "number"
-              },
-              {
-                "$ref": "#/components/schemas/BoundariesWikiPopulation"
-              }
-            ]
-          },
           "lon": {
             "type": "number",
             "minimum": -180,
@@ -8846,6 +8404,54 @@
           },
           "timezone": {
             "$ref": "#/components/schemas/BoundariesTimezoneOutput"
+          },
+          "population": {
+            "oneOf": [
+              {
+                "type": "number"
+              },
+              {
+                "$ref": "#/components/schemas/BoundariesWikiPopulation"
+              }
+            ]
+          },
+          "distance": {
+            "type": "number"
+          },
+          "categories": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "details": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "datasource": {
+            "$ref": "#/components/schemas/BoundariesPlacesDatasource"
+          },
+          "mappedTo": {
+            "type": "object",
+            "properties": {
+              "lon": {
+                "type": "number",
+                "minimum": -180,
+                "maximum": 180
+              },
+              "lat": {
+                "type": "number",
+                "minimum": -90,
+                "maximum": 90
+              }
+            }
+          },
+          "place_id": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 2048
           },
           "website": {
             "type": "string"
@@ -8915,6 +8521,16 @@
           },
           "disused": {
             "type": "boolean"
+          },
+          "commercial": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/BoundariesPlaceDetailGroup"
+              }
+            ]
           },
           "payment_options": {
             "$ref": "#/components/schemas/BoundariesBooleanMap"
@@ -9002,45 +8618,6 @@
           },
           "production": {
             "$ref": "#/components/schemas/BoundariesPlaceDetailGroup"
-          },
-          "distance": {
-            "type": "number"
-          },
-          "categories": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "details": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "datasource": {
-            "$ref": "#/components/schemas/BoundariesPlacesDatasource"
-          },
-          "mappedTo": {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-              "lon": {
-                "type": "number",
-                "minimum": -180,
-                "maximum": 180
-              },
-              "lat": {
-                "type": "number",
-                "minimum": -90,
-                "maximum": 90
-              }
-            }
-          },
-          "place_id": {
-            "type": "string",
-            "minLength": 3,
-            "maxLength": 2048
           }
         }
       },
@@ -9071,7 +8648,6 @@
       },
       "BoundariesPointGeometry": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "type",
           "coordinates"
@@ -9087,7 +8663,6 @@
       },
       "BoundariesLineStringGeometry": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "type",
           "coordinates"
@@ -9107,7 +8682,6 @@
       },
       "BoundariesPolygonGeometry": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "type",
           "coordinates"
@@ -9130,7 +8704,6 @@
       },
       "BoundariesMultiPointGeometry": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "type",
           "coordinates"
@@ -9149,7 +8722,6 @@
       },
       "BoundariesMultiLineStringGeometry": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "type",
           "coordinates"
@@ -9172,7 +8744,6 @@
       },
       "BoundariesMultiPolygonGeometry": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "type",
           "coordinates"
@@ -9198,7 +8769,6 @@
       },
       "BoundariesGeometryCollection": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "type",
           "geometries"
@@ -9295,7 +8865,6 @@
       },
       "GeometryPointGeometry": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "type",
           "coordinates"
@@ -9334,7 +8903,6 @@
       },
       "GeometryGeometryCollection": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "type",
           "geometries"
@@ -9404,7 +8972,6 @@
       },
       "GeometryStoredGeometryResponse": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "id"
         ],
@@ -9418,7 +8985,6 @@
       },
       "GeometryGatewayError": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "statusCode",
           "error",
@@ -9441,7 +9007,6 @@
       },
       "BatchPendingResponse": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "id",
           "status"
@@ -9465,7 +9030,6 @@
       },
       "BatchResultItem": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "result"
         ],
@@ -9551,7 +9115,6 @@
       },
       "BatchCompletedResponse": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "api",
           "id",
@@ -9604,7 +9167,6 @@
       },
       "BatchItemError": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "statusCode",
           "error",
@@ -9624,7 +9186,6 @@
       },
       "GatewayError": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "statusCode",
           "error",
@@ -9647,7 +9208,6 @@
       },
       "BatchNotFoundError": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "statusCode",
           "error"

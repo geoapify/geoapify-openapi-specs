@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Geoapify Batch Geocoding API",
-    "version": "1.0.0",
+    "version": "1.1.1",
     "description": "OpenAPI specification for Geoapify asynchronous batch geocoding endpoints."
   },
   "servers": [
@@ -1646,7 +1646,6 @@
       },
       "GeocodingPointGeometry": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "type",
           "coordinates"
@@ -1685,7 +1684,6 @@
       },
       "GeocodingGeometryCollection": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "type",
           "geometries"
@@ -1735,7 +1733,6 @@
       },
       "GeocodingTimezoneOutput": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "name",
           "offset_STD",
@@ -1778,7 +1775,6 @@
       },
       "GeocodingPublicDatasource": {
         "type": "object",
-        "additionalProperties": false,
         "properties": {
           "sourcename": {
             "type": "string"
@@ -1797,7 +1793,6 @@
       },
       "GeocodingPlacesDatasource": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "raw"
         ],
@@ -1821,60 +1816,8 @@
           }
         }
       },
-      "GeocodingPeliasPlaceDatasource": {
-        "type": "object",
-        "additionalProperties": true,
-        "properties": {
-          "sourcename": {
-            "type": "string"
-          },
-          "attribution": {
-            "type": "string"
-          },
-          "license": {
-            "type": "string"
-          },
-          "url": {
-            "type": "string",
-            "format": "uri"
-          },
-          "pelias_gid": {
-            "type": "string"
-          },
-          "pelias_layer": {
-            "type": "string"
-          },
-          "osm_id": {
-            "type": "number"
-          },
-          "osm_type": {
-            "type": "string",
-            "enum": [
-              "N",
-              "W",
-              "R"
-            ]
-          },
-          "macrocounty": {
-            "type": "string"
-          },
-          "macrocounty_a": {
-            "type": "string"
-          },
-          "macroregion": {
-            "type": "string"
-          },
-          "macroregion_a": {
-            "type": "string"
-          },
-          "continent": {
-            "type": "string"
-          }
-        }
-      },
       "GeocodingGeocodingRank": {
         "type": "object",
-        "additionalProperties": false,
         "properties": {
           "confidence": {
             "type": "number"
@@ -1908,55 +1851,8 @@
           }
         }
       },
-      "GeocodingPlaceDetailValue": {
-        "oneOf": [
-          {
-            "type": "string"
-          },
-          {
-            "type": "number"
-          },
-          {
-            "type": "boolean"
-          },
-          {
-            "type": "null"
-          },
-          {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/GeocodingPlaceDetailValue"
-            }
-          },
-          {
-            "type": "object",
-            "additionalProperties": {
-              "$ref": "#/components/schemas/GeocodingPlaceDetailValue"
-            }
-          }
-        ]
-      },
-      "GeocodingPlaceDetailGroup": {
-        "type": "object",
-        "additionalProperties": {
-          "$ref": "#/components/schemas/GeocodingPlaceDetailValue"
-        }
-      },
-      "GeocodingStringMap": {
-        "type": "object",
-        "additionalProperties": {
-          "type": "string"
-        }
-      },
-      "GeocodingBooleanMap": {
-        "type": "object",
-        "additionalProperties": {
-          "type": "boolean"
-        }
-      },
       "GeocodingWikiPopulation": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "actual",
           "by_years"
@@ -1975,7 +1871,6 @@
       },
       "GeocodingParsedAddress": {
         "type": "object",
-        "additionalProperties": false,
         "properties": {
           "po_box": {
             "type": "string"
@@ -2037,7 +1932,6 @@
       },
       "GeocodingTextGeocoderQuery": {
         "type": "object",
-        "additionalProperties": false,
         "properties": {
           "lat": {
             "type": "number",
@@ -2080,7 +1974,6 @@
             "type": "array",
             "items": {
               "type": "object",
-              "additionalProperties": false,
               "required": [
                 "keys",
                 "label"
@@ -2102,7 +1995,6 @@
       },
       "GeocodingReverseGeocoderQuery": {
         "type": "object",
-        "additionalProperties": false,
         "properties": {
           "lat": {
             "type": "number",
@@ -2136,7 +2028,6 @@
       },
       "GeocodingGeocodingProperties": {
         "type": "object",
-        "additionalProperties": false,
         "properties": {
           "name": {
             "type": "string"
@@ -2412,7 +2303,6 @@
           },
           "bbox": {
             "type": "object",
-            "additionalProperties": false,
             "required": [
               "lon1",
               "lat1",
@@ -2479,7 +2369,6 @@
       },
       "GeocodingGeocodingJsonResponse": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "results"
         ],
@@ -2491,7 +2380,7 @@
             }
           },
           "query": {
-            "oneOf": [
+            "anyOf": [
               {
                 "$ref": "#/components/schemas/GeocodingTextGeocoderQuery"
               },
@@ -2504,7 +2393,6 @@
       },
       "GeocodingForwardGeocodingXmlResponse": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "results"
         ],
@@ -2535,7 +2423,6 @@
       },
       "GeocodingReverseGeocodingXmlResponse": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "results"
         ],
@@ -2566,7 +2453,6 @@
       },
       "GeocodingAddressAutocompleteXmlResponse": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "results"
         ],
@@ -2597,7 +2483,6 @@
       },
       "GeocodingGatewayError": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "statusCode",
           "error",
@@ -2620,7 +2505,6 @@
       },
       "BatchPendingResponse": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "id",
           "status"
@@ -2644,7 +2528,6 @@
       },
       "BatchResultItem": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "result"
         ],
@@ -2690,7 +2573,6 @@
       },
       "BatchCompletedResponse": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "api",
           "id",
@@ -2724,7 +2606,6 @@
       },
       "BatchItemError": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "statusCode",
           "error",
@@ -2744,7 +2625,6 @@
       },
       "BatchGeocodeSearchQuery": {
         "type": "object",
-        "additionalProperties": false,
         "properties": {
           "lat": {
             "type": "number",
@@ -2787,7 +2667,6 @@
             "type": "array",
             "items": {
               "type": "object",
-              "additionalProperties": false,
               "required": [
                 "keys",
                 "label"
@@ -2812,7 +2691,6 @@
       },
       "BatchReverseGeocodeQuery": {
         "type": "object",
-        "additionalProperties": false,
         "properties": {
           "lat": {
             "type": "number",
@@ -2850,7 +2728,6 @@
       },
       "BatchGeocodeSearchResult": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "query"
         ],
@@ -3129,7 +3006,6 @@
           },
           "bbox": {
             "type": "object",
-            "additionalProperties": false,
             "required": [
               "lon1",
               "lat1",
@@ -3166,7 +3042,6 @@
       },
       "BatchReverseGeocodeResult": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "query"
         ],
@@ -3445,7 +3320,6 @@
           },
           "bbox": {
             "type": "object",
-            "additionalProperties": false,
             "required": [
               "lon1",
               "lat1",
@@ -3494,7 +3368,6 @@
       },
       "GatewayError": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "statusCode",
           "error",
@@ -3517,7 +3390,6 @@
       },
       "BatchNotFoundError": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "statusCode",
           "error"

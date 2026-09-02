@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Geoapify Address Autocomplete API",
-    "version": "1.0.0",
+    "version": "1.1.1",
     "description": "Autocomplete partial addresses while a user types."
   },
   "servers": [
@@ -1373,7 +1373,6 @@
       },
       "PointGeometry": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "type",
           "coordinates"
@@ -1412,7 +1411,6 @@
       },
       "GeometryCollection": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "type",
           "geometries"
@@ -1462,7 +1460,6 @@
       },
       "TimezoneOutput": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "name",
           "offset_STD",
@@ -1505,7 +1502,6 @@
       },
       "PublicDatasource": {
         "type": "object",
-        "additionalProperties": false,
         "properties": {
           "sourcename": {
             "type": "string"
@@ -1524,7 +1520,6 @@
       },
       "PlacesDatasource": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "raw"
         ],
@@ -1548,60 +1543,8 @@
           }
         }
       },
-      "PeliasPlaceDatasource": {
-        "type": "object",
-        "additionalProperties": true,
-        "properties": {
-          "sourcename": {
-            "type": "string"
-          },
-          "attribution": {
-            "type": "string"
-          },
-          "license": {
-            "type": "string"
-          },
-          "url": {
-            "type": "string",
-            "format": "uri"
-          },
-          "pelias_gid": {
-            "type": "string"
-          },
-          "pelias_layer": {
-            "type": "string"
-          },
-          "osm_id": {
-            "type": "number"
-          },
-          "osm_type": {
-            "type": "string",
-            "enum": [
-              "N",
-              "W",
-              "R"
-            ]
-          },
-          "macrocounty": {
-            "type": "string"
-          },
-          "macrocounty_a": {
-            "type": "string"
-          },
-          "macroregion": {
-            "type": "string"
-          },
-          "macroregion_a": {
-            "type": "string"
-          },
-          "continent": {
-            "type": "string"
-          }
-        }
-      },
       "GeocodingRank": {
         "type": "object",
-        "additionalProperties": false,
         "properties": {
           "confidence": {
             "type": "number"
@@ -1635,55 +1578,8 @@
           }
         }
       },
-      "PlaceDetailValue": {
-        "oneOf": [
-          {
-            "type": "string"
-          },
-          {
-            "type": "number"
-          },
-          {
-            "type": "boolean"
-          },
-          {
-            "type": "null"
-          },
-          {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/PlaceDetailValue"
-            }
-          },
-          {
-            "type": "object",
-            "additionalProperties": {
-              "$ref": "#/components/schemas/PlaceDetailValue"
-            }
-          }
-        ]
-      },
-      "PlaceDetailGroup": {
-        "type": "object",
-        "additionalProperties": {
-          "$ref": "#/components/schemas/PlaceDetailValue"
-        }
-      },
-      "StringMap": {
-        "type": "object",
-        "additionalProperties": {
-          "type": "string"
-        }
-      },
-      "BooleanMap": {
-        "type": "object",
-        "additionalProperties": {
-          "type": "boolean"
-        }
-      },
       "WikiPopulation": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "actual",
           "by_years"
@@ -1702,7 +1598,6 @@
       },
       "ParsedAddress": {
         "type": "object",
-        "additionalProperties": false,
         "properties": {
           "po_box": {
             "type": "string"
@@ -1764,7 +1659,6 @@
       },
       "TextGeocoderQuery": {
         "type": "object",
-        "additionalProperties": false,
         "properties": {
           "lat": {
             "type": "number",
@@ -1807,7 +1701,6 @@
             "type": "array",
             "items": {
               "type": "object",
-              "additionalProperties": false,
               "required": [
                 "keys",
                 "label"
@@ -1829,7 +1722,6 @@
       },
       "ReverseGeocoderQuery": {
         "type": "object",
-        "additionalProperties": false,
         "properties": {
           "lat": {
             "type": "number",
@@ -1863,7 +1755,6 @@
       },
       "GeocodingProperties": {
         "type": "object",
-        "additionalProperties": false,
         "properties": {
           "name": {
             "type": "string"
@@ -2139,7 +2030,6 @@
           },
           "bbox": {
             "type": "object",
-            "additionalProperties": false,
             "required": [
               "lon1",
               "lat1",
@@ -2206,7 +2096,6 @@
       },
       "GeocodingJsonResponse": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "results"
         ],
@@ -2218,7 +2107,7 @@
             }
           },
           "query": {
-            "oneOf": [
+            "anyOf": [
               {
                 "$ref": "#/components/schemas/TextGeocoderQuery"
               },
@@ -2231,7 +2120,6 @@
       },
       "ForwardGeocodingXmlResponse": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "results"
         ],
@@ -2262,7 +2150,6 @@
       },
       "ReverseGeocodingXmlResponse": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "results"
         ],
@@ -2293,7 +2180,6 @@
       },
       "AddressAutocompleteXmlResponse": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "results"
         ],
@@ -2324,7 +2210,6 @@
       },
       "GatewayError": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "statusCode",
           "error",

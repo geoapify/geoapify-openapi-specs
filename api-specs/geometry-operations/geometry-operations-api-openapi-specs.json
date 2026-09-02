@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Geoapify Geometry Operations API",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "description": "Run 42 server-side GeoJSON operations for set calculations, predicates, measurements, line queries, transformations, clustering, grids, and geometry generation."
   },
   "servers": [
@@ -765,7 +765,6 @@
     "schemas": {
       "GeometryOperationRequest": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "operation"
         ],
@@ -951,7 +950,6 @@
               },
               {
                 "type": "object",
-                "additionalProperties": false,
                 "required": [
                   "lon1",
                   "lat1",
@@ -1072,7 +1070,6 @@
       },
       "LengthOperationRequest": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "operation",
           "line"
@@ -1107,7 +1104,6 @@
       },
       "LineStringGeometry": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "type",
           "coordinates"
@@ -1127,7 +1123,6 @@
       },
       "MultiLineStringGeometry": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "type",
           "coordinates"
@@ -1185,7 +1180,6 @@
       },
       "GeometryOperationResponse": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "type",
           "data"
@@ -1220,7 +1214,6 @@
       },
       "GatewayError": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "statusCode",
           "error",

@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Geoapify MCP Tool: Geocoding: Reverse Geocode Coordinates",
-    "version": "1.0.1",
+    "version": "1.1.0",
     "description": "AI-focused, tool-specific OpenAPI specification for reverse_geocode_coordinates over the Geoapify JSON-RPC transport. Import this specification when an integration needs this tool without the full MCP catalog."
   },
   "servers": [
@@ -277,7 +277,6 @@
       "JsonRpcError": {
         "type": "object",
         "description": "JSON-RPC error object.",
-        "additionalProperties": false,
         "required": [
           "code",
           "message"
@@ -299,7 +298,6 @@
       "JsonRpcErrorResponse": {
         "type": "object",
         "description": "JSON-RPC error response returned for invalid requests or unknown methods.",
-        "additionalProperties": false,
         "required": [
           "jsonrpc",
           "id",
@@ -320,7 +318,6 @@
       "GatewayError": {
         "type": "object",
         "description": "HTTP gateway error returned before or outside JSON-RPC tool execution.",
-        "additionalProperties": false,
         "required": [
           "statusCode",
           "error",
@@ -400,7 +397,6 @@
       "ReverseGeocodeCoordinatesOutput": {
         "type": "object",
         "description": "Compact reverse-geocoding result for one coordinate.",
-        "additionalProperties": false,
         "required": [
           "coordinates",
           "count",
@@ -410,7 +406,6 @@
           "coordinates": {
             "type": "object",
             "description": "Input coordinate in latitude/longitude form.",
-            "additionalProperties": false,
             "required": [
               "lat",
               "lon"
@@ -447,7 +442,6 @@
             "type": "array",
             "items": {
               "type": "object",
-              "additionalProperties": false,
               "description": "Compact MCP projection of a public Geoapify geocoding result.",
               "properties": {
                 "formatted": {
@@ -501,7 +495,6 @@
                 "rank": {
                   "type": "object",
                   "description": "Match quality, confidence, importance, and popularity metadata.",
-                  "additionalProperties": false,
                   "properties": {
                     "confidence": {
                       "type": "number"
@@ -566,7 +559,6 @@
                 "timezone": {
                   "type": "object",
                   "description": "Timezone information for the result location.",
-                  "additionalProperties": false,
                   "required": [
                     "name",
                     "offset_STD",
@@ -610,7 +602,6 @@
                 "bbox": {
                   "type": "object",
                   "description": "Result bounding box in WGS84 longitude/latitude coordinates.",
-                  "additionalProperties": false,
                   "required": [
                     "lon1",
                     "lat1",
@@ -753,7 +744,6 @@
       "ReverseGeocodeCoordinatesToolCallSuccessResponse": {
         "type": "object",
         "description": "Successful JSON-RPC response with tool-specific structured content.",
-        "additionalProperties": false,
         "required": [
           "jsonrpc",
           "id",
@@ -768,7 +758,6 @@
           },
           "result": {
             "type": "object",
-            "additionalProperties": false,
             "required": [
               "content",
               "structuredContent",
@@ -780,7 +769,6 @@
                 "description": "JSON text representation of structuredContent.",
                 "items": {
                   "type": "object",
-                  "additionalProperties": false,
                   "required": [
                     "type",
                     "text"
@@ -809,7 +797,6 @@
       "ToolCallErrorResponse": {
         "type": "object",
         "description": "JSON-RPC tools/call response when tool execution fails.",
-        "additionalProperties": false,
         "required": [
           "jsonrpc",
           "id",
@@ -824,7 +811,6 @@
           },
           "result": {
             "type": "object",
-            "additionalProperties": false,
             "required": [
               "content",
               "isError"
@@ -835,7 +821,6 @@
                 "description": "Tool error details represented as JSON text.",
                 "items": {
                   "type": "object",
-                  "additionalProperties": false,
                   "required": [
                     "type",
                     "text"

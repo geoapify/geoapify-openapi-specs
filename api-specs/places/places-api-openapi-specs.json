@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Geoapify Places API",
-    "version": "2.0.0",
+    "version": "2.1.1",
     "description": "Find places and points of interest by category, attributes, and geographic area."
   },
   "servers": [
@@ -862,7 +862,6 @@
       },
       "PointGeometry": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "type",
           "coordinates"
@@ -901,7 +900,6 @@
       },
       "GeometryCollection": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "type",
           "geometries"
@@ -951,7 +949,6 @@
       },
       "TimezoneOutput": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "name",
           "offset_STD",
@@ -994,7 +991,6 @@
       },
       "PublicDatasource": {
         "type": "object",
-        "additionalProperties": false,
         "properties": {
           "sourcename": {
             "type": "string"
@@ -1013,7 +1009,6 @@
       },
       "PlacesDatasource": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "raw"
         ],
@@ -1037,60 +1032,8 @@
           }
         }
       },
-      "PeliasPlaceDatasource": {
-        "type": "object",
-        "additionalProperties": true,
-        "properties": {
-          "sourcename": {
-            "type": "string"
-          },
-          "attribution": {
-            "type": "string"
-          },
-          "license": {
-            "type": "string"
-          },
-          "url": {
-            "type": "string",
-            "format": "uri"
-          },
-          "pelias_gid": {
-            "type": "string"
-          },
-          "pelias_layer": {
-            "type": "string"
-          },
-          "osm_id": {
-            "type": "number"
-          },
-          "osm_type": {
-            "type": "string",
-            "enum": [
-              "N",
-              "W",
-              "R"
-            ]
-          },
-          "macrocounty": {
-            "type": "string"
-          },
-          "macrocounty_a": {
-            "type": "string"
-          },
-          "macroregion": {
-            "type": "string"
-          },
-          "macroregion_a": {
-            "type": "string"
-          },
-          "continent": {
-            "type": "string"
-          }
-        }
-      },
       "GeocodingRank": {
         "type": "object",
-        "additionalProperties": false,
         "properties": {
           "confidence": {
             "type": "number"
@@ -1172,7 +1115,6 @@
       },
       "WikiPopulation": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "actual",
           "by_years"
@@ -2076,7 +2018,6 @@
       },
       "GatewayError": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "statusCode",
           "error",
@@ -2099,7 +2040,8 @@
       },
       "PlaceProperties": {
         "type": "object",
-        "additionalProperties": false,
+        "description": "Common properties and known place-detail fields returned by the Places API. Additional category-specific properties may appear when available.",
+        "additionalProperties": true,
         "properties": {
           "name": {
             "type": "string"
@@ -2215,16 +2157,6 @@
           "industrial": {
             "type": "string"
           },
-          "commercial": {
-            "oneOf": [
-              {
-                "type": "string"
-              },
-              {
-                "$ref": "#/components/schemas/PlaceDetailGroup"
-              }
-            ]
-          },
           "retail": {
             "type": "string"
           },
@@ -2318,16 +2250,6 @@
               "type": "string"
             }
           },
-          "population": {
-            "oneOf": [
-              {
-                "type": "number"
-              },
-              {
-                "$ref": "#/components/schemas/WikiPopulation"
-              }
-            ]
-          },
           "lon": {
             "type": "number",
             "minimum": -180,
@@ -2343,6 +2265,54 @@
           },
           "timezone": {
             "$ref": "#/components/schemas/TimezoneOutput"
+          },
+          "population": {
+            "oneOf": [
+              {
+                "type": "number"
+              },
+              {
+                "$ref": "#/components/schemas/WikiPopulation"
+              }
+            ]
+          },
+          "distance": {
+            "type": "number"
+          },
+          "categories": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "details": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "datasource": {
+            "$ref": "#/components/schemas/PlacesDatasource"
+          },
+          "mappedTo": {
+            "type": "object",
+            "properties": {
+              "lon": {
+                "type": "number",
+                "minimum": -180,
+                "maximum": 180
+              },
+              "lat": {
+                "type": "number",
+                "minimum": -90,
+                "maximum": 90
+              }
+            }
+          },
+          "place_id": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 2048
           },
           "website": {
             "type": "string"
@@ -2412,6 +2382,16 @@
           },
           "disused": {
             "type": "boolean"
+          },
+          "commercial": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/components/schemas/PlaceDetailGroup"
+              }
+            ]
           },
           "payment_options": {
             "$ref": "#/components/schemas/BooleanMap"
@@ -2499,45 +2479,6 @@
           },
           "production": {
             "$ref": "#/components/schemas/PlaceDetailGroup"
-          },
-          "distance": {
-            "type": "number"
-          },
-          "categories": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "details": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "datasource": {
-            "$ref": "#/components/schemas/PlacesDatasource"
-          },
-          "mappedTo": {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-              "lon": {
-                "type": "number",
-                "minimum": -180,
-                "maximum": 180
-              },
-              "lat": {
-                "type": "number",
-                "minimum": -90,
-                "maximum": 90
-              }
-            }
-          },
-          "place_id": {
-            "type": "string",
-            "minLength": 3,
-            "maxLength": 2048
           }
         }
       }

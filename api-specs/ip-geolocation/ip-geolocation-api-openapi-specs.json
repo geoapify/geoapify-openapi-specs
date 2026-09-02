@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Geoapify IP Geolocation API",
-    "version": "1.0.0",
+    "version": "1.1.1",
     "description": "Resolve an IP address to an approximate geographic location."
   },
   "servers": [
@@ -37,7 +37,7 @@
             "description": "IPv4 or IPv6 address. The client address is used when omitted.",
             "schema": {
               "type": "string",
-              "oneOf": [
+              "anyOf": [
                 {
                   "format": "ipv4"
                 },
@@ -415,7 +415,7 @@
         "properties": {
           "ip": {
             "type": "string",
-            "oneOf": [
+            "anyOf": [
               {
                 "format": "ipv4"
               },
@@ -573,7 +573,6 @@
       },
       "GatewayError": {
         "type": "object",
-        "additionalProperties": false,
         "required": [
           "statusCode",
           "error",

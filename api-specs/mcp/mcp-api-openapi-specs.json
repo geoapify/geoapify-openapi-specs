@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Geoapify MCP API",
-    "version": "1.0.1",
+    "version": "1.1.0",
     "description": "Compact catalog for the Geoapify Model Context Protocol JSON-RPC endpoint. Use the linked focused specifications for complete tool output contracts and additional examples."
   },
   "servers": [
@@ -1107,7 +1107,6 @@
       "JsonRpcError": {
         "type": "object",
         "description": "JSON-RPC error object.",
-        "additionalProperties": false,
         "required": [
           "code",
           "message"
@@ -1129,7 +1128,6 @@
       "JsonRpcErrorResponse": {
         "type": "object",
         "description": "JSON-RPC error response returned for invalid requests or unknown methods.",
-        "additionalProperties": false,
         "required": [
           "jsonrpc",
           "id",
@@ -1150,7 +1148,6 @@
       "InitializeResponse": {
         "type": "object",
         "description": "Successful JSON-RPC response for initialize.",
-        "additionalProperties": false,
         "required": [
           "jsonrpc",
           "id",
@@ -1165,7 +1162,6 @@
           },
           "result": {
             "type": "object",
-            "additionalProperties": false,
             "required": [
               "protocolVersion",
               "serverInfo",
@@ -1177,7 +1173,6 @@
               },
               "serverInfo": {
                 "type": "object",
-                "additionalProperties": false,
                 "required": [
                   "name",
                   "version"
@@ -1202,7 +1197,6 @@
       "ToolMetadata": {
         "type": "object",
         "description": "MCP tool metadata returned by tools/list.",
-        "additionalProperties": false,
         "required": [
           "name",
           "description",
@@ -1245,7 +1239,6 @@
       "ToolsListResponse": {
         "type": "object",
         "description": "Successful JSON-RPC response for tools/list.",
-        "additionalProperties": false,
         "required": [
           "jsonrpc",
           "id",
@@ -1260,7 +1253,6 @@
           },
           "result": {
             "type": "object",
-            "additionalProperties": false,
             "required": [
               "tools"
             ],
@@ -1278,7 +1270,6 @@
       "ToolCallResponse": {
         "type": "object",
         "description": "Successful JSON-RPC response for tools/call. Tool failures are returned with isError set to true.",
-        "additionalProperties": false,
         "required": [
           "jsonrpc",
           "id",
@@ -1293,7 +1284,6 @@
           },
           "result": {
             "type": "object",
-            "additionalProperties": false,
             "required": [
               "content",
               "isError"
@@ -1304,7 +1294,6 @@
                 "description": "Text representation of the structured result or error.",
                 "items": {
                   "type": "object",
-                  "additionalProperties": false,
                   "required": [
                     "type",
                     "text"
@@ -1347,7 +1336,6 @@
       "GatewayError": {
         "type": "object",
         "description": "HTTP gateway error returned before or outside JSON-RPC tool execution.",
-        "additionalProperties": false,
         "required": [
           "statusCode",
           "error",
@@ -4261,7 +4249,6 @@
       "ToolCallErrorResponse": {
         "type": "object",
         "description": "JSON-RPC tools/call response when tool execution fails.",
-        "additionalProperties": false,
         "required": [
           "jsonrpc",
           "id",
@@ -4276,7 +4263,6 @@
           },
           "result": {
             "type": "object",
-            "additionalProperties": false,
             "required": [
               "content",
               "isError"
@@ -4287,7 +4273,6 @@
                 "description": "Tool error details represented as JSON text.",
                 "items": {
                   "type": "object",
-                  "additionalProperties": false,
                   "required": [
                     "type",
                     "text"

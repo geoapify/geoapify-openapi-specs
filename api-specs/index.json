@@ -332,7 +332,7 @@
       "documentationUrl": "https://apidocs.geoapify.com/docs/places/",
       "openApiSpecUrl": "https://apidocs.geoapify.com/assets/openapi/specs/places/places-api-openapi-specs.json",
       "openApiVersion": "3.1.0",
-      "apiVersion": "2.1.1",
+      "apiVersion": "2.2.0",
       "openApiSpec": "./places/places-api-openapi-specs.json"
     },
     {
@@ -376,7 +376,7 @@
       "documentationUrl": "https://apidocs.geoapify.com/docs/routing/",
       "openApiSpecUrl": "https://apidocs.geoapify.com/assets/openapi/specs/routing/routing-api-openapi-specs.json",
       "openApiVersion": "3.1.0",
-      "apiVersion": "1.1.0",
+      "apiVersion": "1.2.0",
       "openApiSpec": "./routing/routing-api-openapi-specs.json"
     }
   ]

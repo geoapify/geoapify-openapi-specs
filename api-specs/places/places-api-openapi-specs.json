@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Geoapify Places API",
-    "version": "2.1.1",
+    "version": "2.2.0",
     "description": "Find places and points of interest by category, attributes, and geographic area."
   },
   "servers": [
@@ -748,6 +748,582 @@
                   "statusCode": 400,
                   "error": "Bad Request",
                   "message": "\"limit\" must be less than or equal to 500"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid Geoapify API key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GatewayError"
+                },
+                "example": {
+                  "statusCode": 401,
+                  "error": "Unauthorized",
+                  "message": "Invalid apiKey"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit or quota exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GatewayError"
+                },
+                "example": {
+                  "statusCode": 429,
+                  "error": "Too Many Requests",
+                  "message": "Quota exceeded"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal gateway error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GatewayError"
+                },
+                "example": {
+                  "statusCode": 500,
+                  "error": "Internal Server Error",
+                  "message": "Request failed, please try again later"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Places"
+        ],
+        "operationId": "searchPlacesPost",
+        "summary": "Search places with structured spatial controls",
+        "description": "Search places using a JSON body. Provide `categories` and at least one of `filter` or `bias`; `filter` limits returned places while `bias` changes ranking without excluding results. A request may include one structured filter and one structured bias.\n\nUse `filter.type: \"geometry\"` only for a stored geometry ID. Use `polygon` or `polyline` for inline geometry. Inline geometry is validated and forwarded unchanged; it is not simplified, decoded, normalized, or converted by the gateway.\n\nPolygon buffers default to zero metres when omitted. LineString, MultiLineString, and encoded-polyline buffers are omitted from the forwarded request when unspecified, so the internal service applies its 1,000-metre default. Supplied buffers are measured in metres.\n\nThe gateway accepts at most 10,000 source positions, 100 polygon rings, and 102,400 UTF-8 bytes for the geometry value per request. Polygon topology validation, including self-intersections and hole containment, is not performed.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PlacesPostRequest"
+              },
+              "examples": {
+                "polygon": {
+                  "summary": "Search inside an inline polygon",
+                  "value": {
+                    "categories": [
+                      "commercial.supermarket"
+                    ],
+                    "filter": {
+                      "type": "polygon",
+                      "geometry": {
+                        "type": "Polygon",
+                        "coordinates": [
+                          [
+                            [
+                              -89.94,
+                              35.14
+                            ],
+                            [
+                              -89.92,
+                              35.14
+                            ],
+                            [
+                              -89.92,
+                              35.15
+                            ],
+                            [
+                              -89.94,
+                              35.14
+                            ]
+                          ]
+                        ]
+                      }
+                    },
+                    "limit": 20
+                  }
+                },
+                "rawPolyline": {
+                  "summary": "Search along an inline GeoJSON line",
+                  "value": {
+                    "categories": [
+                      "catering.restaurant"
+                    ],
+                    "filter": {
+                      "type": "polyline",
+                      "geometry": {
+                        "type": "LineString",
+                        "coordinates": [
+                          [
+                            -89.94,
+                            35.14
+                          ],
+                          [
+                            -89.93,
+                            35.145
+                          ],
+                          [
+                            -89.92,
+                            35.15
+                          ]
+                        ]
+                      },
+                      "buffer": 500
+                    }
+                  }
+                },
+                "encodedPolyline": {
+                  "summary": "Search along an encoded polyline",
+                  "value": {
+                    "categories": [
+                      "catering.restaurant"
+                    ],
+                    "filter": {
+                      "type": "polyline",
+                      "geometry": "_p~iF~ps|U_ulLnnqC_mqNvxq`@",
+                      "encoding": "polyline5"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Places matching the requested categories and structured spatial controls, ordered according to the selected bias.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FeatureCollection"
+                },
+                "example": {
+                  "type": "FeatureCollection",
+                  "features": [
+                    {
+                      "type": "Feature",
+                      "properties": {
+                        "name": "Dollar General",
+                        "country": "United States",
+                        "country_code": "us",
+                        "region": "West Tennessee",
+                        "state": "Tennessee",
+                        "county": "Shelby County",
+                        "city": "Memphis",
+                        "postcode": "38122",
+                        "street": "Summer Avenue",
+                        "housenumber": "4111",
+                        "iso3166_2": "US-TN",
+                        "lon": -89.9237661,
+                        "lat": 35.1484713,
+                        "state_code": "TN",
+                        "formatted": "Dollar General, 4111 Summer Avenue, Memphis, TN 38122, United States of America",
+                        "address_line1": "Dollar General",
+                        "address_line2": "4111 Summer Avenue, Memphis, TN 38122, United States of America",
+                        "categories": [
+                          "commercial",
+                          "commercial.discount_store"
+                        ],
+                        "details": [
+                          "details",
+                          "details.contact"
+                        ],
+                        "datasource": {
+                          "sourcename": "openstreetmap",
+                          "attribution": "© OpenStreetMap contributors",
+                          "license": "Open Database License",
+                          "url": "https://www.openstreetmap.org/copyright",
+                          "raw": {
+                            "name": "Dollar General",
+                            "shop": "variety_store",
+                            "brand": "Dollar General",
+                            "phone": "+1-901-452-1618",
+                            "osm_id": 4944605516,
+                            "website": "https://www.dollargeneral.com/store-directory/tn/memphis/11958",
+                            "osm_type": "n",
+                            "addr:city": "Memphis",
+                            "addr:state": "TN",
+                            "addr:street": "Summer Avenue",
+                            "addr:postcode": 38122,
+                            "opening_hours": "Mo-Su 8:00-22:00",
+                            "brand:wikidata": "Q145168",
+                            "addr:housenumber": 4111
+                          }
+                        },
+                        "website": "https://www.dollargeneral.com/store-directory/tn/memphis/11958",
+                        "opening_hours": "Mo-Su 8:00-22:00",
+                        "brand": "Dollar General",
+                        "brand_details": {
+                          "wikidata": "Q145168"
+                        },
+                        "contact": {
+                          "phone": "+1-901-452-1618"
+                        },
+                        "commercial": {
+                          "type": "variety_store"
+                        },
+                        "distance": 943,
+                        "place_id": "51d229d9fb1e7b56c059b938881b01934140f00103f9014cb1b8260100000092030e446f6c6c61722047656e6572616c"
+                      },
+                      "geometry": {
+                        "type": "Point",
+                        "coordinates": [
+                          -89.9237661,
+                          35.148471299662056
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Feature",
+                      "properties": {
+                        "name": "Jiffy Lube",
+                        "country": "United States",
+                        "country_code": "us",
+                        "region": "West Tennessee",
+                        "state": "Tennessee",
+                        "county": "Shelby County",
+                        "city": "Memphis",
+                        "postcode": "38122",
+                        "street": "North Graham Street",
+                        "housenumber": "630",
+                        "iso3166_2": "US-TN",
+                        "lon": -89.927624,
+                        "lat": 35.1483556,
+                        "state_code": "TN",
+                        "formatted": "Jiffy Lube, 630 North Graham Street, Memphis, TN 38122, United States of America",
+                        "address_line1": "Jiffy Lube",
+                        "address_line2": "630 North Graham Street, Memphis, TN 38122, United States of America",
+                        "categories": [
+                          "building",
+                          "building.commercial",
+                          "commercial",
+                          "service",
+                          "service.vehicle",
+                          "service.vehicle.repair",
+                          "service.vehicle.repair.car"
+                        ],
+                        "details": [
+                          "details",
+                          "details.contact"
+                        ],
+                        "datasource": {
+                          "sourcename": "openstreetmap",
+                          "attribution": "© OpenStreetMap contributors",
+                          "license": "Open Database License",
+                          "url": "https://www.openstreetmap.org/copyright",
+                          "raw": {
+                            "name": "Jiffy Lube",
+                            "shop": "car_repair",
+                            "brand": "Jiffy Lube",
+                            "phone": "+1-901-458-1292",
+                            "osm_id": 836214347,
+                            "building": "yes",
+                            "osm_type": "w",
+                            "addr:city": "Memphis",
+                            "addr:state": "TN",
+                            "addr:street": "North Graham Street",
+                            "addr:postcode": 38122,
+                            "opening_hours": "Mo-Sa 07:00-19:00; Su 10:00-17:00",
+                            "brand:wikidata": "Q6192247",
+                            "addr:housenumber": 630,
+                            "service:vehicle:oil_change": "yes"
+                          }
+                        },
+                        "opening_hours": "Mo-Sa 07:00-19:00; Su 10:00-17:00",
+                        "brand": "Jiffy Lube",
+                        "brand_details": {
+                          "wikidata": "Q6192247"
+                        },
+                        "contact": {
+                          "phone": "+1-901-458-1292"
+                        },
+                        "commercial": {
+                          "type": "car_repair"
+                        },
+                        "distance": 656,
+                        "place_id": "51be96d8305e7b56c05944fd8c50fd924140f00102f9014b9ed7310000000092030a4a69666679204c756265"
+                      },
+                      "geometry": {
+                        "type": "Point",
+                        "coordinates": [
+                          -89.92762395049337,
+                          35.14835554966206
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Feature",
+                      "properties": {
+                        "name": "Duke's Automotive",
+                        "country": "United States",
+                        "country_code": "us",
+                        "region": "West Tennessee",
+                        "state": "Tennessee",
+                        "county": "Shelby County",
+                        "city": "Memphis",
+                        "postcode": "38122",
+                        "street": "North Graham Street",
+                        "housenumber": "596",
+                        "iso3166_2": "US-TN",
+                        "lon": -89.927658,
+                        "lat": 35.1480699,
+                        "state_code": "TN",
+                        "formatted": "Duke's Automotive, 596 North Graham Street, Memphis, TN 38122, United States of America",
+                        "address_line1": "Duke's Automotive",
+                        "address_line2": "596 North Graham Street, Memphis, TN 38122, United States of America",
+                        "categories": [
+                          "commercial",
+                          "service",
+                          "service.vehicle",
+                          "service.vehicle.repair",
+                          "service.vehicle.repair.car"
+                        ],
+                        "details": [
+                          "details",
+                          "details.contact"
+                        ],
+                        "datasource": {
+                          "sourcename": "openstreetmap",
+                          "attribution": "© OpenStreetMap contributors",
+                          "license": "Open Database License",
+                          "url": "https://www.openstreetmap.org/copyright",
+                          "raw": {
+                            "name": "Duke's Automotive",
+                            "shop": "car_repair",
+                            "phone": "+1-901-323-9837",
+                            "osm_id": 4944605520,
+                            "osm_type": "n",
+                            "addr:city": "Memphis",
+                            "addr:state": "TN",
+                            "addr:street": "North Graham Street",
+                            "addr:postcode": 38122,
+                            "opening_hours": "Mo-Fr 07:30-17:30",
+                            "addr:housenumber": 596,
+                            "service:vehicle:car_parts": "yes",
+                            "service:vehicle:car_repair": "yes"
+                          }
+                        },
+                        "opening_hours": "Mo-Fr 07:30-17:30",
+                        "contact": {
+                          "phone": "+1-901-323-9837"
+                        },
+                        "commercial": {
+                          "type": "car_repair"
+                        },
+                        "distance": 641,
+                        "place_id": "51daf7a8bf5e7b56c059044958f4f3924140f00103f90150b1b8260100000092031144756b652773204175746f6d6f74697665"
+                      },
+                      "geometry": {
+                        "type": "Point",
+                        "coordinates": [
+                          -89.92765799999998,
+                          35.14806989966203
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Feature",
+                      "properties": {
+                        "name": "High Point Terrace Shopping Center",
+                        "country": "United States",
+                        "country_code": "us",
+                        "region": "West Tennessee",
+                        "state": "Tennessee",
+                        "county": "Shelby County",
+                        "city": "Memphis",
+                        "postcode": "38122",
+                        "street": "Philwood Avenue",
+                        "iso3166_2": "US-TN",
+                        "lon": -89.9376452,
+                        "lat": 35.1449256,
+                        "state_code": "TN",
+                        "formatted": "High Point Terrace Shopping Center, Philwood Avenue, Memphis, TN 38122, United States of America",
+                        "address_line1": "High Point Terrace Shopping Center",
+                        "address_line2": "Philwood Avenue, Memphis, TN 38122, United States of America",
+                        "categories": [
+                          "commercial",
+                          "commercial.shopping_mall"
+                        ],
+                        "details": [],
+                        "datasource": {
+                          "sourcename": "openstreetmap",
+                          "attribution": "© OpenStreetMap contributors",
+                          "license": "Open Database License",
+                          "url": "https://www.openstreetmap.org/copyright",
+                          "raw": {
+                            "name": "High Point Terrace Shopping Center",
+                            "shop": "mall",
+                            "osm_id": 223786578,
+                            "osm_type": "w"
+                          }
+                        },
+                        "commercial": {
+                          "type": "mall"
+                        },
+                        "distance": 463,
+                        "place_id": "51b289f860027c56c05948730bec8c924140f00102f90152b6560d000000009203224869676820506f696e7420546572726163652053686f7070696e672043656e746572"
+                      },
+                      "geometry": {
+                        "type": "Point",
+                        "coordinates": [
+                          -89.93764518996502,
+                          35.1449255996618
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Feature",
+                      "properties": {
+                        "name": "High Point Barber Shop",
+                        "country": "United States",
+                        "country_code": "us",
+                        "region": "West Tennessee",
+                        "state": "Tennessee",
+                        "county": "Shelby County",
+                        "city": "Memphis",
+                        "postcode": "38122",
+                        "street": "High Point Terrace",
+                        "housenumber": "477",
+                        "iso3166_2": "US-TN",
+                        "lon": -89.9378035,
+                        "lat": 35.1447958,
+                        "state_code": "TN",
+                        "formatted": "High Point Barber Shop, 477 High Point Terrace, Memphis, TN 38122, United States of America",
+                        "address_line1": "High Point Barber Shop",
+                        "address_line2": "477 High Point Terrace, Memphis, TN 38122, United States of America",
+                        "categories": [
+                          "commercial",
+                          "service",
+                          "service.beauty",
+                          "service.beauty.hairdresser"
+                        ],
+                        "details": [
+                          "details.contact",
+                          "details.payment"
+                        ],
+                        "datasource": {
+                          "sourcename": "openstreetmap",
+                          "attribution": "© OpenStreetMap contributors",
+                          "license": "Open Database License",
+                          "url": "https://www.openstreetmap.org/copyright",
+                          "raw": {
+                            "name": "High Point Barber Shop",
+                            "shop": "hairdresser",
+                            "phone": "+1-901-715-8883",
+                            "osm_id": 12613343782,
+                            "osm_type": "n",
+                            "addr:city": "Memphis",
+                            "addr:unit": "#C",
+                            "addr:state": "TN",
+                            "addr:street": "High Point Terrace",
+                            "hairdresser": "barber",
+                            "payment:cash": "yes",
+                            "addr:postcode": 38122,
+                            "addr:housenumber": 477
+                          }
+                        },
+                        "contact": {
+                          "phone": "+1-901-715-8883"
+                        },
+                        "payment_options": {
+                          "cash": true
+                        },
+                        "commercial": {
+                          "type": "hairdresser"
+                        },
+                        "distance": 500,
+                        "place_id": "51c2a4f8f8047c56c059a11234ab88924140f00103f901265ad0ef020000009203164869676820506f696e74204261726265722053686f70"
+                      },
+                      "geometry": {
+                        "type": "Point",
+                        "coordinates": [
+                          -89.9378035,
+                          35.144795799661786
+                        ]
+                      }
+                    },
+                    {
+                      "type": "Feature",
+                      "properties": {
+                        "name": "High Point Grocery",
+                        "country": "United States",
+                        "country_code": "us",
+                        "region": "West Tennessee",
+                        "state": "Tennessee",
+                        "county": "Shelby County",
+                        "city": "Memphis",
+                        "hamlet": "Hedgemoor",
+                        "postcode": "38122",
+                        "street": "High Point Terrace",
+                        "housenumber": "469",
+                        "iso3166_2": "US-TN",
+                        "lon": -89.9376722,
+                        "lat": 35.1444938,
+                        "state_code": "TN",
+                        "formatted": "High Point Grocery, 469 High Point Terrace, Memphis, TN 38122, United States of America",
+                        "address_line1": "High Point Grocery",
+                        "address_line2": "469 High Point Terrace, Memphis, TN 38122, United States of America",
+                        "categories": [
+                          "commercial",
+                          "commercial.supermarket"
+                        ],
+                        "details": [
+                          "details"
+                        ],
+                        "datasource": {
+                          "sourcename": "openstreetmap",
+                          "attribution": "© OpenStreetMap contributors",
+                          "license": "Open Database License",
+                          "url": "https://www.openstreetmap.org/copyright",
+                          "raw": {
+                            "name": "High Point Grocery",
+                            "shop": "supermarket",
+                            "osm_id": 2326594332,
+                            "twitter": "https://twitter.com/HighPointGrocer/",
+                            "website": "https://www.highpointgrocery.com/",
+                            "osm_type": "n",
+                            "addr:street": "High Point Terrace",
+                            "addr:postcode": 38122,
+                            "addr:housenumber": 469
+                          }
+                        },
+                        "website": "https://www.highpointgrocery.com/",
+                        "commercial": {
+                          "type": "supermarket"
+                        },
+                        "distance": 483,
+                        "place_id": "51935742d2027c56c059d402d8c57e924140f00103f9011c03ad8a000000009203124869676820506f696e742047726f63657279"
+                      },
+                      "geometry": {
+                        "type": "Point",
+                        "coordinates": [
+                          -89.9376722,
+                          35.144493799661774
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid Places POST request. Check categories, structured spatial controls, geometry limits, and buffer values.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GatewayError"
+                },
+                "example": {
+                  "statusCode": 400,
+                  "error": "Bad Request",
+                  "message": "\"filter.geometry\" must be a valid Polygon or MultiPolygon"
                 }
               }
             }
@@ -2015,6 +2591,921 @@
           "soy_free"
         ],
         "example": "wheelchair.yes"
+      },
+      "PlacesPostRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "categories"
+        ],
+        "anyOf": [
+          {
+            "required": [
+              "filter"
+            ]
+          },
+          {
+            "required": [
+              "bias"
+            ]
+          }
+        ],
+        "properties": {
+          "categories": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 100,
+            "description": "One or more place category keys.",
+            "items": {
+              "type": "string",
+              "minLength": 3,
+              "description": "Hierarchical place category key."
+            }
+          },
+          "conditions": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 100,
+            "description": "Optional place-attribute conditions.",
+            "items": {
+              "type": "string",
+              "minLength": 3,
+              "description": "Hierarchical place condition."
+            }
+          },
+          "filter": {
+            "$ref": "#/components/schemas/PlacesFilter"
+          },
+          "bias": {
+            "$ref": "#/components/schemas/PlacesBias"
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 500,
+            "default": 20
+          },
+          "offset": {
+            "type": "integer",
+            "minimum": 0,
+            "default": 0
+          },
+          "lang": {
+            "type": "string",
+            "enum": [
+              "ab",
+              "aa",
+              "af",
+              "ak",
+              "sq",
+              "am",
+              "ar",
+              "an",
+              "hy",
+              "as",
+              "av",
+              "ae",
+              "ay",
+              "az",
+              "bm",
+              "ba",
+              "eu",
+              "be",
+              "bn",
+              "bh",
+              "bi",
+              "bs",
+              "br",
+              "bg",
+              "my",
+              "ca",
+              "ch",
+              "ce",
+              "ny",
+              "zh",
+              "cv",
+              "kw",
+              "co",
+              "cr",
+              "hr",
+              "cs",
+              "da",
+              "dv",
+              "nl",
+              "en",
+              "eo",
+              "et",
+              "ee",
+              "fo",
+              "fj",
+              "fi",
+              "fr",
+              "ff",
+              "gl",
+              "ka",
+              "de",
+              "el",
+              "gn",
+              "gu",
+              "ht",
+              "ha",
+              "he",
+              "hz",
+              "hi",
+              "ho",
+              "hu",
+              "ia",
+              "id",
+              "ie",
+              "ga",
+              "ig",
+              "ik",
+              "io",
+              "is",
+              "it",
+              "iu",
+              "ja",
+              "jv",
+              "kl",
+              "kn",
+              "kr",
+              "ks",
+              "kk",
+              "km",
+              "ki",
+              "rw",
+              "ky",
+              "kv",
+              "kg",
+              "ko",
+              "ku",
+              "kj",
+              "la",
+              "lb",
+              "lg",
+              "li",
+              "ln",
+              "lo",
+              "lt",
+              "lu",
+              "lv",
+              "gv",
+              "mk",
+              "mg",
+              "ms",
+              "ml",
+              "mt",
+              "mi",
+              "mr",
+              "mh",
+              "mn",
+              "na",
+              "nv",
+              "nb",
+              "nd",
+              "ne",
+              "ng",
+              "nn",
+              "no",
+              "ii",
+              "nr",
+              "oc",
+              "oj",
+              "cu",
+              "om",
+              "or",
+              "os",
+              "pa",
+              "pi",
+              "fa",
+              "pl",
+              "ps",
+              "pt",
+              "qu",
+              "rm",
+              "rn",
+              "ro",
+              "ru",
+              "sa",
+              "sc",
+              "sd",
+              "se",
+              "sm",
+              "sg",
+              "sr",
+              "gd",
+              "sn",
+              "si",
+              "sk",
+              "sl",
+              "so",
+              "st",
+              "es",
+              "su",
+              "sw",
+              "ss",
+              "sv",
+              "ta",
+              "te",
+              "tg",
+              "th",
+              "ti",
+              "bo",
+              "tk",
+              "tl",
+              "tn",
+              "to",
+              "tr",
+              "ts",
+              "tt",
+              "tw",
+              "ty",
+              "ug",
+              "uk",
+              "ur",
+              "uz",
+              "ve",
+              "vi",
+              "vo",
+              "wa",
+              "cy",
+              "wo",
+              "fy",
+              "xh",
+              "yi",
+              "yo",
+              "za"
+            ],
+            "default": "en"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "PlacesFilter": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/PlacesCircle"
+          },
+          {
+            "$ref": "#/components/schemas/PlacesRect"
+          },
+          {
+            "$ref": "#/components/schemas/PlacesStoredGeometryFilter"
+          },
+          {
+            "$ref": "#/components/schemas/PlacesPlaceFilter"
+          },
+          {
+            "$ref": "#/components/schemas/PlacesCountryCodeFilter"
+          },
+          {
+            "$ref": "#/components/schemas/PlacesPolygonFilter"
+          },
+          {
+            "$ref": "#/components/schemas/PlacesPolylineFilter"
+          }
+        ],
+        "discriminator": {
+          "propertyName": "type",
+          "mapping": {
+            "circle": "#/components/schemas/PlacesCircle",
+            "rect": "#/components/schemas/PlacesRect",
+            "geometry": "#/components/schemas/PlacesStoredGeometryFilter",
+            "place": "#/components/schemas/PlacesPlaceFilter",
+            "countrycode": "#/components/schemas/PlacesCountryCodeFilter",
+            "polygon": "#/components/schemas/PlacesPolygonFilter",
+            "polyline": "#/components/schemas/PlacesPolylineFilter"
+          }
+        }
+      },
+      "PlacesBias": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/PlacesProximityBias"
+          },
+          {
+            "$ref": "#/components/schemas/PlacesCircle"
+          },
+          {
+            "$ref": "#/components/schemas/PlacesRect"
+          }
+        ],
+        "discriminator": {
+          "propertyName": "type",
+          "mapping": {
+            "proximity": "#/components/schemas/PlacesProximityBias",
+            "circle": "#/components/schemas/PlacesCircle",
+            "rect": "#/components/schemas/PlacesRect"
+          }
+        }
+      },
+      "PlacesLongitude": {
+        "type": "number",
+        "minimum": -180,
+        "maximum": 180
+      },
+      "PlacesLatitude": {
+        "type": "number",
+        "minimum": -90,
+        "maximum": 90
+      },
+      "PlacesCircle": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type",
+          "lon",
+          "lat",
+          "radius"
+        ],
+        "properties": {
+          "type": {
+            "const": "circle"
+          },
+          "lon": {
+            "$ref": "#/components/schemas/PlacesLongitude"
+          },
+          "lat": {
+            "$ref": "#/components/schemas/PlacesLatitude"
+          },
+          "radius": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          }
+        }
+      },
+      "PlacesRect": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type",
+          "lon1",
+          "lat1",
+          "lon2",
+          "lat2"
+        ],
+        "properties": {
+          "type": {
+            "const": "rect"
+          },
+          "lon1": {
+            "$ref": "#/components/schemas/PlacesLongitude"
+          },
+          "lat1": {
+            "$ref": "#/components/schemas/PlacesLatitude"
+          },
+          "lon2": {
+            "$ref": "#/components/schemas/PlacesLongitude"
+          },
+          "lat2": {
+            "$ref": "#/components/schemas/PlacesLatitude"
+          }
+        }
+      },
+      "PlacesProximityBias": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type",
+          "lon",
+          "lat"
+        ],
+        "properties": {
+          "type": {
+            "const": "proximity"
+          },
+          "lon": {
+            "$ref": "#/components/schemas/PlacesLongitude"
+          },
+          "lat": {
+            "$ref": "#/components/schemas/PlacesLatitude"
+          }
+        }
+      },
+      "PlacesStoredGeometryFilter": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type",
+          "id"
+        ],
+        "description": "References a previously stored geometry. This is distinct from inline polygon and polyline filters.",
+        "properties": {
+          "type": {
+            "const": "geometry"
+          },
+          "id": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{32}$"
+          }
+        }
+      },
+      "PlacesPlaceFilter": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type",
+          "id"
+        ],
+        "properties": {
+          "type": {
+            "const": "place"
+          },
+          "id": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 2048,
+            "pattern": "^(?:[a-f0-9]{2}){1,1024}$"
+          }
+        }
+      },
+      "PlacesCountryCodeFilter": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type",
+          "values"
+        ],
+        "properties": {
+          "type": {
+            "const": "countrycode"
+          },
+          "values": {
+            "type": "array",
+            "minItems": 1,
+            "description": "ISO 3166-1 alpha-2 country codes, `auto`, or the standalone value `none`.",
+            "oneOf": [
+              {
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "ad",
+                    "ae",
+                    "af",
+                    "ag",
+                    "ai",
+                    "al",
+                    "am",
+                    "an",
+                    "ao",
+                    "ap",
+                    "aq",
+                    "ar",
+                    "as",
+                    "at",
+                    "au",
+                    "aw",
+                    "az",
+                    "ba",
+                    "bb",
+                    "bd",
+                    "be",
+                    "bf",
+                    "bg",
+                    "bh",
+                    "bi",
+                    "bj",
+                    "bm",
+                    "bn",
+                    "bo",
+                    "br",
+                    "bs",
+                    "bt",
+                    "bv",
+                    "bw",
+                    "by",
+                    "bz",
+                    "ca",
+                    "cc",
+                    "cd",
+                    "cf",
+                    "cg",
+                    "ch",
+                    "ci",
+                    "ck",
+                    "cl",
+                    "cm",
+                    "cn",
+                    "co",
+                    "cr",
+                    "cu",
+                    "cv",
+                    "cx",
+                    "cy",
+                    "cz",
+                    "de",
+                    "dj",
+                    "dk",
+                    "dm",
+                    "do",
+                    "dz",
+                    "ec",
+                    "ee",
+                    "eg",
+                    "eh",
+                    "er",
+                    "es",
+                    "et",
+                    "eu",
+                    "fi",
+                    "fj",
+                    "fk",
+                    "fm",
+                    "fo",
+                    "fr",
+                    "ga",
+                    "gb",
+                    "gd",
+                    "ge",
+                    "gf",
+                    "gg",
+                    "gh",
+                    "gi",
+                    "gl",
+                    "gm",
+                    "gn",
+                    "gp",
+                    "gq",
+                    "gr",
+                    "gs",
+                    "gt",
+                    "gu",
+                    "gw",
+                    "gy",
+                    "hk",
+                    "hm",
+                    "hn",
+                    "hr",
+                    "ht",
+                    "hu",
+                    "id",
+                    "ie",
+                    "im",
+                    "il",
+                    "in",
+                    "io",
+                    "iq",
+                    "ir",
+                    "is",
+                    "it",
+                    "je",
+                    "jm",
+                    "jo",
+                    "jp",
+                    "ke",
+                    "kg",
+                    "kh",
+                    "ki",
+                    "km",
+                    "kn",
+                    "kp",
+                    "kr",
+                    "kw",
+                    "ky",
+                    "kz",
+                    "la",
+                    "lb",
+                    "lc",
+                    "li",
+                    "lk",
+                    "lr",
+                    "ls",
+                    "lt",
+                    "lu",
+                    "lv",
+                    "ly",
+                    "ma",
+                    "mc",
+                    "md",
+                    "me",
+                    "mg",
+                    "mh",
+                    "mk",
+                    "ml",
+                    "mm",
+                    "mn",
+                    "mo",
+                    "mp",
+                    "mq",
+                    "mr",
+                    "ms",
+                    "mt",
+                    "mu",
+                    "mv",
+                    "mw",
+                    "mx",
+                    "my",
+                    "mz",
+                    "na",
+                    "nc",
+                    "ne",
+                    "nf",
+                    "ng",
+                    "ni",
+                    "nl",
+                    "no",
+                    "np",
+                    "nr",
+                    "nu",
+                    "nz",
+                    "om",
+                    "pa",
+                    "pe",
+                    "pf",
+                    "pg",
+                    "ph",
+                    "pk",
+                    "pl",
+                    "pm",
+                    "pr",
+                    "ps",
+                    "pt",
+                    "pw",
+                    "py",
+                    "qa",
+                    "re",
+                    "ro",
+                    "rs",
+                    "ru",
+                    "rw",
+                    "sa",
+                    "sb",
+                    "sc",
+                    "sd",
+                    "se",
+                    "sg",
+                    "sh",
+                    "si",
+                    "sj",
+                    "sk",
+                    "sl",
+                    "sm",
+                    "sn",
+                    "so",
+                    "sr",
+                    "st",
+                    "sv",
+                    "sy",
+                    "sz",
+                    "tc",
+                    "td",
+                    "tf",
+                    "tg",
+                    "th",
+                    "tj",
+                    "tk",
+                    "tm",
+                    "tn",
+                    "to",
+                    "tr",
+                    "tt",
+                    "tv",
+                    "tw",
+                    "tz",
+                    "ua",
+                    "ug",
+                    "um",
+                    "us",
+                    "uy",
+                    "uz",
+                    "va",
+                    "vc",
+                    "ve",
+                    "vg",
+                    "vi",
+                    "vn",
+                    "vu",
+                    "wf",
+                    "ws",
+                    "ye",
+                    "yt",
+                    "za",
+                    "zm",
+                    "zw",
+                    "auto"
+                  ]
+                }
+              },
+              {
+                "maxItems": 1,
+                "items": {
+                  "const": "none"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "PlacesPolygonFilter": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type",
+          "geometry"
+        ],
+        "properties": {
+          "type": {
+            "const": "polygon"
+          },
+          "geometry": {
+            "$ref": "#/components/schemas/PlacesPolygonGeometry"
+          },
+          "buffer": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100000,
+            "description": "Optional polygon buffer in metres. Omitted means zero."
+          }
+        }
+      },
+      "PlacesPolylineFilter": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/PlacesRawPolylineFilter"
+          },
+          {
+            "$ref": "#/components/schemas/PlacesEncodedPolylineFilter"
+          }
+        ]
+      },
+      "PlacesRawPolylineFilter": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type",
+          "geometry"
+        ],
+        "properties": {
+          "type": {
+            "const": "polyline"
+          },
+          "geometry": {
+            "$ref": "#/components/schemas/PlacesLineGeometry"
+          },
+          "buffer": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "maximum": 100000,
+            "description": "Optional line buffer in metres. When omitted, the internal service uses 1,000 metres."
+          }
+        }
+      },
+      "PlacesEncodedPolylineFilter": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type",
+          "geometry",
+          "encoding"
+        ],
+        "properties": {
+          "type": {
+            "const": "polyline"
+          },
+          "geometry": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 102400,
+            "description": "Encoded polyline. Its UTF-8 byte length must not exceed 102,400 bytes."
+          },
+          "encoding": {
+            "type": "string",
+            "enum": [
+              "polyline5",
+              "polyline6"
+            ]
+          },
+          "buffer": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "maximum": 100000,
+            "description": "Optional line buffer in metres. When omitted, the internal service uses 1,000 metres."
+          }
+        }
+      },
+      "PlacesPosition": {
+        "type": "array",
+        "minItems": 2,
+        "prefixItems": [
+          {
+            "$ref": "#/components/schemas/PlacesLongitude"
+          },
+          {
+            "$ref": "#/components/schemas/PlacesLatitude"
+          }
+        ],
+        "items": {
+          "type": "number"
+        },
+        "description": "Position in longitude, latitude order, with optional additional finite numeric ordinates preserved unchanged."
+      },
+      "PlacesLineCoordinates": {
+        "type": "array",
+        "minItems": 2,
+        "maxItems": 10000,
+        "items": {
+          "$ref": "#/components/schemas/PlacesPosition"
+        }
+      },
+      "PlacesLinearRingCoordinates": {
+        "type": "array",
+        "minItems": 4,
+        "description": "A closed ring with at least three distinct positions. Closure and distinctness are validated by the gateway.",
+        "items": {
+          "$ref": "#/components/schemas/PlacesPosition"
+        }
+      },
+      "PlacesLineGeometry": {
+        "oneOf": [
+          {
+            "type": "object",
+            "additionalProperties": true,
+            "required": [
+              "type",
+              "coordinates"
+            ],
+            "properties": {
+              "type": {
+                "const": "LineString"
+              },
+              "coordinates": {
+                "$ref": "#/components/schemas/PlacesLineCoordinates"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "additionalProperties": true,
+            "required": [
+              "type",
+              "coordinates"
+            ],
+            "properties": {
+              "type": {
+                "const": "MultiLineString"
+              },
+              "coordinates": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "$ref": "#/components/schemas/PlacesLineCoordinates"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "PlacesPolygonGeometry": {
+        "oneOf": [
+          {
+            "type": "object",
+            "additionalProperties": true,
+            "required": [
+              "type",
+              "coordinates"
+            ],
+            "properties": {
+              "type": {
+                "const": "Polygon"
+              },
+              "coordinates": {
+                "type": "array",
+                "minItems": 1,
+                "maxItems": 100,
+                "items": {
+                  "$ref": "#/components/schemas/PlacesLinearRingCoordinates"
+                }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "additionalProperties": true,
+            "required": [
+              "type",
+              "coordinates"
+            ],
+            "properties": {
+              "type": {
+                "const": "MultiPolygon"
+              },
+              "coordinates": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "$ref": "#/components/schemas/PlacesLinearRingCoordinates"
+                  }
+                }
+              }
+            }
+          }
+        ]
       },
       "GatewayError": {
         "type": "object",

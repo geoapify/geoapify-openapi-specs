@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Geoapify Routing API",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "description": "Calculate routes for driving, walking, cycling, trucking, and public transit."
   },
   "servers": [
@@ -98,6 +98,17 @@
             }
           },
           {
+            "name": "optimize_stops",
+            "in": "query",
+            "required": false,
+            "description": "Whether to optimize the order of intermediate waypoints. The first and last waypoints remain fixed.",
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "example": true
+            }
+          },
+          {
             "name": "type",
             "in": "query",
             "required": false,
@@ -190,7 +201,7 @@
             "name": "details",
             "in": "query",
             "required": false,
-            "description": "Additional result data. `instruction_details` adds maneuver metadata; `route_details` adds road attributes; `elevation` adds the elevation profile. `route_details` and `elevation` increase API credit cost and are unavailable for transit modes.",
+            "description": "Additional result data. `instruction_details` adds maneuver metadata; `route_details` adds road attributes; `elevation` adds the elevation profile. `polyline5` and `polyline6` add encoded geometry to the route properties and every leg without replacing the GeoJSON geometry. The route-level value concatenates legs in travel order and removes a duplicated shared endpoint. `route_details` and `elevation` increase API credit cost and are unavailable for transit modes; encoded polylines do not add credits.",
             "schema": {
               "type": "array",
               "uniqueItems": true,
@@ -199,7 +210,9 @@
                 "enum": [
                   "instruction_details",
                   "route_details",
-                  "elevation"
+                  "elevation",
+                  "polyline5",
+                  "polyline6"
                 ],
                 "example": "instruction_details"
               }
@@ -741,6 +754,14 @@
           "distance": {
             "type": "number"
           },
+          "polyline5": {
+            "type": "string",
+            "description": "Precision-5 encoded geometry for the leg. Present when `details=polyline5` is requested."
+          },
+          "polyline6": {
+            "type": "string",
+            "description": "Precision-6 encoded geometry for the leg. Present when `details=polyline6` is requested."
+          },
           "steps": {
             "type": "array",
             "items": {
@@ -902,7 +923,9 @@
                 "instruction_details",
                 "route_details",
                 "elevation",
-                "admin_areas"
+                "admin_areas",
+                "polyline5",
+                "polyline6"
               ]
             }
           },
@@ -1026,7 +1049,9 @@
                 "instruction_details",
                 "route_details",
                 "elevation",
-                "admin_areas"
+                "admin_areas",
+                "polyline5",
+                "polyline6"
               ]
             }
           },
@@ -1060,6 +1085,14 @@
           },
           "max_speed": {
             "type": "number"
+          },
+          "polyline5": {
+            "type": "string",
+            "description": "Precision-5 encoded geometry for the complete route. Present when `details=polyline5` is requested."
+          },
+          "polyline6": {
+            "type": "string",
+            "description": "Precision-6 encoded geometry for the complete route. Present when `details=polyline6` is requested."
           },
           "legs": {
             "type": "array",
@@ -1240,7 +1273,9 @@
                 "instruction_details",
                 "route_details",
                 "elevation",
-                "admin_areas"
+                "admin_areas",
+                "polyline5",
+                "polyline6"
               ]
             }
           },
@@ -1274,6 +1309,14 @@
           },
           "max_speed": {
             "type": "number"
+          },
+          "polyline5": {
+            "type": "string",
+            "description": "Precision-5 encoded geometry for the complete route. Present when `details=polyline5` is requested."
+          },
+          "polyline6": {
+            "type": "string",
+            "description": "Precision-6 encoded geometry for the complete route. Present when `details=polyline6` is requested."
           },
           "legs": {
             "type": "array",

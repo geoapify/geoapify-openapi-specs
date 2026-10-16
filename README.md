@@ -11,7 +11,7 @@ The specifications in `api-specs/` are generated artifacts. Their schemas are au
 Start with [`api-specs/index.json`](api-specs/index.json), the machine-readable catalog of every specification in this repository.
 
 1. Match the task to an entry using its `id`, `category`, and `description`.
-2. Load the file named by `openApiSpec`. Paths are relative to `api-specs/index.json`.
+2. Load the specification at `openApiSpecUrl`. To use the checked-in copy, remove the `/assets/openapi/specs/` prefix from that URL's path and look up the result under `api-specs/`.
 3. Load only the selected specification unless the task requires multiple APIs. This reduces context use and avoids exposing unrelated operations to the agent.
 4. Treat the selected OpenAPI document as the source of truth for endpoints, parameters, authentication, and schemas. Use `documentationUrl` for guides and examples.
 5. Never invent an endpoint or parameter that is absent from the selected specification.
@@ -20,7 +20,7 @@ Example discovery with `jq`:
 
 ```bash
 # List available specifications
-jq -r '.apis[] | [.id, .title, .openApiSpec] | @tsv' api-specs/index.json
+jq -r '.apis[] | [.id, .title, .openApiSpecUrl] | @tsv' api-specs/index.json
 
 # Find routing-related specifications
 jq '.apis[] | select((.id + " " + .description) | test("route|routing"; "i"))' api-specs/index.json

@@ -59,14 +59,16 @@ jobs:
 
           const catalogPath = path.join(outputDirectory, 'api-specs', 'index.json');
           const catalog = JSON.parse(fs.readFileSync(catalogPath, 'utf8'));
+          const specificationPrefix = '/assets/openapi/specs/';
           for (const specification of catalog.apis) {
-            const specificationPath = path.resolve(
-              outputDirectory,
-              'api-specs',
-              specification.openApiSpec
-            );
+            const sourceUrl = new URL(specification.openApiSpecUrl);
+            if (!sourceUrl.pathname.startsWith(specificationPrefix)) {
+              throw new Error(`Unexpected specification URL: ${specification.openApiSpecUrl}`);
+            }
+            const relativePath = sourceUrl.pathname.slice(specificationPrefix.length);
+            const specificationPath = path.join(outputDirectory, 'api-specs', relativePath);
             if (!fs.existsSync(specificationPath)) {
-              throw new Error(`Catalog references a missing file: ${specification.openApiSpec}`);
+              throw new Error(`Catalog references a missing file: ${relativePath}`);
             }
           }
 

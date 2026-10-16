@@ -204,6 +204,7 @@
   <script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.32.14/swagger-ui-standalone-preset.js"></script>
   <script>
     const CATALOG_PATH = "../api-specs/index.json";
+    const SPECIFICATION_URL_PREFIX = "/assets/openapi/specs/";
     const DEFAULT_SPEC_ID = "geocoding/forward-geocoding";
     const GROUP_ORDER = [
       "Geocoding",
@@ -279,7 +280,12 @@
     }
 
     function openSpecification(specification, catalogUrl) {
-      const specificationUrl = new URL(specification.openApiSpec, catalogUrl).toString();
+      const sourceUrl = new URL(specification.openApiSpecUrl);
+      if (!sourceUrl.pathname.startsWith(SPECIFICATION_URL_PREFIX)) {
+        throw new Error(`Unexpected specification URL: ${specification.openApiSpecUrl}`);
+      }
+      const relativePath = sourceUrl.pathname.slice(SPECIFICATION_URL_PREFIX.length);
+      const specificationUrl = new URL(relativePath, catalogUrl).toString();
 
       SwaggerUIBundle({
         url: specificationUrl,

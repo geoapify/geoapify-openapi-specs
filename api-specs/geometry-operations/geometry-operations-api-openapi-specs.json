@@ -2,8 +2,13 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Geoapify Geometry Operations API",
-    "version": "1.1.0",
-    "description": "Run 42 server-side GeoJSON operations for set calculations, predicates, measurements, line queries, transformations, clustering, grids, and geometry generation."
+    "version": "1.1.1",
+    "description": "Run 42 server-side GeoJSON operations for set calculations, predicates, measurements, line queries, transformations, clustering, grids, and geometry generation.",
+    "contact": {
+      "name": "Geoapify",
+      "url": "https://geoapify.com",
+      "email": "info@geoapify.com"
+    }
   },
   "servers": [
     {
@@ -1035,7 +1040,9 @@
             "type": "number"
           }
         ],
-        "items": false
+        "items": {
+          "not": {}
+        }
       },
       "GeometryLengthUnit": {
         "type": "string",
@@ -1174,7 +1181,8 @@
             ]
           },
           "coordinates": {
-            "type": "array"
+            "type": "array",
+            "items": {}
           }
         }
       },

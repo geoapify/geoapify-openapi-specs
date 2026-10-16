@@ -2,8 +2,13 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Geoapify Postcode API",
-    "version": "1.1.1",
-    "description": "OpenAPI specification for Geoapify postcode search and autocomplete endpoints."
+    "version": "1.1.2",
+    "description": "OpenAPI specification for Geoapify postcode search and autocomplete endpoints.",
+    "contact": {
+      "name": "Geoapify",
+      "url": "https://geoapify.com",
+      "email": "info@geoapify.com"
+    }
   },
   "servers": [
     {
@@ -1709,130 +1714,6 @@
           }
         }
       },
-      "PlacesDatasource": {
-        "type": "object",
-        "required": [
-          "raw"
-        ],
-        "properties": {
-          "sourcename": {
-            "type": "string"
-          },
-          "attribution": {
-            "type": "string"
-          },
-          "license": {
-            "type": "string"
-          },
-          "url": {
-            "type": "string",
-            "format": "uri"
-          },
-          "raw": {
-            "type": "object",
-            "additionalProperties": true
-          }
-        }
-      },
-      "GeocodingRank": {
-        "type": "object",
-        "properties": {
-          "confidence": {
-            "type": "number"
-          },
-          "confidence_city_level": {
-            "type": "number"
-          },
-          "confidence_street_level": {
-            "type": "number"
-          },
-          "confidence_building_level": {
-            "type": "number"
-          },
-          "match_type": {
-            "type": "string",
-            "enum": [
-              "full_match",
-              "inner_part",
-              "match_by_building",
-              "match_by_street",
-              "match_by_postcode",
-              "match_by_city_or_disrict",
-              "match_by_country_or_state"
-            ]
-          },
-          "importance": {
-            "type": "number"
-          },
-          "popularity": {
-            "type": "number"
-          }
-        }
-      },
-      "PlaceDetailValue": {
-        "oneOf": [
-          {
-            "type": "string"
-          },
-          {
-            "type": "number"
-          },
-          {
-            "type": "boolean"
-          },
-          {
-            "type": "null"
-          },
-          {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/PlaceDetailValue"
-            }
-          },
-          {
-            "type": "object",
-            "additionalProperties": {
-              "$ref": "#/components/schemas/PlaceDetailValue"
-            }
-          }
-        ]
-      },
-      "PlaceDetailGroup": {
-        "type": "object",
-        "additionalProperties": {
-          "$ref": "#/components/schemas/PlaceDetailValue"
-        }
-      },
-      "StringMap": {
-        "type": "object",
-        "additionalProperties": {
-          "type": "string"
-        }
-      },
-      "BooleanMap": {
-        "type": "object",
-        "additionalProperties": {
-          "type": "boolean"
-        }
-      },
-      "WikiPopulation": {
-        "type": "object",
-        "required": [
-          "actual",
-          "by_years"
-        ],
-        "properties": {
-          "actual": {
-            "type": "string"
-          },
-          "by_years": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "string"
-            }
-          }
-        }
-      },
       "PostcodeFeatureCollection": {
         "type": "object",
         "required": [
@@ -2203,7 +2084,8 @@
                 "maximum": 90,
                 "description": "Latitude."
               }
-            ]
+            ],
+            "items": {}
           }
         }
       },
@@ -2224,7 +2106,8 @@
           },
           "coordinates": {
             "description": "GeoJSON coordinates.",
-            "type": "array"
+            "type": "array",
+            "items": {}
           }
         }
       },

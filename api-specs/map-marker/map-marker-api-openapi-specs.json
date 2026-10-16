@@ -2,8 +2,13 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Geoapify Map Marker API",
-    "version": "2.1.0",
-    "description": "Generate customizable PNG map marker images with a background shape, icon or text content, colors, and resolution scaling."
+    "version": "2.1.1",
+    "description": "Generate customizable PNG map marker images with a background shape, icon or text content, colors, and resolution scaling.",
+    "contact": {
+      "name": "Geoapify",
+      "url": "https://geoapify.com",
+      "email": "info@geoapify.com"
+    }
   },
   "servers": [
     {

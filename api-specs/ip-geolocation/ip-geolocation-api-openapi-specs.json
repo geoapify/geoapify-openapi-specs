@@ -2,8 +2,13 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Geoapify IP Geolocation API",
-    "version": "1.1.1",
-    "description": "Resolve an IP address to an approximate geographic location."
+    "version": "1.1.2",
+    "description": "Resolve an IP address to an approximate geographic location.",
+    "contact": {
+      "name": "Geoapify",
+      "url": "https://geoapify.com",
+      "email": "info@geoapify.com"
+    }
   },
   "servers": [
     {

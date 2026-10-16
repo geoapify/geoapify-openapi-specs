@@ -13,8 +13,7 @@
       "documentationUrl": "https://apidocs.geoapify.com/docs/batch/",
       "openApiSpecUrl": "https://apidocs.geoapify.com/assets/openapi/specs/batch/batch-api-openapi-specs.json",
       "openApiVersion": "3.1.0",
-      "apiVersion": "1.1.1",
-      "openApiSpec": "./batch/batch-api-openapi-specs.json"
+      "apiVersion": "1.1.2"
     },
     {
       "id": "boundaries/boundaries",
@@ -24,8 +23,7 @@
       "documentationUrl": "https://apidocs.geoapify.com/docs/boundaries/",
       "openApiSpecUrl": "https://apidocs.geoapify.com/assets/openapi/specs/boundaries/boundaries-api-openapi-specs.json",
       "openApiVersion": "3.1.0",
-      "apiVersion": "1.1.1",
-      "openApiSpec": "./boundaries/boundaries-api-openapi-specs.json"
+      "apiVersion": "1.1.2"
     },
     {
       "id": "elevation/elevation",
@@ -35,8 +33,7 @@
       "documentationUrl": "https://apidocs.geoapify.com/docs/elevation/",
       "openApiSpecUrl": "https://apidocs.geoapify.com/assets/openapi/specs/elevation/elevation-api-openapi-specs.json",
       "openApiVersion": "3.1.0",
-      "apiVersion": "1.1.0",
-      "openApiSpec": "./elevation/elevation-api-openapi-specs.json"
+      "apiVersion": "1.1.1"
     },
     {
       "id": "geocoding/address-autocomplete",
@@ -46,8 +43,7 @@
       "documentationUrl": "https://apidocs.geoapify.com/docs/geocoding/address-autocomplete/",
       "openApiSpecUrl": "https://apidocs.geoapify.com/assets/openapi/specs/address-autocomplete/address-autocomplete-api-openapi-specs.json",
       "openApiVersion": "3.1.0",
-      "apiVersion": "1.1.1",
-      "openApiSpec": "./address-autocomplete/address-autocomplete-api-openapi-specs.json"
+      "apiVersion": "1.1.2"
     },
     {
       "id": "geocoding/batch",
@@ -57,8 +53,7 @@
       "documentationUrl": "https://apidocs.geoapify.com/docs/geocoding/batch/",
       "openApiSpecUrl": "https://apidocs.geoapify.com/assets/openapi/specs/batch-geocoding/batch-geocoding-api-openapi-specs.json",
       "openApiVersion": "3.1.0",
-      "apiVersion": "1.1.1",
-      "openApiSpec": "./batch-geocoding/batch-geocoding-api-openapi-specs.json"
+      "apiVersion": "1.1.2"
     },
     {
       "id": "geocoding/forward-geocoding",
@@ -68,8 +63,7 @@
       "documentationUrl": "https://apidocs.geoapify.com/docs/geocoding/forward-geocoding/",
       "openApiSpecUrl": "https://apidocs.geoapify.com/assets/openapi/specs/forward-geocoding/forward-geocoding-api-openapi-specs.json",
       "openApiVersion": "3.1.0",
-      "apiVersion": "1.1.1",
-      "openApiSpec": "./forward-geocoding/forward-geocoding-api-openapi-specs.json"
+      "apiVersion": "1.1.2"
     },
     {
       "id": "geocoding/reverse-geocoding",
@@ -79,8 +73,7 @@
       "documentationUrl": "https://apidocs.geoapify.com/docs/geocoding/reverse-geocoding/",
       "openApiSpecUrl": "https://apidocs.geoapify.com/assets/openapi/specs/reverse-geocoding/reverse-geocoding-api-openapi-specs.json",
       "openApiVersion": "3.1.0",
-      "apiVersion": "1.1.1",
-      "openApiSpec": "./reverse-geocoding/reverse-geocoding-api-openapi-specs.json"
+      "apiVersion": "1.1.2"
     },
     {
       "id": "geometry-operations/geometry-operations",
@@ -90,8 +83,7 @@
       "documentationUrl": "https://apidocs.geoapify.com/docs/geometry-operations/",
       "openApiSpecUrl": "https://apidocs.geoapify.com/assets/openapi/specs/geometry-operations/geometry-operations-api-openapi-specs.json",
       "openApiVersion": "3.1.0",
-      "apiVersion": "1.1.0",
-      "openApiSpec": "./geometry-operations/geometry-operations-api-openapi-specs.json"
+      "apiVersion": "1.1.1"
     },
     {
       "id": "geometry/geometry",
@@ -101,8 +93,7 @@
       "documentationUrl": "https://apidocs.geoapify.com/docs/geometry/",
       "openApiSpecUrl": "https://apidocs.geoapify.com/assets/openapi/specs/geometry/geometry-api-openapi-specs.json",
       "openApiVersion": "3.1.0",
-      "apiVersion": "1.1.0",
-      "openApiSpec": "./geometry/geometry-api-openapi-specs.json"
+      "apiVersion": "1.1.1"
     },
     {
       "id": "icon/icon",
@@ -112,8 +103,7 @@
       "documentationUrl": "https://apidocs.geoapify.com/docs/icon/",
       "openApiSpecUrl": "https://apidocs.geoapify.com/assets/openapi/specs/map-marker/map-marker-api-openapi-specs.json",
       "openApiVersion": "3.1.0",
-      "apiVersion": "2.1.0",
-      "openApiSpec": "./map-marker/map-marker-api-openapi-specs.json"
+      "apiVersion": "2.1.1"
     },
     {
       "id": "ip-geolocation/ip-geolocation",
@@ -123,8 +113,7 @@
       "documentationUrl": "https://apidocs.geoapify.com/docs/ip-geolocation/",
       "openApiSpecUrl": "https://apidocs.geoapify.com/assets/openapi/specs/ip-geolocation/ip-geolocation-api-openapi-specs.json",
       "openApiVersion": "3.1.0",
-      "apiVersion": "1.1.1",
-      "openApiSpec": "./ip-geolocation/ip-geolocation-api-openapi-specs.json"
+      "apiVersion": "1.1.2"
     },
     {
       "id": "isolines/isolines",
@@ -134,8 +123,7 @@
       "documentationUrl": "https://apidocs.geoapify.com/docs/isolines/",
       "openApiSpecUrl": "https://apidocs.geoapify.com/assets/openapi/specs/isoline/isoline-api-openapi-specs.json",
       "openApiVersion": "3.1.0",
-      "apiVersion": "1.1.0",
-      "openApiSpec": "./isoline/isoline-api-openapi-specs.json"
+      "apiVersion": "1.1.1"
     },
     {
       "id": "map-matching/map-matching",
@@ -145,8 +133,7 @@
       "documentationUrl": "https://apidocs.geoapify.com/docs/map-matching/",
       "openApiSpecUrl": "https://apidocs.geoapify.com/assets/openapi/specs/map-matching/map-matching-api-openapi-specs.json",
       "openApiVersion": "3.1.0",
-      "apiVersion": "1.1.0",
-      "openApiSpec": "./map-matching/map-matching-api-openapi-specs.json"
+      "apiVersion": "1.1.1"
     },
     {
       "id": "maps/map-tiles",
@@ -156,8 +143,7 @@
       "documentationUrl": "https://apidocs.geoapify.com/docs/maps/map-tiles/",
       "openApiSpecUrl": "https://apidocs.geoapify.com/assets/openapi/specs/map-tiles/map-tiles-api-openapi-specs.json",
       "openApiVersion": "3.1.0",
-      "apiVersion": "1.1.0",
-      "openApiSpec": "./map-tiles/map-tiles-api-openapi-specs.json"
+      "apiVersion": "1.1.1"
     },
     {
       "id": "maps/static",
@@ -167,8 +153,7 @@
       "documentationUrl": "https://apidocs.geoapify.com/docs/maps/static/",
       "openApiSpecUrl": "https://apidocs.geoapify.com/assets/openapi/specs/static-maps/static-maps-api-openapi-specs.json",
       "openApiVersion": "3.1.0",
-      "apiVersion": "1.1.0",
-      "openApiSpec": "./static-maps/static-maps-api-openapi-specs.json"
+      "apiVersion": "1.1.1"
     },
     {
       "id": "mcp/calculate-route",
@@ -178,8 +163,7 @@
       "documentationUrl": "https://apidocs.geoapify.com/docs/mcp/calculate-route/",
       "openApiSpecUrl": "https://apidocs.geoapify.com/assets/openapi/specs/mcp/tools/calculate-route-openapi-spec.json",
       "openApiVersion": "3.1.0",
-      "apiVersion": "1.1.0",
-      "openApiSpec": "./mcp/tools/calculate-route-openapi-spec.json"
+      "apiVersion": "1.1.2"
     },
     {
       "id": "mcp/calculate-route-matrix",
@@ -189,8 +173,7 @@
       "documentationUrl": "https://apidocs.geoapify.com/docs/mcp/calculate-route-matrix/",
       "openApiSpecUrl": "https://apidocs.geoapify.com/assets/openapi/specs/mcp/tools/calculate-route-matrix-openapi-spec.json",
       "openApiVersion": "3.1.0",
-      "apiVersion": "1.1.0",
-      "openApiSpec": "./mcp/tools/calculate-route-matrix-openapi-spec.json"
+      "apiVersion": "1.1.2"
     },
     {
       "id": "mcp/combine-geometries",
@@ -200,8 +183,7 @@
       "documentationUrl": "https://apidocs.geoapify.com/docs/mcp/combine-geometries/",
       "openApiSpecUrl": "https://apidocs.geoapify.com/assets/openapi/specs/mcp/tools/combine-geometries-openapi-spec.json",
       "openApiVersion": "3.1.0",
-      "apiVersion": "1.1.0",
-      "openApiSpec": "./mcp/tools/combine-geometries-openapi-spec.json"
+      "apiVersion": "1.1.2"
     },
     {
       "id": "mcp/evaluate-spatial-relation",
@@ -211,8 +193,7 @@
       "documentationUrl": "https://apidocs.geoapify.com/docs/mcp/evaluate-spatial-relation/",
       "openApiSpecUrl": "https://apidocs.geoapify.com/assets/openapi/specs/mcp/tools/evaluate-spatial-relation-openapi-spec.json",
       "openApiVersion": "3.1.0",
-      "apiVersion": "1.1.0",
-      "openApiSpec": "./mcp/tools/evaluate-spatial-relation-openapi-spec.json"
+      "apiVersion": "1.1.2"
     },
     {
       "id": "mcp/geocode-address",
@@ -222,8 +203,7 @@
       "documentationUrl": "https://apidocs.geoapify.com/docs/mcp/geocode-address/",
       "openApiSpecUrl": "https://apidocs.geoapify.com/assets/openapi/specs/mcp/tools/geocode-address-openapi-spec.json",
       "openApiVersion": "3.1.0",
-      "apiVersion": "1.1.0",
-      "openApiSpec": "./mcp/tools/geocode-address-openapi-spec.json"
+      "apiVersion": "1.1.2"
     },
     {
       "id": "mcp/geocode-structured-address",
@@ -233,8 +213,7 @@
       "documentationUrl": "https://apidocs.geoapify.com/docs/mcp/geocode-structured-address/",
       "openApiSpecUrl": "https://apidocs.geoapify.com/assets/openapi/specs/mcp/tools/geocode-structured-address-openapi-spec.json",
       "openApiVersion": "3.1.0",
-      "apiVersion": "1.1.0",
-      "openApiSpec": "./mcp/tools/geocode-structured-address-openapi-spec.json"
+      "apiVersion": "1.1.2"
     },
     {
       "id": "mcp/list-place-categories",
@@ -244,8 +223,7 @@
       "documentationUrl": "https://apidocs.geoapify.com/docs/mcp/list-place-categories/",
       "openApiSpecUrl": "https://apidocs.geoapify.com/assets/openapi/specs/mcp/tools/list-place-categories-openapi-spec.json",
       "openApiVersion": "3.1.0",
-      "apiVersion": "1.1.0",
-      "openApiSpec": "./mcp/tools/list-place-categories-openapi-spec.json"
+      "apiVersion": "1.1.2"
     },
     {
       "id": "mcp/mcp",
@@ -255,8 +233,7 @@
       "documentationUrl": "https://apidocs.geoapify.com/docs/mcp/",
       "openApiSpecUrl": "https://apidocs.geoapify.com/assets/openapi/specs/mcp/mcp-api-openapi-specs.json",
       "openApiVersion": "3.1.0",
-      "apiVersion": "1.1.0",
-      "openApiSpec": "./mcp/mcp-api-openapi-specs.json"
+      "apiVersion": "1.1.2"
     },
     {
       "id": "mcp/measure-geometry",
@@ -266,8 +243,7 @@
       "documentationUrl": "https://apidocs.geoapify.com/docs/mcp/measure-geometry/",
       "openApiSpecUrl": "https://apidocs.geoapify.com/assets/openapi/specs/mcp/tools/measure-geometry-openapi-spec.json",
       "openApiVersion": "3.1.0",
-      "apiVersion": "1.1.0",
-      "openApiSpec": "./mcp/tools/measure-geometry-openapi-spec.json"
+      "apiVersion": "1.1.2"
     },
     {
       "id": "mcp/reverse-geocode",
@@ -277,8 +253,7 @@
       "documentationUrl": "https://apidocs.geoapify.com/docs/mcp/reverse-geocode/",
       "openApiSpecUrl": "https://apidocs.geoapify.com/assets/openapi/specs/mcp/tools/reverse-geocode-coordinates-openapi-spec.json",
       "openApiVersion": "3.1.0",
-      "apiVersion": "1.1.0",
-      "openApiSpec": "./mcp/tools/reverse-geocode-coordinates-openapi-spec.json"
+      "apiVersion": "1.1.2"
     },
     {
       "id": "mcp/search-places",
@@ -288,8 +263,7 @@
       "documentationUrl": "https://apidocs.geoapify.com/docs/mcp/search-places/",
       "openApiSpecUrl": "https://apidocs.geoapify.com/assets/openapi/specs/mcp/tools/search-places-openapi-spec.json",
       "openApiVersion": "3.1.0",
-      "apiVersion": "1.1.0",
-      "openApiSpec": "./mcp/tools/search-places-openapi-spec.json"
+      "apiVersion": "1.1.2"
     },
     {
       "id": "mcp/transform-geometry",
@@ -299,8 +273,7 @@
       "documentationUrl": "https://apidocs.geoapify.com/docs/mcp/transform-geometry/",
       "openApiSpecUrl": "https://apidocs.geoapify.com/assets/openapi/specs/mcp/tools/transform-geometry-openapi-spec.json",
       "openApiVersion": "3.1.0",
-      "apiVersion": "1.1.0",
-      "openApiSpec": "./mcp/tools/transform-geometry-openapi-spec.json"
+      "apiVersion": "1.1.2"
     },
     {
       "id": "place-details/place-details",
@@ -310,8 +283,7 @@
       "documentationUrl": "https://apidocs.geoapify.com/docs/place-details/",
       "openApiSpecUrl": "https://apidocs.geoapify.com/assets/openapi/specs/place-details/place-details-api-openapi-specs.json",
       "openApiVersion": "3.1.0",
-      "apiVersion": "2.1.1",
-      "openApiSpec": "./place-details/place-details-api-openapi-specs.json"
+      "apiVersion": "2.1.2"
     },
     {
       "id": "place-info/place-info",
@@ -321,8 +293,7 @@
       "documentationUrl": "https://apidocs.geoapify.com/docs/",
       "openApiSpecUrl": "https://apidocs.geoapify.com/assets/openapi/specs/place-info/place-info-api-openapi-specs.json",
       "openApiVersion": "3.1.0",
-      "apiVersion": "2.1.1",
-      "openApiSpec": "./place-info/place-info-api-openapi-specs.json"
+      "apiVersion": "2.1.2"
     },
     {
       "id": "places/places",
@@ -332,8 +303,7 @@
       "documentationUrl": "https://apidocs.geoapify.com/docs/places/",
       "openApiSpecUrl": "https://apidocs.geoapify.com/assets/openapi/specs/places/places-api-openapi-specs.json",
       "openApiVersion": "3.1.0",
-      "apiVersion": "2.2.0",
-      "openApiSpec": "./places/places-api-openapi-specs.json"
+      "apiVersion": "2.2.1"
     },
     {
       "id": "postcode/postcode",
@@ -343,8 +313,7 @@
       "documentationUrl": "https://apidocs.geoapify.com/docs/postcode/",
       "openApiSpecUrl": "https://apidocs.geoapify.com/assets/openapi/specs/postcode/postcode-api-openapi-specs.json",
       "openApiVersion": "3.1.0",
-      "apiVersion": "1.1.1",
-      "openApiSpec": "./postcode/postcode-api-openapi-specs.json"
+      "apiVersion": "1.1.2"
     },
     {
       "id": "route-matrix/route-matrix",
@@ -354,8 +323,7 @@
       "documentationUrl": "https://apidocs.geoapify.com/docs/route-matrix/",
       "openApiSpecUrl": "https://apidocs.geoapify.com/assets/openapi/specs/route-matrix/route-matrix-api-openapi-specs.json",
       "openApiVersion": "3.1.0",
-      "apiVersion": "1.1.0",
-      "openApiSpec": "./route-matrix/route-matrix-api-openapi-specs.json"
+      "apiVersion": "1.1.1"
     },
     {
       "id": "route-planner/route-planner",
@@ -365,8 +333,7 @@
       "documentationUrl": "https://apidocs.geoapify.com/docs/route-planner/",
       "openApiSpecUrl": "https://apidocs.geoapify.com/assets/openapi/specs/route-planner/route-planner-api-openapi-specs.json",
       "openApiVersion": "3.1.0",
-      "apiVersion": "1.1.0",
-      "openApiSpec": "./route-planner/route-planner-api-openapi-specs.json"
+      "apiVersion": "1.1.1"
     },
     {
       "id": "routing/routing",
@@ -376,8 +343,7 @@
       "documentationUrl": "https://apidocs.geoapify.com/docs/routing/",
       "openApiSpecUrl": "https://apidocs.geoapify.com/assets/openapi/specs/routing/routing-api-openapi-specs.json",
       "openApiVersion": "3.1.0",
-      "apiVersion": "1.2.0",
-      "openApiSpec": "./routing/routing-api-openapi-specs.json"
+      "apiVersion": "1.2.1"
     }
   ]
 }

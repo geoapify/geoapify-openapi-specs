@@ -2,8 +2,13 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Geoapify MCP API",
-    "version": "1.1.0",
-    "description": "Compact catalog for the Geoapify Model Context Protocol JSON-RPC endpoint. Use the linked focused specifications for complete tool output contracts and additional examples."
+    "version": "1.1.2",
+    "description": "Compact catalog for the Geoapify Model Context Protocol JSON-RPC endpoint. Use the linked focused specifications for complete tool output contracts and additional examples.",
+    "contact": {
+      "name": "Geoapify",
+      "url": "https://geoapify.com",
+      "email": "info@geoapify.com"
+    }
   },
   "servers": [
     {
@@ -1391,10 +1396,6 @@
           }
         }
       },
-      "GeocodeAddressOutput": {
-        "type": "object",
-        "description": "Compact geocoding result for a free-text query. See the focused tool specification for the complete output contract."
-      },
       "GeocodeAddressToolCallParams": {
         "type": "object",
         "description": "MCP tools/call params for geocode_address.",
@@ -1562,10 +1563,6 @@
           }
         ]
       },
-      "GeocodeStructuredAddressOutput": {
-        "type": "object",
-        "description": "Compact geocoding result for structured address components. See the focused tool specification for the complete output contract."
-      },
       "GeocodeStructuredAddressToolCallParams": {
         "type": "object",
         "description": "MCP tools/call params for geocode_structured_address.",
@@ -1691,10 +1688,6 @@
           }
         }
       },
-      "ReverseGeocodeCoordinatesOutput": {
-        "type": "object",
-        "description": "Compact reverse-geocoding result for one coordinate. See the focused tool specification for the complete output contract."
-      },
       "ReverseGeocodeCoordinatesToolCallParams": {
         "type": "object",
         "description": "MCP tools/call params for reverse_geocode_coordinates.",
@@ -1810,10 +1803,6 @@
           }
         }
       },
-      "SearchPlacesOutput": {
-        "type": "object",
-        "description": "Places matching one category around a coordinate. See the focused tool specification for the complete output contract."
-      },
       "SearchPlacesToolCallParams": {
         "type": "object",
         "description": "MCP tools/call params for search_places.",
@@ -1888,10 +1877,6 @@
         "type": "object",
         "additionalProperties": false,
         "properties": {}
-      },
-      "ListPlaceCategoriesOutput": {
-        "type": "object",
-        "description": "Supported category catalog for search_places. See the focused tool specification for the complete output contract."
       },
       "ListPlaceCategoriesToolCallParams": {
         "type": "object",
@@ -2133,10 +2118,6 @@
           }
         }
       },
-      "CalculateRouteOutput": {
-        "type": "object",
-        "description": "Route totals, resolved waypoints, legs, and optional geometry. See the focused tool specification for the complete output contract."
-      },
       "CalculateRouteToolCallParams": {
         "type": "object",
         "description": "MCP tools/call params for calculate_route.",
@@ -2338,10 +2319,6 @@
             "description": "Distance and speed units."
           }
         }
-      },
-      "CalculateRouteMatrixOutput": {
-        "type": "object",
-        "description": "Resolved matrix locations and source-to-target travel costs. See the focused tool specification for the complete output contract."
       },
       "CalculateRouteMatrixToolCallParams": {
         "type": "object",
@@ -2554,10 +2531,6 @@
             "$ref": "#/components/schemas/CombineGeometriesEnvelopeInput"
           }
         ]
-      },
-      "CombineGeometriesOutput": {
-        "type": "object",
-        "description": "Typed geometry-operation result. The type value determines the data schema. See the focused tool specification for the complete output contract."
       },
       "CombineGeometriesToolCallParams": {
         "type": "object",
@@ -2945,10 +2918,6 @@
             "$ref": "#/components/schemas/EvaluateSpatialRelationPointOnLineInput"
           }
         ]
-      },
-      "EvaluateSpatialRelationOutput": {
-        "type": "object",
-        "description": "Typed geometry-operation result. The type value determines the data schema. See the focused tool specification for the complete output contract."
       },
       "EvaluateSpatialRelationToolCallParams": {
         "type": "object",
@@ -3504,10 +3473,6 @@
           }
         ]
       },
-      "MeasureGeometryOutput": {
-        "type": "object",
-        "description": "Typed geometry-operation result. The type value determines the data schema. See the focused tool specification for the complete output contract."
-      },
       "MeasureGeometryToolCallParams": {
         "type": "object",
         "description": "MCP tools/call params for measure_geometry.",
@@ -3802,19 +3767,11 @@
             "type": "array",
             "minItems": 2,
             "maxItems": 2,
-            "prefixItems": [
-              {
-                "type": "number",
-                "minimum": -180,
-                "maximum": 180
-              },
-              {
-                "type": "number",
-                "minimum": -90,
-                "maximum": 90
-              }
-            ],
-            "items": false,
+            "items": {
+              "type": "number",
+              "minimum": -180,
+              "maximum": 180
+            },
             "description": "Optional [longitude, latitude] pivot. Defaults to the geometry centroid."
           }
         }
@@ -3864,19 +3821,12 @@
                 "type": "array",
                 "minItems": 2,
                 "maxItems": 2,
-                "prefixItems": [
-                  {
-                    "type": "number",
-                    "minimum": -180,
-                    "maximum": 180
-                  },
-                  {
-                    "type": "number",
-                    "minimum": -90,
-                    "maximum": 90
-                  }
-                ],
-                "items": false
+                "items": {
+                  "type": "number",
+                  "minimum": -180,
+                  "maximum": 180
+                },
+                "description": "A [longitude, latitude] pair; longitude is -180 to 180 and latitude is -90 to 90."
               }
             ],
             "description": "Scale origin keyword or [longitude, latitude] position."
@@ -4075,10 +4025,6 @@
           }
         ]
       },
-      "TransformGeometryOutput": {
-        "type": "object",
-        "description": "Typed geometry-operation result. The type value determines the data schema. See the focused tool specification for the complete output contract."
-      },
       "TransformGeometryToolCallParams": {
         "type": "object",
         "description": "MCP tools/call params for transform_geometry.",
@@ -4245,55 +4191,6 @@
             }
           }
         ]
-      },
-      "ToolCallErrorResponse": {
-        "type": "object",
-        "description": "JSON-RPC tools/call response when tool execution fails.",
-        "required": [
-          "jsonrpc",
-          "id",
-          "result"
-        ],
-        "properties": {
-          "jsonrpc": {
-            "const": "2.0"
-          },
-          "id": {
-            "$ref": "#/components/schemas/JsonRpcId"
-          },
-          "result": {
-            "type": "object",
-            "required": [
-              "content",
-              "isError"
-            ],
-            "properties": {
-              "content": {
-                "type": "array",
-                "description": "Tool error details represented as JSON text.",
-                "items": {
-                  "type": "object",
-                  "required": [
-                    "type",
-                    "text"
-                  ],
-                  "properties": {
-                    "type": {
-                      "const": "text"
-                    },
-                    "text": {
-                      "type": "string",
-                      "description": "JSON-encoded GatewayError with statusCode, error, and message fields."
-                    }
-                  }
-                }
-              },
-              "isError": {
-                "const": true
-              }
-            }
-          }
-        }
       }
     },
     "securitySchemes": {

@@ -2,8 +2,13 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Geoapify Geometry API",
-    "version": "1.1.0",
-    "description": "Store GeoJSON geometries and calculate unions or intersections of two or more reusable geometry or isoline IDs."
+    "version": "1.1.1",
+    "description": "Store GeoJSON geometries and calculate unions or intersections of two or more reusable geometry or isoline IDs.",
+    "contact": {
+      "name": "Geoapify",
+      "url": "https://geoapify.com",
+      "email": "info@geoapify.com"
+    }
   },
   "servers": [
     {
@@ -444,7 +449,8 @@
             ]
           },
           "coordinates": {
-            "type": "array"
+            "type": "array",
+            "items": {}
           }
         }
       },
@@ -495,7 +501,9 @@
             "type": "number"
           }
         ],
-        "items": false
+        "items": {
+          "not": {}
+        }
       },
       "GeometryProperties": {
         "type": "object",

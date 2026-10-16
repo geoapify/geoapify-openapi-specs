@@ -2,8 +2,13 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Geoapify MCP Tool: Utilities: Transform Geometry",
-    "version": "1.1.0",
-    "description": "AI-focused, tool-specific OpenAPI specification for transform_geometry over the Geoapify JSON-RPC transport. Import this specification when an integration needs this tool without the full MCP catalog."
+    "version": "1.1.2",
+    "description": "AI-focused, tool-specific OpenAPI specification for transform_geometry over the Geoapify JSON-RPC transport. Import this specification when an integration needs this tool without the full MCP catalog.",
+    "contact": {
+      "name": "Geoapify",
+      "url": "https://geoapify.com",
+      "email": "info@geoapify.com"
+    }
   },
   "servers": [
     {
@@ -858,19 +863,11 @@
             "type": "array",
             "minItems": 2,
             "maxItems": 2,
-            "prefixItems": [
-              {
-                "type": "number",
-                "minimum": -180,
-                "maximum": 180
-              },
-              {
-                "type": "number",
-                "minimum": -90,
-                "maximum": 90
-              }
-            ],
-            "items": false,
+            "items": {
+              "type": "number",
+              "minimum": -180,
+              "maximum": 180
+            },
             "description": "Optional [longitude, latitude] pivot. Defaults to the geometry centroid."
           }
         }
@@ -925,19 +922,12 @@
                 "type": "array",
                 "minItems": 2,
                 "maxItems": 2,
-                "prefixItems": [
-                  {
-                    "type": "number",
-                    "minimum": -180,
-                    "maximum": 180
-                  },
-                  {
-                    "type": "number",
-                    "minimum": -90,
-                    "maximum": 90
-                  }
-                ],
-                "items": false
+                "items": {
+                  "type": "number",
+                  "minimum": -180,
+                  "maximum": 180
+                },
+                "description": "A [longitude, latitude] pair; longitude is -180 to 180 and latitude is -90 to 90."
               }
             ],
             "description": "Scale origin keyword or [longitude, latitude] position."

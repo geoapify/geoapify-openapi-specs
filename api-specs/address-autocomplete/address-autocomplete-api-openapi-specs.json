@@ -2,8 +2,13 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Geoapify Address Autocomplete API",
-    "version": "1.1.1",
-    "description": "Autocomplete partial addresses while a user types."
+    "version": "1.1.2",
+    "description": "Autocomplete partial addresses while a user types.",
+    "contact": {
+      "name": "Geoapify",
+      "url": "https://geoapify.com",
+      "email": "info@geoapify.com"
+    }
   },
   "servers": [
     {
@@ -1405,7 +1410,8 @@
             ]
           },
           "coordinates": {
-            "type": "array"
+            "type": "array",
+            "items": {}
           }
         }
       },
@@ -1456,7 +1462,9 @@
             "type": "number"
           }
         ],
-        "items": false
+        "items": {
+          "not": {}
+        }
       },
       "TimezoneOutput": {
         "type": "object",
@@ -1518,31 +1526,6 @@
           }
         }
       },
-      "PlacesDatasource": {
-        "type": "object",
-        "required": [
-          "raw"
-        ],
-        "properties": {
-          "sourcename": {
-            "type": "string"
-          },
-          "attribution": {
-            "type": "string"
-          },
-          "license": {
-            "type": "string"
-          },
-          "url": {
-            "type": "string",
-            "format": "uri"
-          },
-          "raw": {
-            "type": "object",
-            "additionalProperties": true
-          }
-        }
-      },
       "GeocodingRank": {
         "type": "object",
         "properties": {
@@ -1575,24 +1558,6 @@
           },
           "popularity": {
             "type": "number"
-          }
-        }
-      },
-      "WikiPopulation": {
-        "type": "object",
-        "required": [
-          "actual",
-          "by_years"
-        ],
-        "properties": {
-          "actual": {
-            "type": "string"
-          },
-          "by_years": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "string"
-            }
           }
         }
       },
@@ -2076,24 +2041,6 @@
           }
         ]
       },
-      "ReverseGeocodingFeatureCollection": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/FeatureCollection"
-          },
-          {
-            "type": "object",
-            "required": [
-              "query"
-            ],
-            "properties": {
-              "query": {
-                "$ref": "#/components/schemas/ReverseGeocoderQuery"
-              }
-            }
-          }
-        ]
-      },
       "GeocodingJsonResponse": {
         "type": "object",
         "required": [
@@ -2115,66 +2062,6 @@
                 "$ref": "#/components/schemas/ReverseGeocoderQuery"
               }
             ]
-          }
-        }
-      },
-      "ForwardGeocodingXmlResponse": {
-        "type": "object",
-        "required": [
-          "results"
-        ],
-        "xml": {
-          "name": "root"
-        },
-        "properties": {
-          "results": {
-            "type": "array",
-            "xml": {
-              "name": "results",
-              "wrapped": false
-            },
-            "items": {
-              "$ref": "#/components/schemas/GeocodingProperties",
-              "xml": {
-                "name": "results"
-              }
-            }
-          },
-          "query": {
-            "$ref": "#/components/schemas/TextGeocoderQuery",
-            "xml": {
-              "name": "query"
-            }
-          }
-        }
-      },
-      "ReverseGeocodingXmlResponse": {
-        "type": "object",
-        "required": [
-          "results"
-        ],
-        "xml": {
-          "name": "root"
-        },
-        "properties": {
-          "results": {
-            "type": "array",
-            "xml": {
-              "name": "results",
-              "wrapped": false
-            },
-            "items": {
-              "$ref": "#/components/schemas/GeocodingProperties",
-              "xml": {
-                "name": "results"
-              }
-            }
-          },
-          "query": {
-            "$ref": "#/components/schemas/ReverseGeocoderQuery",
-            "xml": {
-              "name": "query"
-            }
           }
         }
       },

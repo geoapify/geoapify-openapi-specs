@@ -1,0 +1,704 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Geoapify MCP Tool: Geocoding: Get Timezone",
+    "version": "1.2.0",
+    "description": "AI-focused, tool-specific OpenAPI specification for get_timezone over the Geoapify JSON-RPC transport. Import this specification when an integration needs this tool without the full MCP catalog.",
+    "contact": {
+      "name": "Geoapify",
+      "url": "https://geoapify.com",
+      "email": "info@geoapify.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.geoapify.com/v1",
+      "description": "Default API endpoint."
+    },
+    {
+      "url": "https://api-eu.geoapify.com/v1",
+      "description": "EU-focused endpoint. Geoapify service processing uses EU infrastructure."
+    }
+  ],
+  "tags": [
+    {
+      "name": "Geocoding",
+      "description": "Geocoding MCP tools."
+    }
+  ],
+  "paths": {
+    "/mcp": {
+      "post": {
+        "tags": [
+          "Geocoding"
+        ],
+        "operationId": "callGetTimezone",
+        "summary": "Geocoding: Get Timezone",
+        "description": "Use this tool when coordinates are known and the exact UTC offset or local time at an instant is needed. It also returns the next known transition. Use reverse_geocode_coordinates when a nearby address or place is needed.",
+        "parameters": [
+          {
+            "name": "MCP-Protocol-Version",
+            "in": "header",
+            "required": false,
+            "description": "Optional protocol version. Defaults to 2025-06-18 when omitted; explicitly unsupported versions are rejected.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "2025-06-18"
+              ]
+            },
+            "example": "2025-06-18"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetTimezoneToolCallRequest"
+              },
+              "examples": {
+                "getTimezoneAmsterdam": {
+                  "summary": "Get the timezone at a winter instant",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 4,
+                    "method": "tools/call",
+                    "params": {
+                      "name": "get_timezone",
+                      "arguments": {
+                        "lat": 52.3772,
+                        "lon": 4.9066,
+                        "at_unix_seconds": 1768478400
+                      }
+                    }
+                  }
+                },
+                "getTimezoneNow": {
+                  "summary": "Get the current timezone offset",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 5,
+                    "method": "tools/call",
+                    "params": {
+                      "name": "get_timezone",
+                      "arguments": {
+                        "lat": 35.6762,
+                        "lon": 139.6503
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "JSON-RPC response for the get_timezone MCP tool. Tool execution and validation failures also use HTTP 200 with result.isError set to true.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetTimezoneToolCallResponse"
+                },
+                "examples": {
+                  "getTimezoneSuccess": {
+                    "summary": "Timezone at an instant",
+                    "description": "Timezone offset, local time, and next known transition at the requested coordinate and instant.",
+                    "value": {
+                      "jsonrpc": "2.0",
+                      "id": 1,
+                      "result": {
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "{\n  \"lat\": 52.3772,\n  \"lon\": 4.9066,\n  \"at\": \"2026-01-15T12:00:00.000Z\",\n  \"tzdb_version\": \"2026e\",\n  \"timezones\": [\n    {\n      \"name\": \"Europe/Amsterdam\",\n      \"type\": \"standard\",\n      \"utc_offset\": \"+01:00\",\n      \"offset_seconds\": 3600,\n      \"abbreviation\": \"CET\",\n      \"local_time\": \"2026-01-15T13:00:00.000+01:00\",\n      \"next_transition\": {\n        \"at\": \"2026-03-29T01:00:00.000Z\",\n        \"before\": {\n          \"type\": \"standard\",\n          \"utc_offset\": \"+01:00\",\n          \"offset_seconds\": 3600,\n          \"abbreviation\": \"CET\"\n        },\n        \"after\": {\n          \"type\": \"daylightSaving\",\n          \"utc_offset\": \"+02:00\",\n          \"offset_seconds\": 7200,\n          \"abbreviation\": \"CEST\"\n        },\n        \"offset_change_seconds\": 3600,\n        \"kind\": \"daylight-start\"\n      }\n    }\n  ]\n}"
+                          }
+                        ],
+                        "structuredContent": {
+                          "lat": 52.3772,
+                          "lon": 4.9066,
+                          "at": "2026-01-15T12:00:00.000Z",
+                          "tzdb_version": "2026e",
+                          "timezones": [
+                            {
+                              "name": "Europe/Amsterdam",
+                              "type": "standard",
+                              "utc_offset": "+01:00",
+                              "offset_seconds": 3600,
+                              "abbreviation": "CET",
+                              "local_time": "2026-01-15T13:00:00.000+01:00",
+                              "next_transition": {
+                                "at": "2026-03-29T01:00:00.000Z",
+                                "before": {
+                                  "type": "standard",
+                                  "utc_offset": "+01:00",
+                                  "offset_seconds": 3600,
+                                  "abbreviation": "CET"
+                                },
+                                "after": {
+                                  "type": "daylightSaving",
+                                  "utc_offset": "+02:00",
+                                  "offset_seconds": 7200,
+                                  "abbreviation": "CEST"
+                                },
+                                "offset_change_seconds": 3600,
+                                "kind": "daylight-start"
+                              }
+                            }
+                          ]
+                        },
+                        "isError": false
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid HTTP request or unsupported MCP protocol version. Tool validation errors are returned with HTTP 200 and result.isError set to true.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GatewayError"
+                },
+                "example": {
+                  "statusCode": 400,
+                  "error": "Bad Request",
+                  "message": "MCP-Protocol-Version header must be \"2025-06-18\""
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid Geoapify API key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GatewayError"
+                },
+                "example": {
+                  "statusCode": 401,
+                  "error": "Unauthorized",
+                  "message": "Invalid apiKey"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit or quota exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GatewayError"
+                },
+                "example": {
+                  "statusCode": 429,
+                  "error": "Too Many Requests",
+                  "message": "Quota exceeded"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal gateway error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GatewayError"
+                },
+                "example": {
+                  "statusCode": 500,
+                  "error": "Internal Server Error",
+                  "message": "Request failed, please try again later"
+                }
+              }
+            }
+          }
+        },
+        "x-geoapify-mcp-tool": "get_timezone",
+        "x-geoapify-mcp-input-schema": "#/components/schemas/GetTimezoneInput",
+        "x-geoapify-mcp-output-schema": "#/components/schemas/GetTimezoneOutput"
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "JsonRpcId": {
+        "description": "JSON-RPC request identifier. The server echoes this value in the response.",
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "JsonRpcError": {
+        "type": "object",
+        "description": "JSON-RPC error object.",
+        "required": [
+          "code",
+          "message"
+        ],
+        "properties": {
+          "code": {
+            "type": "integer",
+            "description": "JSON-RPC error code, such as -32600 for an invalid request, -32601 for an unknown method, or -32602 for invalid parameters."
+          },
+          "message": {
+            "type": "string",
+            "description": "Human-readable JSON-RPC error message."
+          },
+          "data": {
+            "description": "Optional machine-readable error details."
+          }
+        }
+      },
+      "JsonRpcErrorResponse": {
+        "type": "object",
+        "description": "JSON-RPC error response returned for invalid requests or unknown methods.",
+        "required": [
+          "jsonrpc",
+          "id",
+          "error"
+        ],
+        "properties": {
+          "jsonrpc": {
+            "const": "2.0"
+          },
+          "id": {
+            "$ref": "#/components/schemas/JsonRpcId"
+          },
+          "error": {
+            "$ref": "#/components/schemas/JsonRpcError"
+          }
+        }
+      },
+      "GatewayError": {
+        "type": "object",
+        "description": "HTTP gateway error returned before or outside JSON-RPC tool execution.",
+        "required": [
+          "statusCode",
+          "error",
+          "message"
+        ],
+        "properties": {
+          "statusCode": {
+            "type": "integer",
+            "description": "HTTP status code."
+          },
+          "error": {
+            "type": "string",
+            "description": "HTTP error name."
+          },
+          "message": {
+            "type": "string",
+            "description": "Human-readable error message."
+          }
+        }
+      },
+      "GetTimezoneInput": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "lat",
+          "lon"
+        ],
+        "properties": {
+          "lat": {
+            "type": "number",
+            "minimum": -90,
+            "maximum": 90,
+            "description": "Latitude of the location."
+          },
+          "lon": {
+            "type": "number",
+            "minimum": -180,
+            "maximum": 180,
+            "description": "Longitude of the location."
+          },
+          "at_unix_seconds": {
+            "type": "integer",
+            "minimum": 1735689600,
+            "maximum": 1956527999,
+            "description": "Optional Unix time in whole seconds. Defaults to the current instant. Supported dates are 2025-01-01 through 2031-12-31 UTC."
+          }
+        }
+      },
+      "GetTimezoneOutput": {
+        "type": "object",
+        "description": "Timezone and exact UTC offset at the requested coordinate and instant.",
+        "required": [
+          "lat",
+          "lon",
+          "at",
+          "tzdb_version",
+          "timezones"
+        ],
+        "properties": {
+          "lat": {
+            "type": "number"
+          },
+          "lon": {
+            "type": "number"
+          },
+          "at": {
+            "type": "string",
+            "description": "Resolved UTC instant."
+          },
+          "tzdb_version": {
+            "type": "string"
+          },
+          "timezones": {
+            "type": "array",
+            "description": "Timezone matches; a boundary can return more than one.",
+            "items": {
+              "type": "object",
+              "required": [
+                "name",
+                "type",
+                "utc_offset",
+                "offset_seconds",
+                "abbreviation",
+                "local_time",
+                "next_transition"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "standard",
+                    "daylightSaving",
+                    "other"
+                  ]
+                },
+                "utc_offset": {
+                  "type": "string"
+                },
+                "offset_seconds": {
+                  "type": "integer"
+                },
+                "abbreviation": {
+                  "type": "string"
+                },
+                "local_time": {
+                  "type": "string",
+                  "description": "Local date and time with its UTC offset."
+                },
+                "next_transition": {
+                  "description": "Next known offset transition, or null within the bundled data range.",
+                  "anyOf": [
+                    {
+                      "type": "object",
+                      "required": [
+                        "at",
+                        "before",
+                        "after",
+                        "offset_change_seconds",
+                        "kind"
+                      ],
+                      "properties": {
+                        "at": {
+                          "type": "string",
+                          "description": "UTC instant when the transition occurs."
+                        },
+                        "before": {
+                          "type": "object",
+                          "required": [
+                            "type",
+                            "utc_offset",
+                            "offset_seconds",
+                            "abbreviation"
+                          ],
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "enum": [
+                                "standard",
+                                "daylightSaving",
+                                "other"
+                              ]
+                            },
+                            "utc_offset": {
+                              "type": "string"
+                            },
+                            "offset_seconds": {
+                              "type": "integer"
+                            },
+                            "abbreviation": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "after": {
+                          "type": "object",
+                          "required": [
+                            "type",
+                            "utc_offset",
+                            "offset_seconds",
+                            "abbreviation"
+                          ],
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "enum": [
+                                "standard",
+                                "daylightSaving",
+                                "other"
+                              ]
+                            },
+                            "utc_offset": {
+                              "type": "string"
+                            },
+                            "offset_seconds": {
+                              "type": "integer"
+                            },
+                            "abbreviation": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "offset_change_seconds": {
+                          "type": "integer"
+                        },
+                        "kind": {
+                          "type": "string",
+                          "enum": [
+                            "daylight-start",
+                            "daylight-end",
+                            "offset-change",
+                            "designation-change"
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "GetTimezoneToolCallParams": {
+        "type": "object",
+        "description": "MCP tools/call params for get_timezone.",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "arguments"
+        ],
+        "properties": {
+          "name": {
+            "description": "Registered MCP tool name.",
+            "const": "get_timezone"
+          },
+          "arguments": {
+            "description": "Arguments validated by the get_timezone input schema.",
+            "$ref": "#/components/schemas/GetTimezoneInput"
+          }
+        }
+      },
+      "GetTimezoneToolCallRequest": {
+        "type": "object",
+        "description": "JSON-RPC tools/call request for the get_timezone MCP tool.",
+        "additionalProperties": false,
+        "required": [
+          "jsonrpc",
+          "id",
+          "method",
+          "params"
+        ],
+        "properties": {
+          "jsonrpc": {
+            "description": "JSON-RPC protocol version.",
+            "const": "2.0"
+          },
+          "id": {
+            "description": "Client-supplied JSON-RPC request id echoed in the response.",
+            "$ref": "#/components/schemas/JsonRpcId"
+          },
+          "method": {
+            "description": "MCP method used to call a tool.",
+            "const": "tools/call"
+          },
+          "params": {
+            "description": "Tool call parameters for get_timezone.",
+            "$ref": "#/components/schemas/GetTimezoneToolCallParams"
+          }
+        },
+        "examples": [
+          {
+            "jsonrpc": "2.0",
+            "id": 4,
+            "method": "tools/call",
+            "params": {
+              "name": "get_timezone",
+              "arguments": {
+                "lat": 52.3772,
+                "lon": 4.9066,
+                "at_unix_seconds": 1768478400
+              }
+            }
+          },
+          {
+            "jsonrpc": "2.0",
+            "id": 5,
+            "method": "tools/call",
+            "params": {
+              "name": "get_timezone",
+              "arguments": {
+                "lat": 35.6762,
+                "lon": 139.6503
+              }
+            }
+          }
+        ],
+        "x-geoapify-mcp-tool": "get_timezone",
+        "x-geoapify-mcp-category": "Geocoding",
+        "x-geoapify-mcp-input-schema": "#/components/schemas/GetTimezoneInput",
+        "x-geoapify-mcp-output-schema": "#/components/schemas/GetTimezoneOutput"
+      },
+      "GetTimezoneToolCallSuccessResponse": {
+        "type": "object",
+        "description": "Successful JSON-RPC response with tool-specific structured content.",
+        "required": [
+          "jsonrpc",
+          "id",
+          "result"
+        ],
+        "properties": {
+          "jsonrpc": {
+            "const": "2.0"
+          },
+          "id": {
+            "$ref": "#/components/schemas/JsonRpcId"
+          },
+          "result": {
+            "type": "object",
+            "required": [
+              "content",
+              "structuredContent",
+              "isError"
+            ],
+            "properties": {
+              "content": {
+                "type": "array",
+                "description": "JSON text representation of structuredContent.",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "type",
+                    "text"
+                  ],
+                  "properties": {
+                    "type": {
+                      "const": "text"
+                    },
+                    "text": {
+                      "type": "string",
+                      "description": "JSON-encoded copy of structuredContent."
+                    }
+                  }
+                }
+              },
+              "structuredContent": {
+                "$ref": "#/components/schemas/GetTimezoneOutput"
+              },
+              "isError": {
+                "const": false
+              }
+            }
+          }
+        }
+      },
+      "ToolCallErrorResponse": {
+        "type": "object",
+        "description": "JSON-RPC tools/call response when tool execution fails.",
+        "required": [
+          "jsonrpc",
+          "id",
+          "result"
+        ],
+        "properties": {
+          "jsonrpc": {
+            "const": "2.0"
+          },
+          "id": {
+            "$ref": "#/components/schemas/JsonRpcId"
+          },
+          "result": {
+            "type": "object",
+            "required": [
+              "content",
+              "isError"
+            ],
+            "properties": {
+              "content": {
+                "type": "array",
+                "description": "Tool error details represented as JSON text.",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "type",
+                    "text"
+                  ],
+                  "properties": {
+                    "type": {
+                      "const": "text"
+                    },
+                    "text": {
+                      "type": "string",
+                      "description": "JSON-encoded GatewayError with statusCode, error, and message fields."
+                    }
+                  }
+                }
+              },
+              "isError": {
+                "const": true
+              }
+            }
+          }
+        }
+      },
+      "GetTimezoneToolCallResponse": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/GetTimezoneToolCallSuccessResponse"
+          },
+          {
+            "$ref": "#/components/schemas/ToolCallErrorResponse"
+          },
+          {
+            "$ref": "#/components/schemas/JsonRpcErrorResponse"
+          }
+        ]
+      }
+    },
+    "securitySchemes": {
+      "ApiKeyInHeader": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "x-api-key",
+        "description": "Geoapify API key header. Recommended authentication method for MCP clients."
+      }
+    }
+  },
+  "x-geoapify-mcp-tool-index": "index.json",
+  "security": [
+    {
+      "ApiKeyInHeader": []
+    }
+  ]
+}

@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Geoapify MCP API",
-    "version": "1.1.2",
+    "version": "1.2.0",
     "description": "Compact catalog for the Geoapify Model Context Protocol JSON-RPC endpoint. Use the linked focused specifications for complete tool output contracts and additional examples.",
     "contact": {
       "name": "Geoapify",
@@ -73,6 +73,9 @@
                   },
                   {
                     "$ref": "#/components/schemas/ReverseGeocodeCoordinatesToolCallRequest"
+                  },
+                  {
+                    "$ref": "#/components/schemas/GetTimezoneToolCallRequest"
                   },
                   {
                     "$ref": "#/components/schemas/SearchPlacesToolCallRequest"
@@ -182,6 +185,22 @@
                         "lon": 13.405,
                         "limit": 1,
                         "lang": "en"
+                      }
+                    }
+                  }
+                },
+                "getTimezoneAmsterdam": {
+                  "summary": "Get the timezone at a winter instant",
+                  "value": {
+                    "jsonrpc": "2.0",
+                    "id": 4,
+                    "method": "tools/call",
+                    "params": {
+                      "name": "get_timezone",
+                      "arguments": {
+                        "lat": 52.3772,
+                        "lon": 4.9066,
+                        "at_unix_seconds": 1768478400
                       }
                     }
                   }
@@ -653,6 +672,56 @@
                                 "lat1": 52.5203575,
                                 "lon2": 13.4049636,
                                 "lat2": 52.5204575
+                              }
+                            }
+                          ]
+                        },
+                        "isError": false
+                      }
+                    }
+                  },
+                  "getTimezoneSuccess": {
+                    "summary": "Timezone at an instant",
+                    "description": "Timezone offset, local time, and next known transition at the requested coordinate and instant.",
+                    "value": {
+                      "jsonrpc": "2.0",
+                      "id": 1,
+                      "result": {
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "{\"lat\":52.3772,\"lon\":4.9066,\"at\":\"2026-01-15T12:00:00.000Z\",\"tzdb_version\":\"2026e\",\"timezones\":[{\"name\":\"Europe/Amsterdam\",\"type\":\"standard\",\"utc_offset\":\"+01:00\",\"offset_seconds\":3600,\"abbreviation\":\"CET\",\"local_time\":\"2026-01-15T13:00:00.000+01:00\",\"next_transition\":{\"at\":\"2026-03-29T01:00:00.000Z\",\"before\":{\"type\":\"standard\",\"utc_offset\":\"+01:00\",\"offset_seconds\":3600,\"abbreviation\":\"CET\"},\"after\":{\"type\":\"daylightSaving\",\"utc_offset\":\"+02:00\",\"offset_seconds\":7200,\"abbreviation\":\"CEST\"},\"offset_change_seconds\":3600,\"kind\":\"daylight-start\"}}]}"
+                          }
+                        ],
+                        "structuredContent": {
+                          "lat": 52.3772,
+                          "lon": 4.9066,
+                          "at": "2026-01-15T12:00:00.000Z",
+                          "tzdb_version": "2026e",
+                          "timezones": [
+                            {
+                              "name": "Europe/Amsterdam",
+                              "type": "standard",
+                              "utc_offset": "+01:00",
+                              "offset_seconds": 3600,
+                              "abbreviation": "CET",
+                              "local_time": "2026-01-15T13:00:00.000+01:00",
+                              "next_transition": {
+                                "at": "2026-03-29T01:00:00.000Z",
+                                "before": {
+                                  "type": "standard",
+                                  "utc_offset": "+01:00",
+                                  "offset_seconds": 3600,
+                                  "abbreviation": "CET"
+                                },
+                                "after": {
+                                  "type": "daylightSaving",
+                                  "utc_offset": "+02:00",
+                                  "offset_seconds": 7200,
+                                  "abbreviation": "CEST"
+                                },
+                                "offset_change_seconds": 3600,
+                                "kind": "daylight-start"
                               }
                             }
                           ]
@@ -1755,6 +1824,101 @@
         "x-geoapify-mcp-category": "Geocoding",
         "x-geoapify-mcp-input-schema": "#/components/schemas/ReverseGeocodeCoordinatesInput",
         "x-geoapify-mcp-output-schema": "#/components/schemas/ReverseGeocodeCoordinatesOutput"
+      },
+      "GetTimezoneInput": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "lat",
+          "lon"
+        ],
+        "properties": {
+          "lat": {
+            "type": "number",
+            "minimum": -90,
+            "maximum": 90,
+            "description": "Latitude of the location."
+          },
+          "lon": {
+            "type": "number",
+            "minimum": -180,
+            "maximum": 180,
+            "description": "Longitude of the location."
+          },
+          "at_unix_seconds": {
+            "type": "integer",
+            "minimum": 1735689600,
+            "maximum": 1956527999,
+            "description": "Optional Unix time in whole seconds. Defaults to the current instant. Supported dates are 2025-01-01 through 2031-12-31 UTC."
+          }
+        }
+      },
+      "GetTimezoneToolCallParams": {
+        "type": "object",
+        "description": "MCP tools/call params for get_timezone.",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "arguments"
+        ],
+        "properties": {
+          "name": {
+            "description": "Registered MCP tool name.",
+            "const": "get_timezone"
+          },
+          "arguments": {
+            "description": "Arguments validated by the get_timezone input schema.",
+            "$ref": "#/components/schemas/GetTimezoneInput"
+          }
+        }
+      },
+      "GetTimezoneToolCallRequest": {
+        "type": "object",
+        "description": "JSON-RPC tools/call request for the get_timezone MCP tool.",
+        "additionalProperties": false,
+        "required": [
+          "jsonrpc",
+          "id",
+          "method",
+          "params"
+        ],
+        "properties": {
+          "jsonrpc": {
+            "description": "JSON-RPC protocol version.",
+            "const": "2.0"
+          },
+          "id": {
+            "description": "Client-supplied JSON-RPC request id echoed in the response.",
+            "$ref": "#/components/schemas/JsonRpcId"
+          },
+          "method": {
+            "description": "MCP method used to call a tool.",
+            "const": "tools/call"
+          },
+          "params": {
+            "description": "Tool call parameters for get_timezone.",
+            "$ref": "#/components/schemas/GetTimezoneToolCallParams"
+          }
+        },
+        "examples": [
+          {
+            "jsonrpc": "2.0",
+            "id": 4,
+            "method": "tools/call",
+            "params": {
+              "name": "get_timezone",
+              "arguments": {
+                "lat": 52.3772,
+                "lon": 4.9066,
+                "at_unix_seconds": 1768478400
+              }
+            }
+          }
+        ],
+        "x-geoapify-mcp-tool": "get_timezone",
+        "x-geoapify-mcp-category": "Geocoding",
+        "x-geoapify-mcp-input-schema": "#/components/schemas/GetTimezoneInput",
+        "x-geoapify-mcp-output-schema": "#/components/schemas/GetTimezoneOutput"
       },
       "SearchPlacesInput": {
         "type": "object",

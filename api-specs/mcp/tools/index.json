@@ -34,6 +34,14 @@
       "openApiSpec": "./reverse-geocode-coordinates-openapi-spec.json"
     },
     {
+      "name": "get_timezone",
+      "title": "Geocoding: Get Timezone",
+      "category": "Geocoding",
+      "description": "Use this tool when coordinates are known and the exact UTC offset or local time at an instant is needed. It also returns the next known transition. Use reverse_geocode_coordinates when a nearby address or place is needed.",
+      "operationId": "callGetTimezone",
+      "openApiSpec": "./get-timezone-openapi-spec.json"
+    },
+    {
       "name": "search_places",
       "title": "Places: Search Places",
       "category": "Places",

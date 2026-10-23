@@ -163,7 +163,7 @@
       "documentationUrl": "https://apidocs.geoapify.com/docs/mcp/calculate-route/",
       "openApiSpecUrl": "https://apidocs.geoapify.com/assets/openapi/specs/mcp/tools/calculate-route-openapi-spec.json",
       "openApiVersion": "3.1.0",
-      "apiVersion": "1.1.2"
+      "apiVersion": "1.2.0"
     },
     {
       "id": "mcp/calculate-route-matrix",
@@ -173,7 +173,7 @@
       "documentationUrl": "https://apidocs.geoapify.com/docs/mcp/calculate-route-matrix/",
       "openApiSpecUrl": "https://apidocs.geoapify.com/assets/openapi/specs/mcp/tools/calculate-route-matrix-openapi-spec.json",
       "openApiVersion": "3.1.0",
-      "apiVersion": "1.1.2"
+      "apiVersion": "1.2.0"
     },
     {
       "id": "mcp/combine-geometries",
@@ -183,7 +183,7 @@
       "documentationUrl": "https://apidocs.geoapify.com/docs/mcp/combine-geometries/",
       "openApiSpecUrl": "https://apidocs.geoapify.com/assets/openapi/specs/mcp/tools/combine-geometries-openapi-spec.json",
       "openApiVersion": "3.1.0",
-      "apiVersion": "1.1.2"
+      "apiVersion": "1.2.0"
     },
     {
       "id": "mcp/evaluate-spatial-relation",
@@ -193,7 +193,7 @@
       "documentationUrl": "https://apidocs.geoapify.com/docs/mcp/evaluate-spatial-relation/",
       "openApiSpecUrl": "https://apidocs.geoapify.com/assets/openapi/specs/mcp/tools/evaluate-spatial-relation-openapi-spec.json",
       "openApiVersion": "3.1.0",
-      "apiVersion": "1.1.2"
+      "apiVersion": "1.2.0"
     },
     {
       "id": "mcp/geocode-address",
@@ -203,7 +203,7 @@
       "documentationUrl": "https://apidocs.geoapify.com/docs/mcp/geocode-address/",
       "openApiSpecUrl": "https://apidocs.geoapify.com/assets/openapi/specs/mcp/tools/geocode-address-openapi-spec.json",
       "openApiVersion": "3.1.0",
-      "apiVersion": "1.1.2"
+      "apiVersion": "1.2.0"
     },
     {
       "id": "mcp/geocode-structured-address",
@@ -213,7 +213,7 @@
       "documentationUrl": "https://apidocs.geoapify.com/docs/mcp/geocode-structured-address/",
       "openApiSpecUrl": "https://apidocs.geoapify.com/assets/openapi/specs/mcp/tools/geocode-structured-address-openapi-spec.json",
       "openApiVersion": "3.1.0",
-      "apiVersion": "1.1.2"
+      "apiVersion": "1.2.0"
     },
     {
       "id": "mcp/list-place-categories",
@@ -223,7 +223,7 @@
       "documentationUrl": "https://apidocs.geoapify.com/docs/mcp/list-place-categories/",
       "openApiSpecUrl": "https://apidocs.geoapify.com/assets/openapi/specs/mcp/tools/list-place-categories-openapi-spec.json",
       "openApiVersion": "3.1.0",
-      "apiVersion": "1.1.2"
+      "apiVersion": "1.2.0"
     },
     {
       "id": "mcp/mcp",
@@ -233,7 +233,7 @@
       "documentationUrl": "https://apidocs.geoapify.com/docs/mcp/",
       "openApiSpecUrl": "https://apidocs.geoapify.com/assets/openapi/specs/mcp/mcp-api-openapi-specs.json",
       "openApiVersion": "3.1.0",
-      "apiVersion": "1.1.2"
+      "apiVersion": "1.2.0"
     },
     {
       "id": "mcp/measure-geometry",
@@ -243,7 +243,7 @@
       "documentationUrl": "https://apidocs.geoapify.com/docs/mcp/measure-geometry/",
       "openApiSpecUrl": "https://apidocs.geoapify.com/assets/openapi/specs/mcp/tools/measure-geometry-openapi-spec.json",
       "openApiVersion": "3.1.0",
-      "apiVersion": "1.1.2"
+      "apiVersion": "1.2.0"
     },
     {
       "id": "mcp/reverse-geocode",
@@ -253,7 +253,7 @@
       "documentationUrl": "https://apidocs.geoapify.com/docs/mcp/reverse-geocode/",
       "openApiSpecUrl": "https://apidocs.geoapify.com/assets/openapi/specs/mcp/tools/reverse-geocode-coordinates-openapi-spec.json",
       "openApiVersion": "3.1.0",
-      "apiVersion": "1.1.2"
+      "apiVersion": "1.2.0"
     },
     {
       "id": "mcp/search-places",
@@ -263,7 +263,17 @@
       "documentationUrl": "https://apidocs.geoapify.com/docs/mcp/search-places/",
       "openApiSpecUrl": "https://apidocs.geoapify.com/assets/openapi/specs/mcp/tools/search-places-openapi-spec.json",
       "openApiVersion": "3.1.0",
-      "apiVersion": "1.1.2"
+      "apiVersion": "1.2.0"
+    },
+    {
+      "id": "mcp/tools/get-timezone",
+      "title": "Geoapify MCP Tool: Geocoding: Get Timezone",
+      "description": "AI-focused, tool-specific OpenAPI specification for get_timezone over the Geoapify JSON-RPC transport. Import this specification when an integration needs this tool without the full MCP catalog.",
+      "category": "Other Geoapify APIs",
+      "documentationUrl": "https://apidocs.geoapify.com/docs/",
+      "openApiSpecUrl": "https://apidocs.geoapify.com/assets/openapi/specs/mcp/tools/get-timezone-openapi-spec.json",
+      "openApiVersion": "3.1.0",
+      "apiVersion": "1.2.0"
     },
     {
       "id": "mcp/transform-geometry",
@@ -273,7 +283,7 @@
       "documentationUrl": "https://apidocs.geoapify.com/docs/mcp/transform-geometry/",
       "openApiSpecUrl": "https://apidocs.geoapify.com/assets/openapi/specs/mcp/tools/transform-geometry-openapi-spec.json",
       "openApiVersion": "3.1.0",
-      "apiVersion": "1.1.2"
+      "apiVersion": "1.2.0"
     },
     {
       "id": "place-details/place-details",
@@ -344,6 +354,16 @@
       "openApiSpecUrl": "https://apidocs.geoapify.com/assets/openapi/specs/routing/routing-api-openapi-specs.json",
       "openApiVersion": "3.1.0",
       "apiVersion": "1.2.1"
+    },
+    {
+      "id": "timezone/timezone",
+      "title": "Geoapify Timezone API",
+      "description": "Look up the timezone and exact UTC offset at coordinates, or list offset transitions.",
+      "category": "Other Geoapify APIs",
+      "documentationUrl": "https://apidocs.geoapify.com/docs/",
+      "openApiSpecUrl": "https://apidocs.geoapify.com/assets/openapi/specs/timezone/timezone-api-openapi-specs.json",
+      "openApiVersion": "3.1.0",
+      "apiVersion": "1.0.0"
     }
   ]
 }

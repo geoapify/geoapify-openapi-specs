@@ -1,0 +1,382 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Geoapify Timezone API",
+    "version": "1.0.0",
+    "description": "Look up the timezone and exact UTC offset at coordinates, or list offset transitions.",
+    "contact": {
+      "name": "Geoapify",
+      "url": "https://geoapify.com",
+      "email": "info@geoapify.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.geoapify.com/v1",
+      "description": "Default API endpoint."
+    },
+    {
+      "url": "https://api-eu.geoapify.com/v1",
+      "description": "EU-focused endpoint. Geoapify service processing uses EU infrastructure."
+    }
+  ],
+  "tags": [
+    {
+      "name": "Timezone",
+      "description": "Timezones by coordinates."
+    }
+  ],
+  "paths": {
+    "/timezone": {
+      "get": {
+        "tags": [
+          "Timezone"
+        ],
+        "operationId": "getTimezone",
+        "summary": "Get the timezone and UTC offset at an instant",
+        "description": "The optional at parameter defaults to the current time. Each timezone includes local time and its next known transition; null means none is known within the bundled range. Supported instants are from 2025-01-01 through 2031-12-31 (UTC). More than one timezone can be returned at a disputed boundary.",
+        "parameters": [
+          {
+            "name": "lat",
+            "in": "query",
+            "required": true,
+            "description": "Latitude.",
+            "schema": {
+              "type": "number",
+              "minimum": -90,
+              "maximum": 90
+            }
+          },
+          {
+            "name": "lon",
+            "in": "query",
+            "required": true,
+            "description": "Longitude.",
+            "schema": {
+              "type": "number",
+              "minimum": -180,
+              "maximum": 180
+            }
+          },
+          {
+            "name": "at",
+            "in": "query",
+            "required": false,
+            "description": "RFC 3339 instant with an offset. Defaults to now.",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Timezone information.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TimezoneResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid coordinate, date, or range."
+          },
+          "401": {
+            "description": "Missing or invalid API key."
+          },
+          "429": {
+            "description": "Quota exceeded."
+          },
+          "500": {
+            "description": "Server error."
+          }
+        }
+      }
+    },
+    "/timezone/transitions": {
+      "get": {
+        "tags": [
+          "Timezone"
+        ],
+        "operationId": "getTimezoneTransitions",
+        "summary": "List timezone transitions within an interval",
+        "description": "The interval is [from, to), with a maximum span of 366 days, within 2025-01-01 through 2032-01-01 (UTC).",
+        "parameters": [
+          {
+            "name": "lat",
+            "in": "query",
+            "required": true,
+            "description": "Latitude.",
+            "schema": {
+              "type": "number",
+              "minimum": -90,
+              "maximum": 90
+            }
+          },
+          {
+            "name": "lon",
+            "in": "query",
+            "required": true,
+            "description": "Longitude.",
+            "schema": {
+              "type": "number",
+              "minimum": -180,
+              "maximum": 180
+            }
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "required": true,
+            "description": "Inclusive RFC 3339 start instant.",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": true,
+            "description": "Exclusive RFC 3339 end instant.",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Timezone information.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TimezoneTransitionsResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid coordinate, date, or range."
+          },
+          "401": {
+            "description": "Missing or invalid API key."
+          },
+          "429": {
+            "description": "Quota exceeded."
+          },
+          "500": {
+            "description": "Server error."
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "TimezoneState": {
+        "type": "object",
+        "required": [
+          "type",
+          "utc_offset",
+          "offset_seconds",
+          "abbreviation"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "standard",
+              "daylightSaving",
+              "other"
+            ]
+          },
+          "utc_offset": {
+            "type": "string"
+          },
+          "offset_seconds": {
+            "type": "integer"
+          },
+          "abbreviation": {
+            "type": "string"
+          }
+        }
+      },
+      "Timezone": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/TimezoneState"
+          },
+          {
+            "type": "object",
+            "required": [
+              "name",
+              "local_time",
+              "next_transition"
+            ],
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "local_time": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "next_transition": {
+                "description": "Next known transition after at, or null if none is known within the bundled range.",
+                "anyOf": [
+                  {
+                    "$ref": "#/components/schemas/Transition"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "Transition": {
+        "type": "object",
+        "required": [
+          "at",
+          "before",
+          "after",
+          "offset_change_seconds",
+          "kind"
+        ],
+        "properties": {
+          "at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "before": {
+            "$ref": "#/components/schemas/TimezoneState"
+          },
+          "after": {
+            "$ref": "#/components/schemas/TimezoneState"
+          },
+          "offset_change_seconds": {
+            "type": "integer"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "daylight-start",
+              "daylight-end",
+              "offset-change",
+              "designation-change"
+            ]
+          }
+        }
+      },
+      "TimezoneResult": {
+        "type": "object",
+        "required": [
+          "lat",
+          "lon",
+          "at",
+          "tzdb_version",
+          "timezones"
+        ],
+        "properties": {
+          "lat": {
+            "type": "number"
+          },
+          "lon": {
+            "type": "number"
+          },
+          "at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "tzdb_version": {
+            "type": "string"
+          },
+          "timezones": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Timezone"
+            }
+          }
+        }
+      },
+      "TimezoneTransitionsResult": {
+        "type": "object",
+        "required": [
+          "lat",
+          "lon",
+          "from",
+          "to",
+          "tzdb_version",
+          "timezones"
+        ],
+        "properties": {
+          "lat": {
+            "type": "number"
+          },
+          "lon": {
+            "type": "number"
+          },
+          "from": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "to": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "tzdb_version": {
+            "type": "string"
+          },
+          "timezones": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "name",
+                "transitions"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "transitions": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Transition"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "ApiKeyInQuery": {
+        "type": "apiKey",
+        "in": "query",
+        "name": "apiKey",
+        "description": "Geoapify API key query parameter. Recommended authentication method for public APIs. API keys in URLs can be logged; use x-api-key for server-to-server clients."
+      },
+      "ApiKeyInHeader": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "x-api-key",
+        "description": "Geoapify API key header. Supported as an alternative authentication method for public APIs."
+      }
+    }
+  },
+  "security": [
+    {
+      "ApiKeyInQuery": []
+    },
+    {
+      "ApiKeyInHeader": []
+    }
+  ]
+}

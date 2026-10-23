@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Geoapify Timezone API",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Look up the timezone and exact UTC offset at coordinates, or list offset transitions.",
     "contact": {
       "name": "Geoapify",
@@ -76,21 +76,115 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/TimezoneResult"
+                },
+                "example": {
+                  "lat": 40.758,
+                  "lon": -73.9855,
+                  "at": "2027-01-15T14:00:00.000Z",
+                  "tzdb_version": "2026e",
+                  "timezones": [
+                    {
+                      "name": "America/New_York",
+                      "type": "standard",
+                      "utc_offset": "-05:00",
+                      "offset_seconds": -18000,
+                      "abbreviation": "EST",
+                      "local_time": "2027-01-15T09:00:00.000-05:00",
+                      "next_transition": {
+                        "at": "2027-03-14T07:00:00.000Z",
+                        "before": {
+                          "type": "standard",
+                          "utc_offset": "-05:00",
+                          "offset_seconds": -18000,
+                          "abbreviation": "EST"
+                        },
+                        "after": {
+                          "type": "daylightSaving",
+                          "utc_offset": "-04:00",
+                          "offset_seconds": -14400,
+                          "abbreviation": "EDT"
+                        },
+                        "offset_change_seconds": 3600,
+                        "kind": "daylight-start"
+                      }
+                    }
+                  ]
                 }
               }
             }
           },
           "400": {
-            "description": "Invalid coordinate, date, or range."
+            "description": "Invalid coordinate, date, or range.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GatewayError"
+                },
+                "examples": {
+                  "invalidCoordinate": {
+                    "summary": "Latitude outside the allowed range",
+                    "value": {
+                      "statusCode": 400,
+                      "error": "Bad Request",
+                      "message": "\"lat\" must be less than or equal to 90"
+                    }
+                  },
+                  "unsupportedInstant": {
+                    "summary": "Instant outside the bundled transition range",
+                    "value": {
+                      "statusCode": 400,
+                      "error": "Bad Request",
+                      "message": "at is outside the supported transition range"
+                    }
+                  }
+                }
+              }
+            }
           },
           "401": {
-            "description": "Missing or invalid API key."
+            "description": "Missing or invalid Geoapify API key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GatewayError"
+                },
+                "example": {
+                  "statusCode": 401,
+                  "error": "Unauthorized",
+                  "message": "Invalid apiKey"
+                }
+              }
+            }
           },
           "429": {
-            "description": "Quota exceeded."
+            "description": "Rate limit or quota exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GatewayError"
+                },
+                "example": {
+                  "statusCode": 429,
+                  "error": "Too Many Requests",
+                  "message": "Quota exceeded"
+                }
+              }
+            }
           },
           "500": {
-            "description": "Server error."
+            "description": "Internal gateway error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GatewayError"
+                },
+                "example": {
+                  "statusCode": 500,
+                  "error": "Internal Server Error",
+                  "message": "Request failed, please try again later"
+                }
+              }
+            }
           }
         }
       }
@@ -154,21 +248,130 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/TimezoneTransitionsResult"
+                },
+                "example": {
+                  "lat": 40.758,
+                  "lon": -73.9855,
+                  "from": "2027-01-01T00:00:00.000Z",
+                  "to": "2028-01-01T00:00:00.000Z",
+                  "tzdb_version": "2026e",
+                  "timezones": [
+                    {
+                      "name": "America/New_York",
+                      "transitions": [
+                        {
+                          "at": "2027-03-14T07:00:00.000Z",
+                          "before": {
+                            "type": "standard",
+                            "utc_offset": "-05:00",
+                            "offset_seconds": -18000,
+                            "abbreviation": "EST"
+                          },
+                          "after": {
+                            "type": "daylightSaving",
+                            "utc_offset": "-04:00",
+                            "offset_seconds": -14400,
+                            "abbreviation": "EDT"
+                          },
+                          "offset_change_seconds": 3600,
+                          "kind": "daylight-start"
+                        },
+                        {
+                          "at": "2027-11-07T06:00:00.000Z",
+                          "before": {
+                            "type": "daylightSaving",
+                            "utc_offset": "-04:00",
+                            "offset_seconds": -14400,
+                            "abbreviation": "EDT"
+                          },
+                          "after": {
+                            "type": "standard",
+                            "utc_offset": "-05:00",
+                            "offset_seconds": -18000,
+                            "abbreviation": "EST"
+                          },
+                          "offset_change_seconds": -3600,
+                          "kind": "daylight-end"
+                        }
+                      ]
+                    }
+                  ]
                 }
               }
             }
           },
           "400": {
-            "description": "Invalid coordinate, date, or range."
+            "description": "Invalid coordinate, date, or range.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GatewayError"
+                },
+                "examples": {
+                  "invalidCoordinate": {
+                    "summary": "Latitude outside the allowed range",
+                    "value": {
+                      "statusCode": 400,
+                      "error": "Bad Request",
+                      "message": "\"lat\" must be less than or equal to 90"
+                    }
+                  },
+                  "invalidInterval": {
+                    "summary": "Reversed or overly long interval",
+                    "value": {
+                      "statusCode": 400,
+                      "error": "Bad Request",
+                      "message": "from must precede to, with an interval of at most 366 days"
+                    }
+                  }
+                }
+              }
+            }
           },
           "401": {
-            "description": "Missing or invalid API key."
+            "description": "Missing or invalid Geoapify API key.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GatewayError"
+                },
+                "example": {
+                  "statusCode": 401,
+                  "error": "Unauthorized",
+                  "message": "Invalid apiKey"
+                }
+              }
+            }
           },
           "429": {
-            "description": "Quota exceeded."
+            "description": "Rate limit or quota exceeded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GatewayError"
+                },
+                "example": {
+                  "statusCode": 429,
+                  "error": "Too Many Requests",
+                  "message": "Quota exceeded"
+                }
+              }
+            }
           },
           "500": {
-            "description": "Server error."
+            "description": "Internal gateway error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GatewayError"
+                },
+                "example": {
+                  "statusCode": 500,
+                  "error": "Internal Server Error",
+                  "message": "Request failed, please try again later"
+                }
+              }
+            }
           }
         }
       }
@@ -176,6 +379,28 @@
   },
   "components": {
     "schemas": {
+      "GatewayError": {
+        "type": "object",
+        "required": [
+          "statusCode",
+          "error",
+          "message"
+        ],
+        "properties": {
+          "statusCode": {
+            "type": "integer",
+            "description": "HTTP status code returned by the gateway."
+          },
+          "error": {
+            "type": "string",
+            "description": "Standard HTTP error name."
+          },
+          "message": {
+            "type": "string",
+            "description": "Human-readable explanation of the error."
+          }
+        }
+      },
       "TimezoneState": {
         "type": "object",
         "required": [

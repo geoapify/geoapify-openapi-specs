@@ -358,12 +358,12 @@
     {
       "id": "timezone/timezone",
       "title": "Geoapify Timezone API",
-      "description": "Look up the timezone and exact UTC offset at coordinates, or list offset transitions.",
-      "category": "Other Geoapify APIs",
-      "documentationUrl": "https://apidocs.geoapify.com/docs/",
+      "description": "The Timezone API returns the time zone, exact UTC offset, and local time at coordinates, and lists daylight saving time changes.",
+      "category": "Timezone API",
+      "documentationUrl": "https://apidocs.geoapify.com/docs/timezone/",
       "openApiSpecUrl": "https://apidocs.geoapify.com/assets/openapi/specs/timezone/timezone-api-openapi-specs.json",
       "openApiVersion": "3.1.0",
-      "apiVersion": "1.0.0"
+      "apiVersion": "1.0.1"
     }
   ]
 }
